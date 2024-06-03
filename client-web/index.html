@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Domini</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body data-server-no-reload>
+  <form id="register-form" hidden>
+    <div>
+      <label>Nome:</label>
+      <input type="text" id="nome-registrazione" name="nome" required>
+    </div>
+    <div>
+      <label>Cognome:</label>
+      <input type="text" id="cognome-registrazione" name="cognome" required>
+    </div>
+    <div>
+      <label>Email:</label>
+      <input type="email" id="email-registrazione" name="email" required>
+    </div>
+    <button type="submit">Registrati</button>
+  </form>
+
+  <form id="create-domain-form" hidden>
+    <div>
+      <label>Dominio da acquistare:</label>
+      <input type="text" id="domain-create-domain" name="domain" required>
+    </div>
+    <div>
+      <label>Durata della registrazione:</label>
+      <select id="duration-create-domain" name="duration" required>
+        <option value="1">1 anno</option>
+        <option value="2">2 anni</option>
+        <option value="3">3 anni</option>
+        <option value="4">4 anni</option>
+        <option value="5">5 anni</option>
+        <option value="6">6 anni</option>
+        <option value="7">7 anni</option>
+        <option value="8">8 anni</option>
+        <option value="9">9 anni</option>
+        <option value="10">10 anni</option>
+      </select>
+    </div>
+    <div>
+      <label>Nome:</label>
+      <input type="text" id="name-create-domain" name="name" required>
+    </div>
+    <div>
+      <label>Cognome:</label>
+      <input type="text" id="surname-create-domain" name="surname" required>
+    </div>
+    <div>
+      <label>Indirizzo Email:</label>
+      <input type="email" id="email-create-domain" name="email" required>
+    </div>
+    <div>
+      <label>Numero di Carta di Credito:</label>
+      <input type="text" id="creditCardNumber-create-domain" name="creditCardNumber" required>
+    </div>
+    <div>
+      <label>Data di Scadenza (MM/AA):</label>
+      <input type="text" id="expirationDate-create-domain" name="expirationDate" placeholder="MM/AA" required>
+    </div>
+    <div>
+      <label>CVV:</label>
+      <input type="text" id="cvv-create-domain" name="cvv" required>
+    </div>
+    <div>
+      <label>Nome e Cognome Intestatario Carta:</label>
+      <input type="text" id="cardHolderName-create-domain" name="cardHolderName" required>
+    </div>
+    <div>
+      <button type="submit">Registrare Dominio</button>
+    </div>
+  </form>
+  <script src="script.js"></script>
+</body>
+
+</html>
