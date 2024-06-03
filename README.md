@@ -4,8 +4,9 @@ Lo scheletro espone la struttura che il progetto deve seguire. Al posto di quest
 
 ## Componenti del gruppo
 
-* Nome Cognome (Matricola) <email@campus.unimib.it>
-* ...
+* Davide Pirovano (894632) <d.pirovano16@campus.unimib.it>
+* Luca Bonfanti (894394) <l.bonfanti19@campus.unimib.it>
+* Matteo Fumagalli (-) <m.fumagalli-@campus.unimib.it>
 
 ## Compilazione ed esecuzione
 
