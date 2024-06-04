@@ -10,18 +10,57 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(90deg, rgba(208,234,255,1) 15%, rgba(200,214,224,1) 39%, rgba(185,217,242,1) 60%, rgba(200,214,224,1) 80%);
-  /* Gradient background */
+  background: linear-gradient(90deg, rgba(208, 234, 255, 1) 15%, rgba(200, 214, 224, 1) 39%, rgba(185, 217, 242, 1) 60%, rgba(200, 214, 224, 1) 80%);
+}
+
+.container {
+  text-align: center;
+}
+
+.button-group {
+  margin-bottom: 20px;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: none;
+  background-color: #3da9fc;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.button-group button.active {
+  text-decoration: underline;
+  text-decoration-color: #ffffff;
+}
+
+.button-group button.active:hover {
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.button-group button:hover {
+  background-color: #3086c9;
 }
 
 .wrapper {
   position: relative;
-  max-width: 380px;
+  max-width: 320px;
   width: 100%;
   background: #ffffff;
-  padding: 34px;
+  padding: 20px;
   border-radius: 6px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  display: none;
+}
+
+.wrapper.active {
+  display: block;
 }
 
 .wrapper h2 {
@@ -29,6 +68,7 @@ body {
   font-size: 22px;
   font-weight: 600;
   color: #094067;
+  margin-bottom: 20px;
 }
 
 .wrapper h2::before {
@@ -42,40 +82,35 @@ body {
   background: #3da9fc;
 }
 
-.wrapper form {
-  margin-top: 30px;
-}
-
-.wrapper form .input-box {
+.input-box {
   position: relative;
-  margin: 18px 0;
+  margin: 15px 0;
 }
 
-.input-box input {
-  height: 45px;
+.input-box input,
+.input-box select {
+  height: 40px;
   width: 100%;
   outline: none;
   padding: 0 15px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 400;
   color: #094067;
-  /* Colore del testo degli input */
   border: 1.5px solid #094067;
-  /* Colore del bordo degli input */
   border-bottom-width: 2.5px;
   border-radius: 6px;
   transition: all 0.3s ease;
   background-color: transparent;
-  /* Sfondo trasparente per gli input */
 }
 
 .input-box input::placeholder {
   color: #c8d6e0;
-  /* Colore bianco per il testo del placeholder */
 }
 
 .input-box input:focus,
-.input-box input:valid {
+.input-box input:valid,
+.input-box select:focus,
+.input-box select:valid {
   border-color: #3da9fc;
 }
 
@@ -86,8 +121,8 @@ body {
   background: #3da9fc;
   cursor: pointer;
   border-radius: 6px;
-  height: 50px;
-  font-size: 18px;
+  height: 45px;
+  font-size: 17px;
 }
 
 .input-box.button input:hover {
@@ -96,4 +131,70 @@ body {
 
 .input-box.button input:active {
   background: #2a76af;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table,
+th,
+td {
+  border: 1px solid #094067;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #3da9fc;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    max-width: 90%;
+    padding: 18px;
+  }
+
+  .wrapper h2 {
+    font-size: 18px;
+  }
+
+  .input-box input,
+  .input-box select {
+    height: 38px;
+    font-size: 14px;
+  }
+
+  .input-box.button input {
+    height: 42px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .wrapper h2 {
+    font-size: 16px;
+  }
+
+  .input-box input,
+  .input-box select {
+    height: 36px;
+    font-size: 13px;
+  }
+
+  .input-box.button input {
+    height: 40px;
+    font-size: 15px;
+  }
 }

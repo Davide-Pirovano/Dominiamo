@@ -8,4 +8,10 @@ public class GestisciPrenotazione {
         // Creazione di una prenotazione
         return db.inserisciDati(dati);
     }
+
+    public synchronized String leggiPrenotazioni(String email) {
+        System.out.println("Lettura prenotazioni");
+        // Lettura delle prenotazioni
+        return db.leggiDati(email);
+    }
 }

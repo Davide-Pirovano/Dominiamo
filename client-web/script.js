@@ -7,7 +7,7 @@ async function init() {
     var cookie = getCookie();
     if (!cookie) {
         registerUserDOM();
-    }else{
+    } else {
         loadInterfaceDOM();
     }
 
@@ -56,7 +56,7 @@ async function registerUserDOM() {
 }
 
 function loadInterfaceDOM() {
-    const createDomainForm = document.getElementById("create-domain-form");
+    const createDomainForm = document.getElementById("container");
     createDomainForm.style.display = "block";
 
     const cookie = getCookie();
@@ -91,8 +91,55 @@ async function handleCreateDomain(event) {
 
 }
 
+async function loadYourDomains() {
+    const cookie = getCookie();
+    const email = cookie.email;
+
+    console.log(email);
+
+    const response = await fetch(`${API_URI}?email=${email}`);
+    const jsonResponse = await response.json();
+    console.log(jsonResponse);
+    // aggiorno la tabella con i domini
+    const tbody = document.getElementById('your-domain-tbody');
+
+    // Pulisce la tabella
+    tbody.innerHTML = '';
+
+    // Genera le righe della tabella ed aggiungi solo gli elementi che ci interessano
+    jsonResponse.forEach(item => {
+        const row = document.createElement('tr');
+
+        Object.keys(item).forEach(key => {
+            if (key == 'dominio' || key == 'durata') {
+                const cell = document.createElement('td');
+                cell.textContent = item[key];
+                row.appendChild(cell);
+            }
+        });
+
+        tbody.appendChild(row);
+    });
+
+}
+
 const form = document.getElementById("register-form-wrapper");
 form.addEventListener("submit", registerUser);
 
-const form_create_domain = document.getElementById("create-domain-form");
+const form_create_domain = document.getElementById("container");
 form_create_domain.addEventListener("submit", handleCreateDomain);
+
+document.getElementById('create-domain-switch').addEventListener('click', function () {
+    document.getElementById('create-domain-wrapper').style.display = 'block';
+    document.getElementById('your-domains-wrapper').style.display = 'none';
+    document.getElementById('create-domain-switch').classList.add('active');
+    document.getElementById('your-domains-switch').classList.remove('active');
+});
+
+document.getElementById('your-domains-switch').addEventListener('click', function () {
+    document.getElementById('create-domain-wrapper').style.display = 'none';
+    document.getElementById('your-domains-wrapper').style.display = 'block';
+    document.getElementById('create-domain-switch').classList.remove('active');
+    document.getElementById('your-domains-switch').classList.add('active');
+    loadYourDomains();
+});

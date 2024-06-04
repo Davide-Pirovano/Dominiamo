@@ -63,6 +63,9 @@ public class Main {
                 	case "1": //creazione
                 		out.println(gp.creaPrenotazione(dati));
                 		break;
+                    case "4":
+                        out.println(gp.leggiPrenotazioni(dati[1]));
+                        break;
                 }
 
                 in.close();

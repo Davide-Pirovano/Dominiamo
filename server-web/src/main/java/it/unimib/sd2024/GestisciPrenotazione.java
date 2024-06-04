@@ -7,20 +7,21 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
+// import java.util.HashMap;
+// import java.util.Map;
 
-import jakarta.json.JsonException;
+// import jakarta.json.JsonException;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
+// import jakarta.ws.rs.Consumes;
+// import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
+// import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+// import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -32,22 +33,67 @@ import jakarta.ws.rs.core.Response.Status;
 public class GestisciPrenotazione {
     // Attributi privati statici...
     private static int latestId = 0;
+    Socket socket;
+    PrintStream out;
+    BufferedReader in;
 
-    // Inizializzazione statica.
-    static {
-        // ...
+    public GestisciPrenotazione() {
+        // apro connessione al db
+        startSocket();
     }
 
-    /**
-     * Implementazione di GET "/example".
-     */
+    private void startSocket() {
+        try {
+            socket = new Socket("localhost", 3030);
+            out = new PrintStream(socket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
+    private void closeSocket() {
+        try {
+            out.close();
+            in.close();
+            socket.close();
+        } catch (IOException e) {
+            System.out.println(e);
+        }
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Integer getDomini() {
-        // Aprire qui una socket verso il database, fare il comando per ottenere la
-        // risposta.
-        // ...
-        return 42;
+    public Response getDomini(@QueryParam("email") String email) {
+
+        try {
+            startSocket();
+            String op = "4"; // read operation
+            String request = op + ";" + email;
+            out.println(request);
+            out.println("0");
+
+            String dato = "";
+            String inputLine = "";
+            while ((inputLine = in.readLine()) != null) {
+                if ("0".equals(inputLine)) {
+                    break;
+                }
+                dato += inputLine;
+            }
+
+            // invio response con dato al client
+            if (dato.equals("")) {
+                closeSocket();
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            closeSocket();
+            return Response.ok(dato).build();
+        } catch (IOException e) {
+            System.out.println(e);
+            return Response.serverError().build();
+        }
     }
 
     @POST
@@ -60,9 +106,7 @@ public class GestisciPrenotazione {
             prenotazione.setIdPrenotazione(latestId++);
             // salvataggio prenotazione nel database
 
-            Socket socket = new Socket("localhost", 3030);
-            PrintStream out = new PrintStream(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            startSocket();
 
             String op = "1"; // create operation
             String dominio = prenotazione.getDominio();
@@ -93,11 +137,11 @@ public class GestisciPrenotazione {
             System.out.println(dato);
 
             if (dato.equals("false")) {
-                socket.close();
+                closeSocket();
                 return Response.status(Response.Status.CONFLICT).build();
             }
 
-            socket.close();
+            closeSocket();
 
             return Response.created(new URI("http://localhost:8080/domini/" + prenotazione.getIdPrenotazione()))
                     .entity(JsonbBuilder.create().toJson(prenotazione)).build();
