@@ -1,6 +1,7 @@
 package it.unimib.sd2024;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -43,7 +44,8 @@ public class GestisciPrenotazione {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Integer getDomini() {
-        // Aprire qui una socket verso il database, fare il comando per ottenere la risposta.
+        // Aprire qui una socket verso il database, fare il comando per ottenere la
+        // risposta.
         // ...
         return 42;
     }
@@ -52,16 +54,17 @@ public class GestisciPrenotazione {
     @Produces(MediaType.APPLICATION_JSON)
     public synchronized Response crateDomain(String body) {
         try {
-            // generazione prenotazione creando un id univoco da assegnarli e passando i valori del body
+            // generazione prenotazione creando un id univoco da assegnarli e passando i
+            // valori del body
             Prenotazione prenotazione = JsonbBuilder.create().fromJson(body, Prenotazione.class);
             prenotazione.setIdPrenotazione(latestId++);
             // salvataggio prenotazione nel database
-            
+
             Socket socket = new Socket("localhost", 3030);
             PrintStream out = new PrintStream(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            String op = "1"; //create operation
+            String op = "1"; // create operation
             String dominio = prenotazione.getDominio();
             int durata = prenotazione.getDurata();
             String nome = prenotazione.getNome();
@@ -71,32 +74,36 @@ public class GestisciPrenotazione {
             String scadenzaCarta = prenotazione.getScadenzaCarta();
             String nomeCognomeIntestatario = prenotazione.getNomeCognomeIntestatario();
 
-            String request = op + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";" + email + ";" + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario+";0";
+            String request = op + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";" + email + ";"
+                    + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";0";
             out.println(request);
 
             String dato = "";
-             String inputLine = "";
-             
+            String inputLine = "";
+
             while ((inputLine = in.readLine()) != null) {
                 if ("0".equals(inputLine)) {
                     break;
                 }
                 dato += inputLine;
             }
-             
+
             System.out.println(dato);
 
-            if(dato.equals("false")) {
+            if (dato.equals("false")) {
                 socket.close();
-                return Response.status(Response.Status.CONFLICT).build();            	 
+                return Response.status(Response.Status.CONFLICT).build();
             }
-            
+
             socket.close();
 
             return Response.created(new URI("http://localhost:8080/domini/" + prenotazione.getIdPrenotazione()))
                     .entity(JsonbBuilder.create().toJson(prenotazione)).build();
         } catch (JsonbException | URISyntaxException e) {
             return Response.status(Status.BAD_REQUEST).build();
+        } catch (IOException e) {
+            System.out.println(e);
+            return Response.serverError().build();
         }
     }
 }
