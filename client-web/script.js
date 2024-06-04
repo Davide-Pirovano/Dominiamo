@@ -44,14 +44,14 @@ async function registerUser(event) {
     document.cookie = `cognome=${data.cognome}`;
 
     // rimuovo form registrazione
-    const registerForm = document.getElementById("register-form");
+    const registerForm = document.getElementById("register-form-wrapper");
     registerForm.style.display = "none";
     loadInterfaceDOM();
 }
 
 async function registerUserDOM() {
     // aggiorno la pagina con il form di registrazione
-    const registerForm = document.getElementById("register-form");
+    const registerForm = document.getElementById("register-form-wrapper");
     registerForm.style.display = "block";
 }
 
@@ -93,7 +93,7 @@ async function handleCreateDomain(event) {
 
 }
 
-const form = document.getElementById("register-form");
+const form = document.getElementById("register-form-wrapper");
 form.addEventListener("submit", registerUser);
 
 const form_create_domain = document.getElementById("create-domain-form");

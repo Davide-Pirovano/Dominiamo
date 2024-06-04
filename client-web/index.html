@@ -12,22 +12,24 @@
 </head>
 
 <body data-server-no-reload>
-  <form id="register-form" hidden>
+
+  <div class="wrapper" id="register-form-wrapper" hidden>
     <h2>Registrati</h2>
-    <div>
-      <label>Nome:</label>
-      <input type="text" id="nome-registrazione" name="nome" required>
-    </div>
-    <div>
-      <label>Cognome:</label>
-      <input type="text" id="cognome-registrazione" name="cognome" required>
-    </div>
-    <div>
-      <label>Email:</label>
-      <input type="email" id="email-registrazione" name="email" required>
-    </div>
-    <button type="submit">Registrati</button>
-  </form>
+    <form id="register-form">
+      <div class="input-box">
+        <input type="text" id="nome-registrazione" name="nome" placeholder="Nome" required>
+      </div>
+      <div class="input-box">
+        <input type="text" id="cognome-registrazione" name="cognome" required placeholder="Cognome">
+      </div>
+      <div class="input-box">
+        <input type="email" id="email-registrazione" name="email" required placeholder="Email">
+      </div>
+      <div class="input-box button">
+        <input type="submit" value="Invia">
+      </div>
+    </form>
+  </div>
 
   <form id="create-domain-form" hidden>
     <div>
