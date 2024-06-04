@@ -6,7 +6,7 @@ Lo scheletro espone la struttura che il progetto deve seguire. Al posto di quest
 
 * Davide Pirovano (894632) <d.pirovano16@campus.unimib.it>
 * Luca Bonfanti (894394) <l.bonfanti19@campus.unimib.it>
-* Matteo Fumagalli (-) <m.fumagalli-@campus.unimib.it>
+* Matteo Fumagalli (894468) <m.fumagalli139@campus.unimib.it>
 
 ## Compilazione ed esecuzione
 
