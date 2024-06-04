@@ -1,0 +1,5 @@
+PROTOCOLLO COMUNICAZIONE CLIENT SERVER
+0 - carettere terminatore conversazione
+1 - creazione nuovo dominio
+2 - modifica durata prenotazione
+3 - rinnovo prenotazione scaduta

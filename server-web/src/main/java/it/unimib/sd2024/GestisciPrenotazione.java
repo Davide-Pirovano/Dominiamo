@@ -75,8 +75,10 @@ public class GestisciPrenotazione {
             String nomeCognomeIntestatario = prenotazione.getNomeCognomeIntestatario();
 
             String request = op + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";" + email + ";"
-                    + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";0";
+                    + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario;
             out.println(request);
+            System.out.println(request);
+            out.println("0");
 
             String dato = "";
             String inputLine = "";

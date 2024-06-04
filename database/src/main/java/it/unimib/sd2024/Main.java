@@ -7,6 +7,8 @@ import java.io.*;
  * Classe principale in cui parte il database.
  */
 public class Main {
+    private static GestisciPrenotazione gp = new GestisciPrenotazione();
+
     /**
      * Porta di ascolto.
      */
@@ -45,14 +47,22 @@ public class Main {
                 var out = new PrintWriter(client.getOutputStream(), true);
                 var in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-                String inputLine;
+                String dato = "";
+                String inputLine = "";
 
                 while ((inputLine = in.readLine()) != null) {
-                    if (".".equals(inputLine)) {
-                        out.println("bye");
+                    if ("0".equals(inputLine)) {
                         break;
                     }
-                    out.println(inputLine);
+                    dato += inputLine;
+                }
+
+                String[] dati = dato.split(";");
+                
+                switch(dati[0]) {
+                	case "1": //creazione
+                		out.println(gp.creaPrenotazione(dati));
+                		break;
                 }
 
                 in.close();

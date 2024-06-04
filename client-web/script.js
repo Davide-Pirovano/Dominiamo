@@ -78,8 +78,6 @@ async function handleCreateDomain(event) {
     const data = Object.fromEntries(formData);
     const jsonData = JSON.stringify(data);
 
-    console.log(jsonData);
-
     const response = await fetch(API_URI, {
         method: "POST",
         headers: {
