@@ -155,46 +155,30 @@ th {
   color: white;
 }
 
-@media (max-width: 768px) {
-  .wrapper {
-    max-width: 90%;
-    padding: 18px;
-  }
-
-  .wrapper h2 {
-    font-size: 18px;
-  }
-
-  .input-box input,
-  .input-box select {
-    height: 38px;
-    font-size: 14px;
-  }
-
-  .input-box.button input {
-    height: 42px;
-    font-size: 16px;
-  }
+#create-domain-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-@media (max-width: 480px) {
-  .wrapper {
-    max-width: 90%;
-    padding: 15px;
-  }
+.form-row {
+  display: flex;
+  margin-bottom: 8px;
+  align-items: center;
+}
 
-  .wrapper h2 {
-    font-size: 16px;
-  }
+.form-row label {
+  width: 50%;
+  padding-right: 10px;
+  text-align: right;
+}
 
-  .input-box input,
-  .input-box select {
-    height: 36px;
-    font-size: 13px;
-  }
+.form-row input,
+.form-row select {
+  width: 50%;
+}
 
-  .input-box.button input {
-    height: 40px;
-    font-size: 15px;
-  }
+#title-create-domain-form {
+  text-align: center;
+  margin-bottom: 5px;
 }

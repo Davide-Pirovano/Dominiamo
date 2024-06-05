@@ -76,6 +76,14 @@ async function handleCreateDomain(event) {
     const form = event.target;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
+
+    // aggingo a jsonData la dataOdierna per il controllo della durata e il giorno di scadenza calcolato
+    const dataPrenotazione = new Date();
+    const dataScadenza = new Date(dataPrenotazione);
+    // calcolo la durata in anni
+    dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(data.durata));
+    data.dataPrenotazione = dataPrenotazione.toLocaleDateString();
+    data.dataScadenza = dataScadenza.toLocaleDateString();
     const jsonData = JSON.stringify(data);
 
     const response = await fetch(API_URI, {
@@ -87,7 +95,6 @@ async function handleCreateDomain(event) {
     });
 
     const jsonResponse = await response.json();
-    console.log(jsonResponse);
 
 }
 
@@ -95,26 +102,44 @@ async function loadYourDomains() {
     const cookie = getCookie();
     const email = cookie.email;
 
-    console.log(email);
-
     const response = await fetch(`${API_URI}?email=${email}`);
     const jsonResponse = await response.json();
-    console.log(jsonResponse);
     // aggiorno la tabella con i domini
     const tbody = document.getElementById('your-domain-tbody');
 
     // Pulisce la tabella
     tbody.innerHTML = '';
 
+    console.log(jsonResponse);
     // Genera le righe della tabella ed aggiungi solo gli elementi che ci interessano
     jsonResponse.forEach(item => {
         const row = document.createElement('tr');
 
         Object.keys(item).forEach(key => {
-            if (key == 'dominio' || key == 'durata') {
+            // popolo la tabella secondo la seguente intestazione <th>idPrenotazione</th> <th>Dominio</th> <th>Durata</th> <th>Scadenza</th> <th>Stato</th>
+
+            if (key === 'idPrenotazione' || key === 'dominio' || key === 'durata' || key === 'dataScadenza') {
                 const cell = document.createElement('td');
                 cell.textContent = item[key];
                 row.appendChild(cell);
+                if (key === 'dataScadenza') {
+                    const dataScadenza = new Date(item[key]);
+                    const dataOdierna = new Date();
+                    if (dataScadenza < dataOdierna) {
+                        // al posto della scritta scaduto metto un bottone con scritto scaduto
+                        const cell = document.createElement('td');
+                        const button = document.createElement('button');
+                        button.textContent = 'Scaduto - Rinnova - Elimina';
+                        cell.appendChild(button);
+                        row.appendChild(cell);
+                    }
+                    else {
+
+                        const cell = document.createElement('td');
+                        cell.textContent = 'Attivo';
+                        row.appendChild(cell);
+                    }
+                }
             }
         });
 

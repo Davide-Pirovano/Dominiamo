@@ -1,5 +1,7 @@
 package it.unimib.sd2024;
 
+// avvio --> mvn jetty:run
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -36,11 +38,6 @@ public class GestisciPrenotazione {
     Socket socket;
     PrintStream out;
     BufferedReader in;
-
-    public GestisciPrenotazione() {
-        // apro connessione al db
-        startSocket();
-    }
 
     private void startSocket() {
         try {
@@ -109,6 +106,7 @@ public class GestisciPrenotazione {
             startSocket();
 
             String op = "1"; // create operation
+            int idPrenotazione = prenotazione.getIdPrenotazione();
             String dominio = prenotazione.getDominio();
             int durata = prenotazione.getDurata();
             String nome = prenotazione.getNome();
@@ -117,11 +115,15 @@ public class GestisciPrenotazione {
             String numeroCarta = prenotazione.getNumeroCarta();
             String scadenzaCarta = prenotazione.getScadenzaCarta();
             String nomeCognomeIntestatario = prenotazione.getNomeCognomeIntestatario();
+            String cvv = prenotazione.getCvv();
+            String dataPrenotazione = prenotazione.getDataPrenotazione().toString();
+            String dataScadenza = prenotazione.getDataScadenza().toString();
 
-            String request = op + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";" + email + ";"
-                    + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario;
+            String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";" + email + ";"+ cvv + ";"
+                    + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";" + dataPrenotazione + ";"
+                    + dataScadenza;
+            
             out.println(request);
-            System.out.println(request);
             out.println("0");
 
             String dato = "";
@@ -133,8 +135,6 @@ public class GestisciPrenotazione {
                 }
                 dato += inputLine;
             }
-
-            System.out.println(dato);
 
             if (dato.equals("false")) {
                 closeSocket();

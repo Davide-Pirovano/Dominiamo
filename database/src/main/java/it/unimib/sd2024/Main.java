@@ -1,5 +1,7 @@
 package it.unimib.sd2024;
 
+// avvio --> mvn clean compile exec:java
+
 import java.net.*;
 import java.io.*;
 

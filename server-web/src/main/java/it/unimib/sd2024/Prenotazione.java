@@ -22,6 +22,10 @@ public class Prenotazione {
 
     private String nomeCognomeIntestatario;
 
+    private String dataPrenotazione;
+
+    private String dataScadenza;
+
     public int getIdPrenotazione() {
         return idPrenotazione;
     }
@@ -102,4 +106,19 @@ public class Prenotazione {
         this.nomeCognomeIntestatario = nomeCognomeIntestatario;
     }
 
+    public String getDataPrenotazione() {
+        return dataPrenotazione;
+    }
+
+    public void setDataPrenotazione(String dataPrenotazione) {
+        this.dataPrenotazione = dataPrenotazione;
+    }
+
+    public String getDataScadenza() {
+        return dataScadenza;
+    }
+
+    public void setDataScadenza(String dataScadenza) {
+        this.dataScadenza = dataScadenza;
+    }
 }

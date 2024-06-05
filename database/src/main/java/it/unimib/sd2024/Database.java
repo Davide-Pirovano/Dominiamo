@@ -12,8 +12,8 @@ import org.json.*;
 
 public class Database {
     private String dbPath = "src\\main\\java\\it\\unimib\\sd2024\\Database.json";
-    String[] chiavi = { "idPrenotazione", "dominio", "durata", "nome", "cognome", "email", "numeroCarta",
-            "scadenzaCarta", "cvv", "nomeCognomeIntestatario" };
+    String[] chiavi = { "idPrenotazione", "dominio", "durata", "nome", "cognome", "email", "cvv", "numeroCarta",
+            "scadenzaCarta", "nomeCognomeIntestatario", "dataPrenotazione", "dataScadenza"};
 
     public Database() {
         // Creazione del file json se non esiste
@@ -24,7 +24,7 @@ public class Database {
                 // inizializzo {"Prenotazione" : []}
                 FileWriter fileWriter = new FileWriter(dbPath);
                 BufferedWriter writer = new BufferedWriter(fileWriter);
-                writer.write("{\"Prenotazione\" : []}");
+                writer.write("{\"Prenotazioni\" : []}");
                 writer.close();
             } else {
                 System.out.println("File esistente");
@@ -45,7 +45,7 @@ public class Database {
             JSONObject jsonObject = new JSONObject(content);
 
             // Ottieni l'array JSON "Prenotazione"
-            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazione");
+            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
 
             // Creo un JSONObject per il nuovo oggetto JSON
             JSONObject newJsonObject = new JSONObject();
@@ -78,7 +78,7 @@ public class Database {
             JSONObject jsonObject = new JSONObject(content);
 
             // Ottieni l'array JSON "Prenotazione"
-            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazione");
+            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
 
             JSONArray result = new JSONArray();
 
