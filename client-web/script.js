@@ -77,6 +77,27 @@ async function handleCreateDomain(event) {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
+    // svuoto i campi del form
+    form.reset();
+    // ripongo le informazioni dei cookie nel form
+    const cookie = getCookie();
+    const nome = document.getElementById("name-create-domain");
+    nome.value = cookie.nome;
+
+    const cognome = document.getElementById("surname-create-domain");
+    cognome.value = cookie.cognome;
+
+    const email = document.getElementById("email-create-domain");
+    email.value = cookie.email;
+
+    // mostro sucessPopup
+    const successPopup = document.getElementById("successPopup");
+    successPopup.style.display = "block";
+
+    // disattivo bottone Registrare Dominio e gli cambio colore
+    document.getElementById("submit-create-domain").disabled = true;
+    document.getElementById("submit-create-domain").style.backgroundColor = "#a7cfee";
+
     // aggingo a jsonData la dataOdierna per il controllo della durata e il giorno di scadenza calcolato
     const dataPrenotazione = new Date();
     const dataScadenza = new Date(dataPrenotazione);
@@ -161,11 +182,28 @@ async function loadYourDomains() {
 
 }
 
-const form = document.getElementById("register-form-wrapper");
-form.addEventListener("submit", registerUser);
+const register_form = document.getElementById("register-form-wrapper");
+register_form.addEventListener("submit", registerUser);
 
-const form_create_domain = document.getElementById("container");
+const form_create_domain = document.getElementById("create-domain-form");
 form_create_domain.addEventListener("submit", handleCreateDomain);
+
+document.getElementById("cancel-create-domain").addEventListener("click", function (event) {
+    event.preventDefault();
+    
+    document.getElementById("create-domain-form").reset();
+
+    // imposto nel form i cookie
+    const cookie = getCookie();
+    const nome = document.getElementById("name-create-domain");
+    nome.value = cookie.nome;
+
+    const cognome = document.getElementById("surname-create-domain");
+    cognome.value = cookie.cognome;
+
+    const email = document.getElementById("email-create-domain");
+    email.value = cookie.email;
+});
 
 document.getElementById('create-domain-switch').addEventListener('click', function () {
     document.getElementById('create-domain-wrapper').style.display = 'block';
@@ -189,8 +227,9 @@ document.getElementById('logout-button').addEventListener('click', function () {
     window.location.reload();
 });
 
-document.getElementById('your-domain-tbody').addEventListener('click', async function (event) {
-    if (event.target.classList.contains('btn-rinnova-elimina')) {
-        // todo
-    }
+// listener successPopup per la chiusura
+document.getElementById('successPopup').addEventListener('click', function () {
+    document.getElementById('successPopup').style.display = 'none';
+    document.getElementById("submit-create-domain").disabled = false;
+    document.getElementById("submit-create-domain").style.backgroundColor = "#3da9fc";
 });

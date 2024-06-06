@@ -18,8 +18,22 @@
         "cvv": "1",
         "dataPrenotazione": "06/06/2024",
         "cognome": "Pirovano",
-        "idPrenotazione": "2",
-        "dominio": "dominio2.it",
+        "idPrenotazione": "1",
+        "dominio": "dominio.it",
+        "durata": "1",
+        "numeroCarta": "1",
+        "nome": "Davide",
+        "scadenzaCarta": "1",
+        "email": "test@email.it",
+        "dataScadenza": "06/06/2023"
+    },
+    {
+        "nomeCognomeIntestatario": "1",
+        "cvv": "1",
+        "dataPrenotazione": "06/06/2024",
+        "cognome": "Piro",
+        "idPrenotazione": "21",
+        "dominio": "1",
         "durata": "1",
         "numeroCarta": "1",
         "nome": "Davide",
@@ -28,17 +42,17 @@
         "dataScadenza": "06/06/2025"
     },
     {
-        "nomeCognomeIntestatario": "1",
-        "cvv": "12",
+        "nomeCognomeIntestatario": "2",
+        "cvv": "2",
         "dataPrenotazione": "06/06/2024",
-        "cognome": "Pirovano",
-        "idPrenotazione": "3",
-        "dominio": "dominio2.it",
+        "cognome": "Piro",
+        "idPrenotazione": "22",
+        "dominio": "2",
         "durata": "1",
-        "numeroCarta": "1",
+        "numeroCarta": "2",
         "nome": "Davide",
-        "scadenzaCarta": "1",
+        "scadenzaCarta": "2",
         "email": "test@email.it",
-        "dataScadenza": "06/06/2021"
+        "dataScadenza": "06/06/2025"
     }
 ]}
