@@ -17,36 +17,6 @@ body {
   text-align: center;
 }
 
-.button-group {
-  margin-bottom: 20px;
-}
-
-.button-group button {
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: none;
-  background-color: #3da9fc;
-  color: #fff;
-  cursor: pointer;
-  border-radius: 5px;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.button-group button.active {
-  text-decoration: underline;
-  text-decoration-color: #ffffff;
-}
-
-.button-group button.active:hover {
-  transition: all 0.3s ease;
-  text-decoration: none;
-}
-
-.button-group button:hover {
-  background-color: #3086c9;
-}
-
 .wrapper {
   position: relative;
   max-width: 320px;
@@ -95,7 +65,7 @@ body {
   padding: 0 15px;
   font-size: 15px;
   font-weight: 400;
-  color: #094067;
+  color: black;
   border: 1.5px solid #094067;
   border-bottom-width: 2.5px;
   border-radius: 6px;
@@ -158,7 +128,6 @@ th {
 #create-domain-form {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .form-row {
@@ -181,4 +150,87 @@ th {
 #title-create-domain-form {
   text-align: center;
   margin-bottom: 5px;
+}
+
+#action-container {
+  margin-top: 15%;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+#logout-button-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+  padding: 5px;
+}
+
+#logout-button {
+  background-color: #ffffff;
+  color: #ff0000;
+  border: 2px solid #ff0000;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.button-group {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+  padding: 5px;
+}
+
+.button-group button {
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  margin-right: 5px;
+  margin-left: 5px;
+  border: none;
+  background-color: #3da9fc;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.button-group button.active {
+  text-decoration: underline;
+  text-decoration-color: #ffffff;
+}
+
+.button-group button.active:hover {
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.button-group button:hover {
+  background-color: #3086c9;
+}
+
+#your-domains-wrapper h2{
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.btn-rinnova-elimina {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border: none;
+  border-radius: 2px;
+  background-color: #ca5e5e;
+  color: #ffffff;
+  cursor: pointer;
 }

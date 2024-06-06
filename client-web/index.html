@@ -36,78 +36,85 @@
       <button id="your-domains-switch">I tuoi domini</button>
     </div>
 
-    <div id="create-domain-wrapper">
-      <form id="create-domain-form">
-        <h2 id="title-create-domain-form">Crea un dominio</h2>
-        <div class="form-row">
-          <label for="domain-create-domain">Dominio da acquistare:</label>
-          <input type="text" id="domain-create-domain" name="dominio" required>
-        </div>
-        <div class="form-row">
-          <label for="duration-create-domain">Durata della registrazione:</label>
-          <select id="duration-create-domain" name="durata" required>
-            <option value="1">1 anno</option>
-            <option value="2">2 anni</option>
-            <option value="3">3 anni</option>
-            <option value="4">4 anni</option>
-            <option value="5">5 anni</option>
-            <option value="6">6 anni</option>
-            <option value="7">7 anni</option>
-            <option value="8">8 anni</option>
-            <option value="9">9 anni</option>
-            <option value="10">10 anni</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="name-create-domain">Nome:</label>
-          <input type="text" id="name-create-domain" name="nome" required>
-        </div>
-        <div class="form-row">
-          <label for="surname-create-domain">Cognome:</label>
-          <input type="text" id="surname-create-domain" name="cognome" required>
-        </div>
-        <div class="form-row">
-          <label for="email-create-domain">Indirizzo Email:</label>
-          <input type="email" id="email-create-domain" name="email" required>
-        </div>
-        <div class="form-row">
-          <label for="creditCardNumber-create-domain">Numero di Carta di Credito:</label>
-          <input type="text" id="creditCardNumber-create-domain" name="numeroCarta" required>
-        </div>
-        <div class="form-row">
-          <label for="expirationDate-create-domain">Data di Scadenza (MM/AA):</label>
-          <input type="text" id="expirationDate-create-domain" name="scadenzaCarta" placeholder="MM/AA" required>
-        </div>
-        <div class="form-row">
-          <label for="cvv-create-domain">CVV:</label>
-          <input type="text" id="cvv-create-domain" name="cvv" required>
-        </div>
-        <div class="form-row">
-          <label for="cardHolderName-create-domain">Nome e Cognome Intestatario Carta:</label>
-          <input type="text" id="cardHolderName-create-domain" name="nomeCognomeIntestatario" required>
-        </div>
-        <div class="input-box button">
-          <input type="submit" value="Registrare Dominio">
-        </div>
-      </form>
+    <div id="logout-button-wrapper">
+      <button id="logout-button">Logout</button>
     </div>
 
-    <div id="your-domains-wrapper" hidden>
-      <h2>I tuoi domini</h2>
-      <!-- tabella per visualizzare i domini -->
-      <table id="your-domains-table">
-        <thead>
-          <tr>
-            <th>idPrenotazione</th>
-            <th>Dominio</th>
-            <th>Durata</th>
-            <th>Scadenza</th>
-            <th>Stato</th>
-          </tr>
-        </thead>
-        <tbody id="your-domain-tbody">
-        </tbody>
+    <div id="action-container">
+      <div id="create-domain-wrapper">
+        <form id="create-domain-form">
+          <h2 id="title-create-domain-form">Crea un dominio</h2>
+          <div class="form-row">
+            <label for="domain-create-domain">Dominio da acquistare:</label>
+            <input type="text" id="domain-create-domain" name="dominio" required>
+          </div>
+          <div class="form-row">
+            <label for="duration-create-domain">Durata della registrazione:</label>
+            <select id="duration-create-domain" name="durata" required>
+              <option value="1">1 anno</option>
+              <option value="2">2 anni</option>
+              <option value="3">3 anni</option>
+              <option value="4">4 anni</option>
+              <option value="5">5 anni</option>
+              <option value="6">6 anni</option>
+              <option value="7">7 anni</option>
+              <option value="8">8 anni</option>
+              <option value="9">9 anni</option>
+              <option value="10">10 anni</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="name-create-domain">Nome:</label>
+            <input type="text" id="name-create-domain" name="nome" required>
+          </div>
+          <div class="form-row">
+            <label for="surname-create-domain">Cognome:</label>
+            <input type="text" id="surname-create-domain" name="cognome" required>
+          </div>
+          <div class="form-row">
+            <label for="email-create-domain">Indirizzo Email:</label>
+            <input type="email" id="email-create-domain" name="email" required>
+          </div>
+          <div class="form-row">
+            <label for="creditCardNumber-create-domain">Numero di Carta di Credito:</label>
+            <input type="text" id="creditCardNumber-create-domain" name="numeroCarta" required>
+          </div>
+          <div class="form-row">
+            <label for="expirationDate-create-domain">Data di Scadenza (MM/AA):</label>
+            <input type="text" id="expirationDate-create-domain" name="scadenzaCarta" placeholder="MM/AA" required>
+          </div>
+          <div class="form-row">
+            <label for="cvv-create-domain">CVV:</label>
+            <input type="text" id="cvv-create-domain" name="cvv" required>
+          </div>
+          <div class="form-row">
+            <label for="cardHolderName-create-domain">Nome e Cognome Intestatario Carta:</label>
+            <input type="text" id="cardHolderName-create-domain" name="nomeCognomeIntestatario" required>
+          </div>
+          <div class="input-box button">
+            <input type="submit" value="Registrare Dominio">
+          </div>
+        </form>
+      </div>
+
+      <div id="your-domains-wrapper" hidden>
+        <h2>I tuoi domini</h2>
+        <table id="your-domains-table">
+          <thead>
+            <tr>
+              <th>idPrenotazione</th>
+              <th>Dominio</th>
+              <th>Durata</th>
+              <th>Scadenza</th>
+              <th>Stato</th>
+            </tr>
+          </thead>
+          <tbody id="your-domain-tbody">
+          </tbody>
+      </div>
     </div>
+
+
 
   </div>
 

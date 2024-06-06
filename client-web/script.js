@@ -110,8 +110,19 @@ async function loadYourDomains() {
     // Pulisce la tabella
     tbody.innerHTML = '';
 
-    console.log(jsonResponse);
+    // console.log(jsonResponse);
     // Genera le righe della tabella ed aggiungi solo gli elementi che ci interessano
+
+    // controllo se ho domini registrati
+    if (jsonResponse.length === 0) {
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');  //aggiungo colspan di 5
+        cell.setAttribute('colspan', '5');
+        cell.textContent = 'Nessun dominio registrato';
+        row.appendChild(cell);
+        tbody.appendChild(row);
+    }
+
     jsonResponse.forEach(item => {
         const row = document.createElement('tr');
 
@@ -129,7 +140,9 @@ async function loadYourDomains() {
                         // al posto della scritta scaduto metto un bottone con scritto scaduto
                         const cell = document.createElement('td');
                         const button = document.createElement('button');
-                        button.textContent = 'Scaduto - Rinnova - Elimina';
+                        button.textContent = 'Rinnova/Elimina';
+                        // aggiungo classe al button
+                        button.classList.add('btn-rinnova-elimina');
                         cell.appendChild(button);
                         row.appendChild(cell);
                     }
@@ -167,4 +180,17 @@ document.getElementById('your-domains-switch').addEventListener('click', functio
     document.getElementById('create-domain-switch').classList.remove('active');
     document.getElementById('your-domains-switch').classList.add('active');
     loadYourDomains();
+});
+
+document.getElementById('logout-button').addEventListener('click', function () {
+    document.cookie = 'email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'nome=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'cognome=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.reload();
+});
+
+document.getElementById('your-domain-tbody').addEventListener('click', async function (event) {
+    if (event.target.classList.contains('btn-rinnova-elimina')) {
+        // todo
+    }
 });
