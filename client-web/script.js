@@ -94,9 +94,9 @@ async function handleCreateDomain(event) {
     const successPopup = document.getElementById("successPopup");
     successPopup.style.display = "block";
 
-    // disattivo bottone Registrare Dominio e gli cambio colore
-    document.getElementById("submit-create-domain").disabled = true;
-    document.getElementById("submit-create-domain").style.backgroundColor = "#a7cfee";
+    // disattivo tutto il resto della pagina tranne il popUp success
+    document.getElementById('container').style.opacity = 0.5;
+    document.getElementById('container').style.pointerEvents = 'none';
 
     // aggingo a jsonData la dataOdierna per il controllo della durata e il giorno di scadenza calcolato
     const dataPrenotazione = new Date();
@@ -142,43 +142,71 @@ async function loadYourDomains() {
         cell.textContent = 'Nessun dominio registrato';
         row.appendChild(cell);
         tbody.appendChild(row);
+    } else {
+        jsonResponse.forEach(item => {
+            const headers = ['dominio', 'durata', 'dataPrenotazione', 'dataScadenza', 'stato'];
+            const row = document.createElement('tr');
+
+            // Crea un array di celle vuote
+            const cells = headers.map(() => document.createElement('td'));
+
+            Object.keys(item).forEach(key => {
+                if (key === 'dominio' || key === 'durata' || key === 'dataPrenotazione' || key === 'dataScadenza' || key === 'stato') {
+                    const cellIndex = headers.indexOf(key);
+                    const cell = cells[cellIndex];
+
+                    if (key === 'durata') {
+                        if (item[key] === '1') {
+                            cell.textContent = item[key] + ' anno';
+                        }
+                        else {
+                            cell.textContent = item[key] + ' anni';
+                        }
+                    } else {
+                        cell.textContent = item[key];
+                    }
+
+                    // se status è "scaduto" al posto bottone rinnova scrivo "scaduto"
+
+
+                    if (key === 'dataScadenza') {
+                        const dataScadenza = new Date(item[key]);
+                        const dataOdierna = new Date();
+
+                        if (item["status"] === 'scaduto') {
+                            cell.classList.add('scaduto'); // Aggiunge una classe per il colore rosso alla dataScadenza
+                            const actionCell = document.createElement('td');
+                            actionCell.textContent = 'Non Rinnovato';
+                            actionCell.classList.add('scaduto');
+                            cells[headers.indexOf('stato')] = actionCell;
+                        }
+                        else if (dataScadenza < dataOdierna) {
+                            cell.classList.add('scaduto'); // Aggiunge una classe per il colore rosso
+                            const actionCell = document.createElement('td');
+                            const button = document.createElement('button');
+                            button.textContent = 'Rinnova';
+                            button.classList.add('btn-rinnova');
+                            actionCell.appendChild(button);
+                            cells[headers.indexOf('stato')] = actionCell;
+                        } else {
+                            const actionCell = document.createElement('td');
+                            actionCell.textContent = 'Attivo';
+                            cells[headers.indexOf('stato')] = actionCell;
+                        }
+                    }
+
+
+
+                }
+            });
+
+            // Appendi tutte le celle alla riga
+            cells.forEach(cell => row.appendChild(cell));
+
+            tbody.appendChild(row);
+        });
     }
 
-    jsonResponse.forEach(item => {
-        const row = document.createElement('tr');
-
-        Object.keys(item).forEach(key => {
-            // popolo la tabella secondo la seguente intestazione <th>idPrenotazione</th> <th>Dominio</th> <th>Durata</th> <th>Scadenza</th> <th>Stato</th>
-
-            if (key === 'idPrenotazione' || key === 'dominio' || key === 'durata' || key === 'dataScadenza') {
-                const cell = document.createElement('td');
-                cell.textContent = item[key];
-                row.appendChild(cell);
-                if (key === 'dataScadenza') {
-                    const dataScadenza = new Date(item[key]);
-                    const dataOdierna = new Date();
-                    if (dataScadenza < dataOdierna) {
-                        // al posto della scritta scaduto metto un bottone con scritto scaduto
-                        const cell = document.createElement('td');
-                        const button = document.createElement('button');
-                        button.textContent = 'Rinnova/Elimina';
-                        // aggiungo classe al button
-                        button.classList.add('btn-rinnova-elimina');
-                        cell.appendChild(button);
-                        row.appendChild(cell);
-                    }
-                    else {
-
-                        const cell = document.createElement('td');
-                        cell.textContent = 'Attivo';
-                        row.appendChild(cell);
-                    }
-                }
-            }
-        });
-
-        tbody.appendChild(row);
-    });
 
 }
 
@@ -190,7 +218,7 @@ form_create_domain.addEventListener("submit", handleCreateDomain);
 
 document.getElementById("cancel-create-domain").addEventListener("click", function (event) {
     event.preventDefault();
-    
+
     document.getElementById("create-domain-form").reset();
 
     // imposto nel form i cookie
@@ -227,9 +255,32 @@ document.getElementById('logout-button').addEventListener('click', function () {
     window.location.reload();
 });
 
-// listener successPopup per la chiusura
 document.getElementById('successPopup').addEventListener('click', function () {
     document.getElementById('successPopup').style.display = 'none';
-    document.getElementById("submit-create-domain").disabled = false;
-    document.getElementById("submit-create-domain").style.backgroundColor = "#3da9fc";
+    // ripristino attività container
+    document.getElementById('container').style.opacity = 1;
+    document.getElementById('container').style.pointerEvents = 'auto';
+});
+
+// listener per il bottone rinnova btn-rinnova
+document.getElementById('your-domain-tbody').addEventListener('click', async function (event) {
+    if (event.target.classList.contains('btn-rinnova')) {
+        // mostro popUp
+        const rinnovaPopup = document.getElementById("rinnovoPopup");
+        rinnovaPopup.style.display = "block";
+        // disattivo tutto il resto della pagina tranne il popUp rinnovo
+        document.getElementById('container').style.opacity = 0.5;
+        document.getElementById('container').style.pointerEvents = 'none';
+    }
+});
+
+document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
+    // chiudo popUp
+    document.getElementById('rinnovoPopup').style.display = 'none';
+    // ripristino attività container
+    document.getElementById('container').style.opacity = 1;
+    document.getElementById('container').style.pointerEvents = 'auto';
+
+    // cambio status prenotazione in scaduto con una put
+    // todo
 });

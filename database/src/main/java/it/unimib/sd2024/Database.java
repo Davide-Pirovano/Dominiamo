@@ -13,7 +13,7 @@ import org.json.*;
 public class Database {
     private String dbPath = "src\\main\\java\\it\\unimib\\sd2024\\Database.json";
     String[] chiavi = { "idPrenotazione", "dominio", "durata", "nome", "cognome", "email", "cvv", "numeroCarta",
-            "scadenzaCarta", "nomeCognomeIntestatario", "dataPrenotazione", "dataScadenza"};
+            "scadenzaCarta", "nomeCognomeIntestatario", "dataPrenotazione", "dataScadenza", "status"};
 
     public Database() {
         // Creazione del file json se non esiste

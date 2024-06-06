@@ -31,7 +31,8 @@
     </form>
   </div>
 
-  <div class="container" id="container" hidden>
+
+  <div id="container" hidden>
     <div class="button-group">
       <button id="create-domain-switch" class="active">Crea un Dominio</button>
       <button id="your-domains-switch">I tuoi domini</button>
@@ -94,8 +95,7 @@
           </div>
 
           <div id="registrationActioButton">
-
-            <button type="button" id="cancel-create-domain" >
+            <button type="button" id="cancel-create-domain">
               <svg id="trash-icon" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                 <path fill="#f33f3f"
@@ -109,13 +109,6 @@
           </div>
 
         </form>
-
-        <!-- successPopup -->
-        <div id="successPopup" hidden>
-          <h2>Successo!</h2>
-          <p>Il dominio è stato registrato con successo!</p>
-          <button id="successPopupCloseButton">Chiudi</button>
-        </div>
       </div>
 
       <div id="your-domains-wrapper" hidden>
@@ -123,17 +116,31 @@
         <table id="your-domains-table">
           <thead>
             <tr>
-              <th>idPrenotazione</th>
               <th>Dominio</th>
               <th>Durata</th>
+              <th>Data Prenotazione</th>
               <th>Scadenza</th>
               <th>Stato</th>
             </tr>
           </thead>
           <tbody id="your-domain-tbody">
           </tbody>
+        </table>
       </div>
     </div>
+  </div>
+
+  <div class="popup" id="rinnovoPopup" hidden>
+    <h2>Vuoi rinnovare?</h2>
+    <p>Il dominio è scaduto, vuoi rinnovarlo?</p>
+    <button id="rinnovoPopupYesButton">Si</button>
+    <button id="rinnovoPopupNoButton">No</button>
+  </div>
+
+  <div class="popup" id="successPopup" hidden>
+    <h2>Successo!</h2>
+    <p>Il dominio è stato registrato con successo!</p>
+    <button id="successPopupCloseButton">Chiudi</button>
   </div>
 
   <script src="script.js"></script>

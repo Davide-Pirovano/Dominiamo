@@ -4,3 +4,10 @@ PROTOCOLLO COMUNICAZIONE CLIENT SERVER
 2 - modifica durata prenotazione
 3 - rinnovo prenotazione scaduta
 4 - visualizza domini
+
+--------------
+status = "attivo"
+	significa che o il dominio è in funzione o si trova in stallo per il rinnovo (bottone rosso)
+
+status = "scaduto"
+	significa che si ha scelto di non rinnovare il dominio

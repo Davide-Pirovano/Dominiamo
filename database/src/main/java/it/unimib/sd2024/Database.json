@@ -1,58 +1,34 @@
-{"Prenotazioni": [
-    {
-        "nomeCognomeIntestatario": "1",
-        "cvv": "1",
-        "dataPrenotazione": "06/06/2024",
-        "cognome": "Pirovano",
-        "idPrenotazione": "1",
-        "dominio": "dominio.it",
-        "durata": "1",
-        "numeroCarta": "1",
-        "nome": "Davide",
-        "scadenzaCarta": "1",
-        "email": "test@email.it",
-        "dataScadenza": "06/06/2025"
-    },
-    {
-        "nomeCognomeIntestatario": "1",
-        "cvv": "1",
-        "dataPrenotazione": "06/06/2024",
-        "cognome": "Pirovano",
-        "idPrenotazione": "1",
-        "dominio": "dominio.it",
-        "durata": "1",
-        "numeroCarta": "1",
-        "nome": "Davide",
-        "scadenzaCarta": "1",
-        "email": "test@email.it",
-        "dataScadenza": "06/06/2023"
-    },
-    {
-        "nomeCognomeIntestatario": "1",
-        "cvv": "1",
-        "dataPrenotazione": "06/06/2024",
-        "cognome": "Piro",
-        "idPrenotazione": "21",
-        "dominio": "1",
-        "durata": "1",
-        "numeroCarta": "1",
-        "nome": "Davide",
-        "scadenzaCarta": "1",
-        "email": "test@email.it",
-        "dataScadenza": "06/06/2025"
-    },
-    {
-        "nomeCognomeIntestatario": "2",
-        "cvv": "2",
-        "dataPrenotazione": "06/06/2024",
-        "cognome": "Piro",
-        "idPrenotazione": "22",
-        "dominio": "2",
-        "durata": "1",
-        "numeroCarta": "2",
-        "nome": "Davide",
-        "scadenzaCarta": "2",
-        "email": "test@email.it",
-        "dataScadenza": "06/06/2025"
-    }
-]}
+{
+    "Prenotazioni": [
+        {
+            "cvv": "123",
+            "cognome": "Pirovano",
+            "idPrenotazione": "0",
+            "dominio": "dominio.it",
+            "durata": "5",
+            "nome": "Davide",
+            "dataScadenza": "06/06/2029",
+            "nomeCognomeIntestatario": "Davide Pirovano",
+            "status": "attivo",
+            "dataPrenotazione": "06/06/2024",
+            "numeroCarta": "12345678",
+            "scadenzaCarta": "12/26",
+            "email": "test@gmail.com"
+        },
+        {
+            "cvv": "123",
+            "cognome": "Pirovano",
+            "idPrenotazione": "0",
+            "dominio": "dominio.it",
+            "durata": "5",
+            "nome": "Davide",
+            "dataScadenza": "06/06/2020",
+            "nomeCognomeIntestatario": "Davide Pirovano",
+            "status": "attivo",
+            "dataPrenotazione": "06/06/2024",
+            "numeroCarta": "12345678",
+            "scadenzaCarta": "12/26",
+            "email": "test@gmail.com"
+        }
+    ]
+}

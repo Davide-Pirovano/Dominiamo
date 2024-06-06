@@ -118,10 +118,11 @@ public class GestisciPrenotazione {
             String cvv = prenotazione.getCvv();
             String dataPrenotazione = prenotazione.getDataPrenotazione().toString();
             String dataScadenza = prenotazione.getDataScadenza().toString();
+            String status = "attivo";
 
             String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";" + email + ";"+ cvv + ";"
                     + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";" + dataPrenotazione + ";"
-                    + dataScadenza;
+                    + dataScadenza+ ";" + status;
             
             out.println(request);
             out.println("0");
