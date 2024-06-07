@@ -14,3 +14,9 @@ status = "rinnovare"
 
 status = "scaduto"
 	significa che si ha scelto di non rinnovare il dominio
+
+------------
+
+TODO
+* controllare se negli ordini di 10 anni, quando scadono mette scaduto e non rinnovare nel db
+* mettere i due popUp in uno

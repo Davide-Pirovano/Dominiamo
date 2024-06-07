@@ -160,14 +160,26 @@
       </select>
 
     </div>
-    <button id="rinnovoPopupYesButton">Si</button>
-    <button id="rinnovoPopupNoButton">No</button>
+    <button class="yesButton" id="rinnovoPopupYesButton">Si</button>
+    <button class="noButton" id="rinnovoPopupNoButton">No</button>
   </div>
 
   <div class="popup" id="successPopup" hidden>
     <h2>Successo!</h2>
     <p>Il dominio è stato registrato con successo!</p>
     <button id="successPopupCloseButton">Chiudi</button>
+  </div>
+
+  <div class="popup" id="prolungaDurataPopup" hidden>
+    <h2>Vuoi prolungare la durata del tuo dominio?</h2>
+    <div id="selettore-prolunga">
+      <label for="durata-prolunga-dominio">Sì, rinnova per :</label>
+      <select id="durata-prolunga-dominio" name="durata" required>
+      </select>
+    </div>
+
+    <button class="yesButton" id="prolungaDurataPopupYesButton">Si</button>
+    <button class="noButton" id="prolungaDurataPopupNoButton">No</button>
   </div>
 
   <script src="script.js"></script>

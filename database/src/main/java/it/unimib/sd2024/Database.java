@@ -122,16 +122,6 @@ public class Database {
                 // e lo salvo in una variabile
                 String dataScadenzaFormatted = dataScadenza[2] + "-" + dataScadenza[1] + "-" + dataScadenza[0];
 
-                // System.out.println("-----------------");
-                // System.out.println(obj.getString("status"));
-                // System.out.println(today);
-                // System.out.println(dataScadenzaFormatted);
-                // System.out.println(dataScadenzaFormatted.compareTo(today));
-                // System.out.println(
-                // obj.getString("status").equals("attivo") &&
-                // dataScadenzaFormatted.compareTo(today) < 0);
-                // System.out.println("-----------------");
-
                 if (obj.getString("status").equals("attivo") && dataScadenzaFormatted.compareTo(today) < 0) {
                     System.out.println("Rinnovare");
                     obj.put("status", "rinnovare");
@@ -151,7 +141,7 @@ public class Database {
         try {
             // stampo array dati
             // for (int i = 0; i < dati.length; i++) {
-            //     System.out.println(dati[i] == "null");
+            // System.out.println(dati[i] == "null");
             // }
             // Leggi il contenuto del file JSON come stringa
             String content = new String(Files.readAllBytes(Paths.get(dbPath)),

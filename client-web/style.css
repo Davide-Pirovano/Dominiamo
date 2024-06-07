@@ -228,16 +228,19 @@ th {
 }
 
 .btn-rinnova {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  border: none;
-  border-radius: 2px;
   background-color: #f33f3f;
   color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+}
+
+.btn-rinnova svg {
+  width: 15px;
+  height: 15px;
+  fill: #ffffff;
+  margin-left: 5px;
 }
 
 .btn-rinnova:hover {
@@ -308,7 +311,7 @@ th {
   margin-bottom: 10px;
 }
 
-#rinnovoPopupYesButton {
+.yesButton {
   padding: 5px 10px;
   border: none;
   background-color: #3fa04c;
@@ -318,13 +321,13 @@ th {
   transition: all 0.3s ease;
 }
 
-#rinnovoPopupYesButton:hover {
+.yesButton:hover {
   background-color: #30863d;
   transform: scale(1.1);
   transition: all 0.3s ease;
 }
 
-#rinnovoPopupNoButton {
+.noButton {
   padding: 5px 10px;
   border: none;
   background-color: #f33f3f;
@@ -334,7 +337,7 @@ th {
   transition: all 0.3s ease;
 }
 
-#rinnovoPopupNoButton:hover {
+.noButton:hover {
   background-color: #c92b2b;
   transform: scale(1.1);
   transition: all 0.3s ease;
@@ -355,4 +358,35 @@ th {
 
 #selettore-rinnovo {
   margin-bottom: 15px;
+}
+
+#selettore-prolunga {
+  margin-bottom: 15px;
+}
+
+.btn-attivo {
+  background-color: #247e54;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.btn-attivo svg {
+  width: 20px;
+  height: 20px;
+  fill: #ffffff;
+}
+
+.btn-attivo:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+.btn-attivo svg {
+  width: 15px;
+  height: 15px;
+  fill: #ffffff;
+  margin-left: 5px;
 }
