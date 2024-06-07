@@ -121,7 +121,7 @@ td {
 th,
 td {
   padding: 10px;
-  text-align: left;
+  text-align: center;
 }
 
 th {
@@ -293,6 +293,10 @@ th {
 }
 
 .scaduto {
+  color: #777575;
+}
+
+.rinnovare {
   color: #f33f3f;
 }
 
@@ -347,4 +351,8 @@ th {
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
   border: 1px solid #094067;
   text-align: center;
+}
+
+#selettore-rinnovo {
+  margin-bottom: 15px;
 }

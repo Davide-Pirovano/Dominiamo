@@ -19,8 +19,10 @@ import jakarta.json.bind.JsonbException;
 // import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 // import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 // import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
@@ -101,6 +103,7 @@ public class GestisciPrenotazione {
             // valori del body
             Prenotazione prenotazione = JsonbBuilder.create().fromJson(body, Prenotazione.class);
             prenotazione.setIdPrenotazione(latestId++);
+            prenotazione.setStatus("attivo");
             // salvataggio prenotazione nel database
 
             startSocket();
@@ -118,12 +121,13 @@ public class GestisciPrenotazione {
             String cvv = prenotazione.getCvv();
             String dataPrenotazione = prenotazione.getDataPrenotazione().toString();
             String dataScadenza = prenotazione.getDataScadenza().toString();
-            String status = "attivo";
+            String status = prenotazione.getStatus();
 
-            String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";" + email + ";"+ cvv + ";"
+            String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";"
+                    + email + ";" + cvv + ";"
                     + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";" + dataPrenotazione + ";"
-                    + dataScadenza+ ";" + status;
-            
+                    + dataScadenza + ";" + status;
+
             out.println(request);
             out.println("0");
 
@@ -147,6 +151,83 @@ public class GestisciPrenotazione {
             return Response.created(new URI("http://localhost:8080/domini/" + prenotazione.getIdPrenotazione()))
                     .entity(JsonbBuilder.create().toJson(prenotazione)).build();
         } catch (JsonbException | URISyntaxException e) {
+            return Response.status(Status.BAD_REQUEST).build();
+        } catch (IOException e) {
+            System.out.println(e);
+            return Response.serverError().build();
+        }
+    }
+
+    // dominio/idPrentazione
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{idPrenotazione}")
+    public synchronized Response updateDomain(@PathParam("idPrenotazione") int idPrenotazione, String body) {
+        try {
+            // aggiornamento prenotazione passando i valori del body
+            Prenotazione prenotazione = JsonbBuilder.create().fromJson(body, Prenotazione.class);
+            prenotazione.setIdPrenotazione(idPrenotazione);
+
+            startSocket();
+
+            String op = "3"; // rinnovo prenotazione scaduta
+            String dominio = prenotazione.getDominio();
+            String durata;
+            // System.out.println(prenotazione.getDurata());
+            if(Integer.toString(prenotazione.getDurata()).equals("0")){
+                durata = null;
+            } else {
+                durata = Integer.toString(prenotazione.getDurata());
+            }
+            String nome = prenotazione.getNome();
+            String cognome = prenotazione.getCognome();
+            String email = prenotazione.getEmail();
+            String numeroCarta = prenotazione.getNumeroCarta();
+            String scadenzaCarta = prenotazione.getScadenzaCarta();
+            String nomeCognomeIntestatario = prenotazione.getNomeCognomeIntestatario();
+            String cvv = prenotazione.getCvv();
+            String dataPrenotazione;
+            if (prenotazione.getDataPrenotazione() != null) {
+                dataPrenotazione = prenotazione.getDataPrenotazione().toString();
+            } else {
+                dataPrenotazione = null;
+            }
+            String dataScadenza;
+            if (prenotazione.getDataScadenza() != null) {
+                dataScadenza = prenotazione.getDataScadenza().toString();
+            } else {
+                dataScadenza = null;
+            }
+
+            String status = prenotazione.getStatus();
+
+            String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";"
+                    + email + ";" + cvv + ";" + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";"
+                    + dataPrenotazione + ";" + dataScadenza + ";" + status;
+            // System.out.println(request);
+
+            out.println(request);
+            out.println("0");
+
+            String dato = "";
+            String inputLine = "";
+
+            while ((inputLine = in.readLine()) != null) {
+                if ("0".equals(inputLine)) {
+                    break;
+                }
+                dato += inputLine;
+            }
+
+            if (dato.equals("false")) {
+                closeSocket();
+                return Response.status(Response.Status.CONFLICT).build();
+            }
+
+            closeSocket();
+
+            return Response.ok().entity(JsonbBuilder.create().toJson(prenotazione)).build();
+        } catch (JsonbException e) {
             return Response.status(Status.BAD_REQUEST).build();
         } catch (IOException e) {
             System.out.println(e);

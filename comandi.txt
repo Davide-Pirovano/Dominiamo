@@ -7,7 +7,10 @@ PROTOCOLLO COMUNICAZIONE CLIENT SERVER
 
 --------------
 status = "attivo"
-	significa che o il dominio è in funzione o si trova in stallo per il rinnovo (bottone rosso)
+	significa che il dominio è in funzione
+
+status = "rinnovare"
+	 significa che il dominio si trova in stallo per il rinnovo (bottone rosso)
 
 status = "scaduto"
 	significa che si ha scelto di non rinnovare il dominio

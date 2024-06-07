@@ -60,12 +60,15 @@ public class Main {
                 }
 
                 String[] dati = dato.split(";");
-                
-                switch(dati[0]) {
-                	case "1": //creazione
-                		out.println(gp.creaPrenotazione(dati));
-                		break;
-                    case "4":
+
+                switch (dati[0]) {
+                    case "1": // creazione
+                        out.println(gp.creaPrenotazione(dati));
+                        break;
+                    case "3": // modifica
+                        out.println(gp.modificaPrenotazione(dati));
+                        break;
+                    case "4": // visualizzazione
                         out.println(gp.leggiPrenotazioni(dati[1]));
                         break;
                 }
@@ -90,4 +93,3 @@ public class Main {
         startServer();
     }
 }
-

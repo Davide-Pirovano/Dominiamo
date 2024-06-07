@@ -180,12 +180,50 @@ async function loadYourDomains() {
                             actionCell.classList.add('scaduto');
                             cells[headers.indexOf('stato')] = actionCell;
                         }
-                        else if (dataScadenza < dataOdierna) {
-                            cell.classList.add('scaduto'); // Aggiunge una classe per il colore rosso
+                        else if (item["status"] === 'rinnovare') {
+                            cell.classList.add('rinnovare'); // Aggiunge una classe per il colore rosso
                             const actionCell = document.createElement('td');
                             const button = document.createElement('button');
                             button.textContent = 'Rinnova';
                             button.classList.add('btn-rinnova');
+                            // aggiungo al bottone un id con lo stesso nome del dominio e gli aggiungo un listener
+
+                            button.id = item["idPrenotazione"];
+                            button.addEventListener('click', async function (event) {
+                                const idPrenotazione = event.target.id;
+                                // mostro popUp
+                                const rinnovaPopup = document.getElementById("rinnovoPopup");
+                                rinnovaPopup.style.display = "block";
+                                // disattivo tutto il resto della pagina tranne il popUp rinnovo
+                                document.getElementById('container').style.opacity = 0.5;
+                                document.getElementById('container').style.pointerEvents = 'none';
+
+                                // aggiungo listener al bottone di conferma e gli passo l'id del dominio per fare la put
+                                document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
+                                    // chiudo popUp
+                                    document.getElementById('rinnovoPopup').style.display = 'none';
+                                    // ripristino attività container
+                                    document.getElementById('container').style.opacity = 1;
+                                    document.getElementById('container').style.pointerEvents = 'auto';
+
+                                    const durata = document.getElementById("durata-rinnovo-dominio").value;
+
+                                    rinnovaDominio(durata, idPrenotazione);
+                                    document.getElementById("durata-rinnovo-dominio").value = 1;
+                                });
+
+                                // aggiungo listener al bottone di annulla
+                                document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
+                                    // chiudo popUp
+                                    document.getElementById('rinnovoPopup').style.display = 'none';
+                                    // ripristino attività container
+                                    document.getElementById('container').style.opacity = 1;
+                                    document.getElementById('container').style.pointerEvents = 'auto';
+
+                                    annullaRinnovo(idPrenotazione);
+                                });
+                            });
+
                             actionCell.appendChild(button);
                             cells[headers.indexOf('stato')] = actionCell;
                         } else {
@@ -208,6 +246,46 @@ async function loadYourDomains() {
     }
 
 
+}
+
+async function rinnovaDominio(durata, idPrenotazione) {
+    // console.log("durata:"+ durata);    
+    // console.log("dominio:"+ dominio);   
+    // aggingo a jsonData i dati per aggiornare la data di scadenza    
+    const dataPrenotazione = new Date();
+    const dataScadenza = new Date(dataPrenotazione);
+    // calcolo la durata in anni    
+    dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
+    let data = "dataPrenotazione: " + dataPrenotazione.toLocaleDateString() + ", ";
+    data += "dataScadenza: " + dataScadenza.toLocaleDateString();
+    const jsonData = JSON.stringify(data);
+    console.log(jsonData + idPrenotazione);
+    const response = await fetch(API_URI + '/' + idPrenotazione, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: jsonData
+    });
+    const jsonResponse = await response.json();
+    //mostro sucessPopup    
+    const successPopup = document.getElementById("successPopup");
+    successPopup.style.display = "block"; // disattivo tutto il resto della pagina tranne il popUp success    
+    document.getElementById('container').style.opacity = 0.5;
+    document.getElementById('container').style.pointerEvents = 'none';
+
+    loadYourDomains();
+}
+
+async function annullaRinnovo(idPrenotazione) {
+    const response = await fetch(`${API_URI}/${idPrenotazione}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: 'scaduto' })
+    });
+    loadYourDomains();
 }
 
 const register_form = document.getElementById("register-form-wrapper");
@@ -260,27 +338,4 @@ document.getElementById('successPopup').addEventListener('click', function () {
     // ripristino attività container
     document.getElementById('container').style.opacity = 1;
     document.getElementById('container').style.pointerEvents = 'auto';
-});
-
-// listener per il bottone rinnova btn-rinnova
-document.getElementById('your-domain-tbody').addEventListener('click', async function (event) {
-    if (event.target.classList.contains('btn-rinnova')) {
-        // mostro popUp
-        const rinnovaPopup = document.getElementById("rinnovoPopup");
-        rinnovaPopup.style.display = "block";
-        // disattivo tutto il resto della pagina tranne il popUp rinnovo
-        document.getElementById('container').style.opacity = 0.5;
-        document.getElementById('container').style.pointerEvents = 'none';
-    }
-});
-
-document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
-    // chiudo popUp
-    document.getElementById('rinnovoPopup').style.display = 'none';
-    // ripristino attività container
-    document.getElementById('container').style.opacity = 1;
-    document.getElementById('container').style.pointerEvents = 'auto';
-
-    // cambio status prenotazione in scaduto con una put
-    // todo
 });

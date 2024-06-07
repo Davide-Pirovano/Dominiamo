@@ -26,6 +26,8 @@ public class Prenotazione {
 
     private String dataScadenza;
 
+    private String status;
+
     public int getIdPrenotazione() {
         return idPrenotazione;
     }
@@ -120,5 +122,13 @@ public class Prenotazione {
 
     public void setDataScadenza(String dataScadenza) {
         this.dataScadenza = dataScadenza;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

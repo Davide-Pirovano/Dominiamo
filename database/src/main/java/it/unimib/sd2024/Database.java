@@ -13,7 +13,7 @@ import org.json.*;
 public class Database {
     private String dbPath = "src\\main\\java\\it\\unimib\\sd2024\\Database.json";
     String[] chiavi = { "idPrenotazione", "dominio", "durata", "nome", "cognome", "email", "cvv", "numeroCarta",
-            "scadenzaCarta", "nomeCognomeIntestatario", "dataPrenotazione", "dataScadenza", "status"};
+            "scadenzaCarta", "nomeCognomeIntestatario", "dataPrenotazione", "dataScadenza", "status" };
 
     public Database() {
         // Creazione del file json se non esiste
@@ -94,6 +94,95 @@ public class Database {
         } catch (JSONException | IOException e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    // controllo scadenze e se scaduto aggiorno lo status in "rinnovare"
+    public synchronized void checkScadenze() {
+        System.out.println("Controllo scadenze");
+        try {
+            // Leggi il contenuto del file JSON come stringa
+            String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
+            // Converti il contenuto in un oggetto JSON
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Ottieni l'array JSON "Prenotazioni"
+            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
+
+            // Ottieni la data odierna
+            String today = java.time.LocalDate.now().toString();
+
+            // itero sugli oggetti del json e controllo dove ho lo stato attivo se la data
+            // di scadenza è scaduta aggiorno lo status in rinnovare
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                // fromatto data dell'oggetto in yyyy-mm-dd
+                String[] dataScadenza = obj.getString("dataScadenza").split("/");
+                // e lo salvo in una variabile
+                String dataScadenzaFormatted = dataScadenza[2] + "-" + dataScadenza[1] + "-" + dataScadenza[0];
+
+                // System.out.println("-----------------");
+                // System.out.println(obj.getString("status"));
+                // System.out.println(today);
+                // System.out.println(dataScadenzaFormatted);
+                // System.out.println(dataScadenzaFormatted.compareTo(today));
+                // System.out.println(
+                // obj.getString("status").equals("attivo") &&
+                // dataScadenzaFormatted.compareTo(today) < 0);
+                // System.out.println("-----------------");
+
+                if (obj.getString("status").equals("attivo") && dataScadenzaFormatted.compareTo(today) < 0) {
+                    System.out.println("Rinnovare");
+                    obj.put("status", "rinnovare");
+                }
+            }
+
+            // Scrivi il nuovo oggetto JSON nel file
+            Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // modifica dati nel file json
+    public synchronized boolean modificaDati(String[] dati) {
+        System.out.println("Modifica dati nel database");
+        try {
+            // stampo array dati
+            // for (int i = 0; i < dati.length; i++) {
+            //     System.out.println(dati[i] == "null");
+            // }
+            // Leggi il contenuto del file JSON come stringa
+            String content = new String(Files.readAllBytes(Paths.get(dbPath)),
+                    StandardCharsets.UTF_8);
+            // Converti il contenuto in un oggetto JSON
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Ottieni l'array JSON "Prenotazione"
+            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
+
+            // Cerca l'oggetto JSON con l'id specificato e aggiorno i valori solamente se
+            // diversi da null e quando incorntra l'id non lo modificare
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                if (obj.getString("idPrenotazione").equals(dati[0])) {
+                    for (int j = 1; j < dati.length; j++) {
+                        if (!dati[j].equals("null")) {
+                            obj.put(chiavi[j], dati[j]);
+                        }
+                    }
+                }
+            }
+
+            // Scrivi il nuovo oggetto JSON nel file
+            Files.write(Paths.get(dbPath),
+                    jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
