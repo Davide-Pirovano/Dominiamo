@@ -175,7 +175,7 @@ async function loadYourDomains() {
                         if (item["status"] === 'scaduto') {
                             cell.classList.add('scaduto'); // Aggiunge una classe per il colore rosso alla dataScadenza
                             const actionCell = document.createElement('td');
-                            actionCell.textContent = 'Non Rinnovato';
+                            actionCell.textContent = 'Scaduto';
                             actionCell.classList.add('scaduto');
                             cells[headers.indexOf('stato')] = actionCell;
                         }
@@ -190,12 +190,27 @@ async function loadYourDomains() {
                             button.id = item["idPrenotazione"];
                             button.addEventListener('click', async function (event) {
                                 const idPrenotazione = event.target.id;
-                                // mostro popUp
                                 const rinnovaPopup = document.getElementById("rinnovoPopup");
                                 rinnovaPopup.style.display = "block";
                                 // disattivo tutto il resto della pagina tranne il popUp rinnovo
                                 document.getElementById('container').style.opacity = 0.5;
                                 document.getElementById('container').style.pointerEvents = 'none';
+
+                                // h2
+                                document.getElementById('h2-rinnovo-popup').textContent = 'Vuoi rinnovare ' + item["dominio"] + '?';
+
+                                //select
+                                document.getElementById('durata-rinnovo-dominio').innerHTML = '';
+                                for (let i = 1; i <= 10; i++) {
+                                    const option = document.createElement('option');
+                                    option.value = i;
+                                    if (i === 1) {
+                                        option.textContent = i + ' anno';
+                                    } else {
+                                        option.textContent = i + ' anni';
+                                    }
+                                    document.getElementById('durata-rinnovo-dominio').appendChild(option);
+                                }
 
                                 // aggiungo listener al bottone di conferma e gli passo l'id del dominio per fare la put
                                 document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
@@ -226,7 +241,7 @@ async function loadYourDomains() {
                             button.innerHTML = button.textContent + svg;
                             actionCell.appendChild(button);
                             cells[headers.indexOf('stato')] = actionCell;
-                            
+
                         } else if (item["status"] === 'attivo') {
                             // creo bottone per prolungare il dominio
                             const actionCell = document.createElement('td');
@@ -245,18 +260,23 @@ async function loadYourDomains() {
                                 button.classList.add('btn-attivo');
                                 // aggiungo al bottone un id con lo stesso nome del dominio e gli aggiungo un listener
                                 button.id = item["idPrenotazione"];
+
                                 button.addEventListener('click', async function (event) {
                                     const idPrenotazione = event.target.id;
                                     const durataPrecedente = item["durata"];
                                     const dataPrenotazione = item["dataPrenotazione"];
                                     // mostro popUp
-                                    const rinnovaPopup = document.getElementById("prolungaDurataPopup");
+                                    const rinnovaPopup = document.getElementById("rinnovoPopup");
                                     rinnovaPopup.style.display = "block";
                                     // disattivo tutto il resto della pagina tranne il popUp
                                     document.getElementById('container').style.opacity = 0.5;
                                     document.getElementById('container').style.pointerEvents = 'none';
                                     // inserisco le option nel selettore
-                                    const select = document.getElementById("durata-prolunga-dominio");
+                                    const select = document.getElementById("durata-rinnovo-dominio");
+
+                                    // h2
+                                    document.getElementById('h2-rinnovo-popup').textContent = 'Vuoi prolungare la durata di ' + item["dominio"] + '?';
+
                                     // rimuovo le option precedenti
                                     select.innerHTML = '';
                                     // aggiungo le option
@@ -273,21 +293,25 @@ async function loadYourDomains() {
                                     }
 
                                     // aggiungo listener al bottone di conferma e gli passo l'id del dominio per fare la put
-                                    document.getElementById('prolungaDurataPopupYesButton').addEventListener('click', async function () {
+                                    document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
                                         // chiudo popUp
-                                        document.getElementById('prolungaDurataPopup').style.display = 'none';
+                                        document.getElementById('rinnovoPopup').style.display = 'none';
                                         // ripristino attività container
                                         document.getElementById('container').style.opacity = 1;
                                         document.getElementById('container').style.pointerEvents = 'auto';
-                                        const durata = document.getElementById("durata-prolunga-dominio").value;
+                                        const durata = document.getElementById("durata-rinnovo-dominio").value;
+                                        // sommo la durata precedente con quella scelta
+                                        console.log(durata);
+                                        console.log(durataPrecedente);
                                         const durataTotale = parseInt(durata) + parseInt(durataPrecedente);
+
                                         prolungaDominio(durataTotale, dataPrenotazione, idPrenotazione);
                                     });
 
                                     // aggiungo listener al bottone di annulla
-                                    document.getElementById('prolungaDurataPopupNoButton').addEventListener('click', function () {
+                                    document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
                                         // chiudo popUp
-                                        document.getElementById('prolungaDurataPopup').style.display = 'none';
+                                        document.getElementById('rinnovoPopup').style.display = 'none';
                                         // ripristino attività container
                                         document.getElementById('container').style.opacity = 1;
                                         document.getElementById('container').style.pointerEvents = 'auto';
@@ -316,9 +340,7 @@ async function loadYourDomains() {
 }
 
 async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
-    // console.log("durata:"+ durata);    
-    // console.log("dominio:"+ dominio);   
-    // aggingo a jsonData i dati per aggiornare la data di scadenza    
+
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
@@ -349,7 +371,7 @@ async function rinnovaDominio(durata, idPrenotazione) {
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
-    const jsonData = JSON.stringify({ durata: durata, dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo' });
+    const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo' });
     console.log(jsonData + idPrenotazione);
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",

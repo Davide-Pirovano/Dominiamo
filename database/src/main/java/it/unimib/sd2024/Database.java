@@ -97,44 +97,6 @@ public class Database {
         }
     }
 
-    // controllo scadenze e se scaduto aggiorno lo status in "rinnovare"
-    public synchronized void checkScadenze() {
-        System.out.println("Controllo scadenze");
-        try {
-            // Leggi il contenuto del file JSON come stringa
-            String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
-            // Converti il contenuto in un oggetto JSON
-            JSONObject jsonObject = new JSONObject(content);
-
-            // Ottieni l'array JSON "Prenotazioni"
-            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
-
-            // Ottieni la data odierna
-            String today = java.time.LocalDate.now().toString();
-
-            // itero sugli oggetti del json e controllo dove ho lo stato attivo se la data
-            // di scadenza è scaduta aggiorno lo status in rinnovare
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject obj = jsonArray.getJSONObject(i);
-
-                // fromatto data dell'oggetto in yyyy-mm-dd
-                String[] dataScadenza = obj.getString("dataScadenza").split("/");
-                // e lo salvo in una variabile
-                String dataScadenzaFormatted = dataScadenza[2] + "-" + dataScadenza[1] + "-" + dataScadenza[0];
-
-                if (obj.getString("status").equals("attivo") && dataScadenzaFormatted.compareTo(today) < 0) {
-                    System.out.println("Rinnovare");
-                    obj.put("status", "rinnovare");
-                }
-            }
-
-            // Scrivi il nuovo oggetto JSON nel file
-            Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     // modifica dati nel file json
     public synchronized boolean modificaDati(String[] dati) {
         System.out.println("Modifica dati nel database");
@@ -173,6 +135,49 @@ public class Database {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    // controllo scadenze e se scaduto aggiorno lo status in "rinnovare"
+    public synchronized void checkScadenze() {
+        System.out.println("Controllo scadenze");
+        try {
+            // Leggi il contenuto del file JSON come stringa
+            String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
+            // Converti il contenuto in un oggetto JSON
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Ottieni l'array JSON "Prenotazioni"
+            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
+
+            // Ottieni la data odierna
+            String today = java.time.LocalDate.now().toString();
+
+            // itero sugli oggetti del json e controllo dove ho lo stato attivo se la data
+            // di scadenza è scaduta aggiorno lo status in rinnovare
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                // fromatto data dell'oggetto in yyyy-mm-dd
+                String[] dataScadenza = obj.getString("dataScadenza").split("/");
+                // e lo salvo in una variabile
+                String dataScadenzaFormatted = dataScadenza[2] + "-" + dataScadenza[1] + "-" + dataScadenza[0];
+
+                if (obj.getString("status").equals("attivo") && dataScadenzaFormatted.compareTo(today) < 0
+                        && obj.getInt("durata") == 10) {
+                    System.out.println("Scaduto");
+                    obj.put("status", "scaduto");
+
+                } else if (obj.getString("status").equals("attivo") && dataScadenzaFormatted.compareTo(today) < 0) {
+                    System.out.println("Rinnovare");
+                    obj.put("status", "rinnovare");
+                }
+            }
+
+            // Scrivi il nuovo oggetto JSON nel file
+            Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
         }
     }
 }

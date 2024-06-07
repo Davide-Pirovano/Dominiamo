@@ -131,32 +131,10 @@
   </div>
 
   <div class="popup" id="rinnovoPopup" hidden>
-    <h2>Vuoi rinnovare?</h2>
-    <p>Il dominio è scaduto, vuoi rinnovarlo?</p>
+    <h2 id="h2-rinnovo-popup"></h2>
     <div id="selettore-rinnovo">
       <label for="durata-rinnovo-dominio">Sì, rinnova per :</label>
       <select id="durata-rinnovo-dominio" name="durata" required>
-
-        <option value="1">1 anno</option>
-
-        <option value="2">2 anni</option>
-
-        <option value="3">3 anni</option>
-
-        <option value="4">4 anni</option>
-
-        <option value="5">5 anni</option>
-
-        <option value="6">6 anni</option>
-
-        <option value="7">7 anni</option>
-
-        <option value="8">8 anni</option>
-
-        <option value="9">9 anni</option>
-
-        <option value="10">10 anni</option>
-
       </select>
 
     </div>
@@ -168,18 +146,6 @@
     <h2>Successo!</h2>
     <p>Il dominio è stato registrato con successo!</p>
     <button id="successPopupCloseButton">Chiudi</button>
-  </div>
-
-  <div class="popup" id="prolungaDurataPopup" hidden>
-    <h2>Vuoi prolungare la durata del tuo dominio?</h2>
-    <div id="selettore-prolunga">
-      <label for="durata-prolunga-dominio">Sì, rinnova per :</label>
-      <select id="durata-prolunga-dominio" name="durata" required>
-      </select>
-    </div>
-
-    <button class="yesButton" id="prolungaDurataPopupYesButton">Si</button>
-    <button class="noButton" id="prolungaDurataPopupNoButton">No</button>
   </div>
 
   <script src="script.js"></script>
