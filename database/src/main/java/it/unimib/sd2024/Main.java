@@ -65,10 +65,13 @@ public class Main {
                     case "1": // creazione
                         out.println(gp.creaPrenotazione(dati));
                         break;
+                    case "2": // visualizza prenotazione dall'id
+                        out.println(gp.leggiPrenotazione(dati[1]));
+                        break;
                     case "3": // modifica
                         out.println(gp.modificaPrenotazione(dati));
                         break;
-                    case "4": // visualizzazione
+                    case "4": // visualizzazione tutte prenotazioni dell'utente dalla mail
                         out.println(gp.leggiPrenotazioni(dati[1]));
                         break;
                 }

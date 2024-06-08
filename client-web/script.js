@@ -2,9 +2,15 @@ const API_URI = "http://localhost:8080/domini";
 
 window.onload = init();
 
+// Variabile globale per memorizzare l'ID della prenotazione corrente
+let currentIdPrenotazione = null;
+
 async function init() {
     // Controllo se i cookie sono presenti altrimenti l'utente deve registrarsi
     var cookie = getCookie();
+
+    initializeRinnovoPopup();   // inizializzo il popUp rinnovo
+
     if (!cookie) {
         registerUserDOM();
     } else {
@@ -120,211 +126,66 @@ async function handleCreateDomain(event) {
 }
 
 async function loadYourDomains() {
+    // ottengo email dai cookie
     const cookie = getCookie();
     const email = cookie.email;
 
+    // chiamata get per ottenere i domini registrati dall'utente
     const response = await fetch(`${API_URI}?email=${email}`);
     const jsonResponse = await response.json();
+
     // aggiorno la tabella con i domini
+
+    // Ottiene il tbody della tabella
     const tbody = document.getElementById('your-domain-tbody');
 
     // Pulisce la tabella
     tbody.innerHTML = '';
 
-    // console.log(jsonResponse);
     // Genera le righe della tabella ed aggiungi solo gli elementi che ci interessano
 
     // controllo se ho domini registrati
-    if (jsonResponse.length === 0) {
+    if (jsonResponse.length === 0) {    // nessun dominio registrato
         const row = document.createElement('tr');
         const cell = document.createElement('td');  //aggiungo colspan di 5
         cell.setAttribute('colspan', '5');
         cell.textContent = 'Nessun dominio registrato';
         row.appendChild(cell);
         tbody.appendChild(row);
-    } else {
-        jsonResponse.forEach(item => {
-            const headers = ['dominio', 'durata', 'dataPrenotazione', 'dataScadenza', 'stato'];
-            const row = document.createElement('tr');
 
-            // Crea un array di celle vuote
+    } else { // ho domini registrati
+        jsonResponse.forEach(item => {  // interpreto la risposta
+
+            const headers = ['dominio', 'durata', 'dataPrenotazione', 'dataScadenza', 'stato']; // headers tabella
+
+            const row = document.createElement('tr'); // creo riga tabella
+
+            // Crea un array di celle td vuote per popolare la riga creata
             const cells = headers.map(() => document.createElement('td'));
 
-            Object.keys(item).forEach(key => {
-                if (key === 'dominio' || key === 'durata' || key === 'dataPrenotazione' || key === 'dataScadenza' || key === 'stato') {
-                    const cellIndex = headers.indexOf(key);
-                    const cell = cells[cellIndex];
+            Object.keys(item).forEach(key => {  // per ogni chiave dell'oggetto in questione
 
-                    if (key === 'durata') {
+                if (key === 'dominio' || key === 'durata' || key === 'dataPrenotazione' || key === 'dataScadenza' || key === 'stato') { // seleziono le chiavi che mi interessano
+
+                    const cellIndex = headers.indexOf(key); // seleziono l'indice della cella corrispondente alla chiave
+                    const cell = cells[cellIndex];  // seleziono la cella corrispondente alla chiave
+
+                    if (key === 'durata') { // se la chiave è durata concateno "anno" o "anni"
                         if (item[key] === '1') {
                             cell.textContent = item[key] + ' anno';
                         }
                         else {
                             cell.textContent = item[key] + ' anni';
                         }
-                    } else {
-                        cell.textContent = item[key];
-                    }
+                    } else if (key === 'dataScadenza') { // se status è "scaduto" al posto bottone rinnova scrivo "scaduto"
 
-                    // se status è "scaduto" al posto bottone rinnova scrivo "scaduto"
-
-                    if (key === 'dataScadenza') {
                         const dataScadenza = new Date(item[key]);
                         const dataOdierna = new Date();
+                        processaDataScadenza(item, dataScadenza, dataOdierna, cell, cells, headers);
+                        cell.textContent = item[key];
 
-                        if (item["status"] === 'scaduto') {
-                            cell.classList.add('scaduto'); // Aggiunge una classe per il colore rosso alla dataScadenza
-                            const actionCell = document.createElement('td');
-                            actionCell.textContent = 'Scaduto';
-                            actionCell.classList.add('scaduto');
-                            cells[headers.indexOf('stato')] = actionCell;
-                        }
-                        else if (item["status"] === 'rinnovare') {
-                            cell.classList.add('rinnovare'); // Aggiunge una classe per il colore rosso
-                            const actionCell = document.createElement('td');
-                            const button = document.createElement('button');
-                            button.textContent = 'Rinnova';
-                            button.classList.add('btn-rinnova');
-                            // aggiungo al bottone un id con lo stesso nome del dominio e gli aggiungo un listener
-
-                            button.id = item["idPrenotazione"];
-                            button.addEventListener('click', async function (event) {
-                                const idPrenotazione = event.target.id;
-                                const rinnovaPopup = document.getElementById("rinnovoPopup");
-                                rinnovaPopup.style.display = "block";
-                                // disattivo tutto il resto della pagina tranne il popUp rinnovo
-                                document.getElementById('container').style.opacity = 0.5;
-                                document.getElementById('container').style.pointerEvents = 'none';
-
-                                // h2
-                                document.getElementById('h2-rinnovo-popup').textContent = 'Vuoi rinnovare ' + item["dominio"] + '?';
-
-                                //select
-                                document.getElementById('durata-rinnovo-dominio').innerHTML = '';
-                                for (let i = 1; i <= 10; i++) {
-                                    const option = document.createElement('option');
-                                    option.value = i;
-                                    if (i === 1) {
-                                        option.textContent = i + ' anno';
-                                    } else {
-                                        option.textContent = i + ' anni';
-                                    }
-                                    document.getElementById('durata-rinnovo-dominio').appendChild(option);
-                                }
-
-                                // aggiungo listener al bottone di conferma e gli passo l'id del dominio per fare la put
-                                document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
-                                    // chiudo popUp
-                                    document.getElementById('rinnovoPopup').style.display = 'none';
-                                    // ripristino attività container
-                                    document.getElementById('container').style.opacity = 1;
-                                    document.getElementById('container').style.pointerEvents = 'auto';
-
-                                    const durata = document.getElementById("durata-rinnovo-dominio").value;
-
-                                    rinnovaDominio(durata, idPrenotazione);
-                                    document.getElementById("durata-rinnovo-dominio").value = 1;
-                                });
-
-                                // aggiungo listener al bottone di annulla
-                                document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
-                                    // chiudo popUp
-                                    document.getElementById('rinnovoPopup').style.display = 'none';
-                                    // ripristino attività container
-                                    document.getElementById('container').style.opacity = 1;
-                                    document.getElementById('container').style.pointerEvents = 'auto';
-
-                                    annullaRinnovo(idPrenotazione);
-                                });
-                            });
-                            const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" /></svg>';
-                            button.innerHTML = button.textContent + svg;
-                            actionCell.appendChild(button);
-                            cells[headers.indexOf('stato')] = actionCell;
-
-                        } else if (item["status"] === 'attivo') {
-                            // creo bottone per prolungare il dominio
-                            const actionCell = document.createElement('td');
-                            const durata = item["durata"];
-
-                            if (item["durata"] === "10") {
-                                // se la durata è 10 anni non posso prolungare metto label "attivo"
-                                actionCell.textContent = 'Attivo';
-                            } else {
-                                const button = document.createElement('button');
-                                button.textContent = 'Attivo';
-                                const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" /></svg>';
-                                button.innerHTML = button.textContent + svg;
-                                // concateno al button text l'svg
-
-                                button.classList.add('btn-attivo');
-                                // aggiungo al bottone un id con lo stesso nome del dominio e gli aggiungo un listener
-                                button.id = item["idPrenotazione"];
-
-                                button.addEventListener('click', async function (event) {
-                                    const idPrenotazione = event.target.id;
-                                    const durataPrecedente = item["durata"];
-                                    const dataPrenotazione = item["dataPrenotazione"];
-                                    // mostro popUp
-                                    const rinnovaPopup = document.getElementById("rinnovoPopup");
-                                    rinnovaPopup.style.display = "block";
-                                    // disattivo tutto il resto della pagina tranne il popUp
-                                    document.getElementById('container').style.opacity = 0.5;
-                                    document.getElementById('container').style.pointerEvents = 'none';
-                                    // inserisco le option nel selettore
-                                    const select = document.getElementById("durata-rinnovo-dominio");
-
-                                    // h2
-                                    document.getElementById('h2-rinnovo-popup').textContent = 'Vuoi prolungare la durata di ' + item["dominio"] + '?';
-
-                                    // rimuovo le option precedenti
-                                    select.innerHTML = '';
-                                    // aggiungo le option
-                                    for (let i = 1; i <= 10 - durataPrecedente; i++) {
-                                        const option = document.createElement('option');
-                                        option.value = i;
-                                        // se 1 scrivo anno altrimenti anni
-                                        if (i === 1) {
-                                            option.textContent = i + ' anno';
-                                        } else {
-                                            option.textContent = i + ' anni';
-                                        }
-                                        select.appendChild(option);
-                                    }
-
-                                    // aggiungo listener al bottone di conferma e gli passo l'id del dominio per fare la put
-                                    document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
-                                        // chiudo popUp
-                                        document.getElementById('rinnovoPopup').style.display = 'none';
-                                        // ripristino attività container
-                                        document.getElementById('container').style.opacity = 1;
-                                        document.getElementById('container').style.pointerEvents = 'auto';
-                                        const durata = document.getElementById("durata-rinnovo-dominio").value;
-                                        // sommo la durata precedente con quella scelta
-                                        console.log(durata);
-                                        console.log(durataPrecedente);
-                                        const durataTotale = parseInt(durata) + parseInt(durataPrecedente);
-
-                                        prolungaDominio(durataTotale, dataPrenotazione, idPrenotazione);
-                                    });
-
-                                    // aggiungo listener al bottone di annulla
-                                    document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
-                                        // chiudo popUp
-                                        document.getElementById('rinnovoPopup').style.display = 'none';
-                                        // ripristino attività container
-                                        document.getElementById('container').style.opacity = 1;
-                                        document.getElementById('container').style.pointerEvents = 'auto';
-
-                                    });
-                                });
-                                // aggiungo bottone alla cella
-                                actionCell.appendChild(button);
-                            }
-
-                            cells[headers.indexOf('stato')] = actionCell;
-
-                        }
+                    } else {    // altrimenti scrivo il valore della chiave
+                        cell.textContent = item[key];
                     }
                 }
             });
@@ -337,6 +198,130 @@ async function loadYourDomains() {
     }
 
 
+}
+
+function initializeRinnovoPopup() {
+    document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
+        // Chiudo popUp
+        document.getElementById('rinnovoPopup').style.display = 'none';
+        // Ripristino attività container
+        document.getElementById('container').style.opacity = 1;
+        document.getElementById('container').style.pointerEvents = 'auto';
+
+        const durata = document.getElementById("durata-rinnovo-dominio").value;
+
+        // ottengo la durata precedente
+        const response = await fetch(`${API_URI}/${currentIdPrenotazione}`);
+        const jsonResponse = await response.json();
+        const durataPrecedente = jsonResponse["durata"];
+        const stato = jsonResponse["status"];
+
+        if (stato === 'rinnovare') {
+            rinnovaDominio(durata, currentIdPrenotazione);
+        } else if (stato === "attivo") {
+            // calcolo durata totale
+            const durataTotale = parseInt(durata) + parseInt(durataPrecedente);
+            prolungaDominio(durataTotale, jsonResponse["dataPrenotazione"], currentIdPrenotazione);
+        }
+        document.getElementById("durata-rinnovo-dominio").value = 1;
+    });
+
+    document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
+        // Chiudo popUp
+        document.getElementById('rinnovoPopup').style.display = 'none';
+        // Ripristino attività container
+        document.getElementById('container').style.opacity = 1;
+        document.getElementById('container').style.pointerEvents = 'auto';
+    });
+}
+
+function openRinnovoPopup(item) {
+    currentIdPrenotazione = item["idPrenotazione"];
+    const durataPrecedente = item["durata"];
+
+    // Mostro popUp
+    const rinnovaPopup = document.getElementById("rinnovoPopup");
+    rinnovaPopup.style.display = "block";
+
+    // Disattivo tutto il resto della pagina tranne il popUp rinnovo
+    document.getElementById('container').style.opacity = 0.5;
+    document.getElementById('container').style.pointerEvents = 'none';
+
+    const select = document.getElementById('durata-rinnovo-dominio');
+    select.innerHTML = '';
+
+    // h2
+    if (item["status"] === 'rinnovare') {
+        document.getElementById('h2-rinnovo-popup').textContent = 'Vuoi rinnovare ' + item["dominio"] + '?';
+        // Select
+        for (let i = 1; i <= 10; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i === 1 ? i + ' anno' : i + ' anni';
+            select.appendChild(option);
+        }
+    } else if (item["status"] === 'attivo') {
+        document.getElementById('h2-rinnovo-popup').textContent = 'Vuoi prolungare la durata di ' + item["dominio"] + '?';
+        // Select
+        for (let i = 1; i <= 10 - durataPrecedente; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i === 1 ? i + ' anno' : i + ' anni';
+            select.appendChild(option);
+        }
+    }
+
+
+}
+
+function processaDataScadenza(item, dataScadenza, dataOdierna, cell, cells, headers) {
+    const actionCell = document.createElement('td');
+
+    if (item["status"] === 'scaduto') {
+        cell.classList.add('scaduto'); // Aggiunge una classe per il colore rosso alla dataScadenza
+        const actionCell = document.createElement('td');
+        actionCell.textContent = 'Scaduto';
+        actionCell.classList.add('scaduto'); // Aggiunge una classe per il colore rosso allo stato
+        cells[headers.indexOf('stato')] = actionCell;
+
+    } else if (item["status"] === 'rinnovare') {
+
+        cell.classList.add('rinnovare'); // Aggiunge una classe per il colore rosso
+        const button = document.createElement('button');
+        button.textContent = 'Rinnova';
+        button.classList.add('btn-rinnova');
+
+        button.addEventListener('click', function () {
+            openRinnovoPopup(item);
+        });
+
+        const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" /></svg>';
+        button.innerHTML = button.textContent + svg;
+
+        actionCell.appendChild(button);
+        cells[headers.indexOf('stato')] = actionCell;
+
+    } else if (item["status"] === 'attivo') {
+        const durata = item["durata"];
+
+        if (durata === "10") {
+            actionCell.textContent = 'Attivo';
+        } else {
+            const button = document.createElement('button');
+            button.textContent = 'Attivo';
+            const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z" /></svg>';
+            button.innerHTML = button.textContent + svg;
+            button.classList.add('btn-attivo');
+
+            button.addEventListener('click', function () {
+                openRinnovoPopup(item);
+            });
+
+            actionCell.appendChild(button);
+        }
+
+        cells[headers.indexOf('stato')] = actionCell;
+    }
 }
 
 async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
@@ -364,15 +349,16 @@ async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
 }
 
 async function rinnovaDominio(durata, idPrenotazione) {
-    // console.log("durata:"+ durata);    
-    // console.log("dominio:"+ dominio);   
+
     // aggingo a jsonData i dati per aggiornare la data di scadenza    
     const dataPrenotazione = new Date();
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
     const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo' });
+
     console.log(jsonData + idPrenotazione);
+
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",
         headers: {

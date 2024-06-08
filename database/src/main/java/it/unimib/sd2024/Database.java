@@ -138,6 +138,33 @@ public class Database {
         }
     }
 
+    // lettura prenotazione dal file json
+    public synchronized String leggiPrenotazione(String id) {
+        System.out.println("Lettura prenotazione dal database");
+        try {
+            // Leggi il contenuto del file JSON come stringa
+            String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
+            // Converti il contenuto in un oggetto JSON
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Ottieni l'array JSON "Prenotazione"
+            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
+
+            // Cerca l'oggetto JSON con l'id specificato
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                if (obj.getString("idPrenotazione").equals(id)) {
+                    return obj.toString(4);
+                }
+            }
+
+            return "";
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
     // controllo scadenze e se scaduto aggiorno lo status in "rinnovare"
     public synchronized void checkScadenze() {
         System.out.println("Controllo scadenze");

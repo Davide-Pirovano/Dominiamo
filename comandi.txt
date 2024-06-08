@@ -1,7 +1,7 @@
 PROTOCOLLO COMUNICAZIONE CLIENT SERVER
 0 - carettere terminatore conversazione
 1 - creazione nuovo dominio
-2 - modifica durata prenotazione
+2 - visualizza prenotazione con id
 3 - rinnovo prenotazione scaduta
 4 - visualizza domini
 

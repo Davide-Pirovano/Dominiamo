@@ -95,6 +95,39 @@ public class GestisciPrenotazione {
         }
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/{idPrenotazione}")
+    public Response getDomain(@PathParam("idPrenotazione") int idPrenotazione) {
+        try {
+            startSocket();
+            String op = "2"; // read operation
+            String request = op + ";" + idPrenotazione;
+            out.println(request);
+            out.println("0");
+
+            String dato = "";
+            String inputLine = "";
+            while ((inputLine = in.readLine()) != null) {
+                if ("0".equals(inputLine)) {
+                    break;
+                }
+                dato += inputLine;
+            }
+
+            if (dato.equals("")) {
+                closeSocket();
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            closeSocket();
+            return Response.ok(dato).build();
+        } catch (IOException e) {
+            System.out.println(e);
+            return Response.serverError().build();
+        }
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public synchronized Response crateDomain(String body) {
@@ -174,7 +207,7 @@ public class GestisciPrenotazione {
             String dominio = prenotazione.getDominio();
             String durata;
             // System.out.println(prenotazione.getDurata());
-            if(Integer.toString(prenotazione.getDurata()).equals("0")){
+            if (Integer.toString(prenotazione.getDurata()).equals("0")) {
                 durata = null;
             } else {
                 durata = Integer.toString(prenotazione.getDurata());

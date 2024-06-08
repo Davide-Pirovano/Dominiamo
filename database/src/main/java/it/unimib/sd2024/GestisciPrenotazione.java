@@ -33,6 +33,13 @@ public class GestisciPrenotazione {
         return db.leggiDati(email);
     }
 
+    public synchronized String leggiPrenotazione(String id) {
+        checkSacdenze();
+        // System.out.println("Lettura prenotazione");
+        // Lettura di una prenotazione
+        return db.leggiPrenotazione(id);
+    }
+
     public synchronized void checkSacdenze() {
         System.out.println("Controllo scadenze");
         // Controllo delle scadenze
