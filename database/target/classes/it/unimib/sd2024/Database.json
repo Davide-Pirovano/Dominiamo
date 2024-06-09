@@ -1,15 +1,15 @@
 {"Prenotazioni": [{
-    "cvv": "dominio1.it",
+    "cvv": "1",
     "cognome": "Pirovano",
     "idPrenotazione": "1",
-    "dominio": "dominio1.it",
-    "durata": "10",
+    "dominio": "dom.it",
+    "durata": "8",
     "nome": "Davide",
-    "dataScadenza": "06/09/2034",
-    "nomeCognomeIntestatario": "dominio1.it",
+    "dataScadenza": "06/09/2032",
+    "nomeCognomeIntestatario": "1",
     "dataPrenotazione": "09/06/2024",
-    "numeroCarta": "dominio1.it",
-    "scadenzaCarta": "dominio1.it",
+    "numeroCarta": "1",
+    "scadenzaCarta": "1",
     "email": "test@gmail.com",
     "status": "attivo"
 }]}

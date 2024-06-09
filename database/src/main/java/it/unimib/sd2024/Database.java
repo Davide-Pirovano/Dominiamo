@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
 import org.json.*;
 
 public class Database {
@@ -169,9 +168,9 @@ public class Database {
     }
 
     // verifica disponibilità dominio
-    public synchronized boolean verificaDisponibilita(String dominio) {
-        System.out.println("Verifica disponibilità dominio");
-        // true disponibile, false non disponibile
+    public synchronized String verificaDisponibilita(String dominio) {
+        System.out.println("Verifica disp dominio");
+        // return "false;l'email" dell'utente che ha prenotato il dominio o "true;null" se il dominio è disponibile
         try {
             // Leggi il contenuto del file JSON come stringa
             String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
@@ -185,14 +184,14 @@ public class Database {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
                 if (obj.getString("dominio").equals(dominio)) {
-                    return false;
+                    return "false;" + obj.getString("email");
                 }
             }
 
-            return true;
+            return "true;null";
         } catch (JSONException | IOException e) {
             e.printStackTrace();
-            return false;
+            return "false;null";
         }
     }
 

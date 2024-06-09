@@ -46,7 +46,6 @@ public class GestisciPrenotazione {
 
     public GestisciPrenotazione() {
         registrazioneConccorrente = new HashMap<>();
-        registrazioneConccorrente.put("dominio", "email");
     }
 
     private void startSocket() {
@@ -71,7 +70,7 @@ public class GestisciPrenotazione {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDomini(@QueryParam("email") String email) {
+    public Response getDomains(@QueryParam("email") String email) {
 
         try {
             startSocket();
@@ -199,7 +198,6 @@ public class GestisciPrenotazione {
         }
     }
 
-    // dominio/idPrentazione
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{idPrenotazione}")
@@ -283,7 +281,9 @@ public class GestisciPrenotazione {
 
         if (registrazioneConccorrente.containsKey(dominio)) {
             // return "occupato"
-            return Response.ok("{\"available\":\"occupato\"}").build();
+            return Response
+                    .ok("{\"available\":\"occupato\", \"email\" : " + registrazioneConccorrente.get(dominio) + "}")
+                    .build();
         }
 
         try {
@@ -305,13 +305,10 @@ public class GestisciPrenotazione {
                 }
                 dato += inputLine;
             }
+            String[] dati = dato.split(";");
 
             closeSocket();
-            if (dato.equals("true")) {
-                return Response.ok("{\"available\": true}").build();
-            }
-            return Response.ok("{\"available\": false}").build();
-
+            return Response.ok("{\"available\":" + dati[0] + ", \"email\": \"" + dati[1] + "\"}").build();
         } catch (IOException e) {
             System.out.println(e);
             return Response.serverError().build();

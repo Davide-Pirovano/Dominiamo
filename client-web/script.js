@@ -77,9 +77,8 @@ function loadInterfaceDOM() {
     email.value = cookie.email;
 }
 
-async function handleCreateDomain(event) {
-    event.preventDefault();
-    const form = event.target;
+async function handleCreateDomain() {
+    const form = document.getElementById("create-domain-form");
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
@@ -107,10 +106,18 @@ async function handleCreateDomain(event) {
     // aggingo a jsonData la dataOdierna per il controllo della durata e il giorno di scadenza calcolato
     const dataPrenotazione = new Date();
     const dataScadenza = new Date(dataPrenotazione);
+
     // calcolo la durata in anni
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(data.durata));
     data.dataPrenotazione = dataPrenotazione.toLocaleDateString();
     data.dataScadenza = dataScadenza.toLocaleDateString();
+
+    //aggiungo a jsonData i dati del pagamento
+    data.cvv = document.getElementById('cvv-create-domain').value;
+    data.numeroCarta = document.getElementById('creditCardNumber-create-domain').value;
+    data.scadenzaCarta = document.getElementById('expirationDate-create-domain').value;
+    data.nomeCognomeIntestatario = document.getElementById('cardHolderName-create-domain').value;
+
     const jsonData = JSON.stringify(data);
 
     const response = await fetch(API_URI, {
@@ -122,6 +129,11 @@ async function handleCreateDomain(event) {
     });
 
     const jsonResponse = await response.json();
+
+
+    const statusView = document.getElementById('disp-dominio');
+    statusView.textContent = 'verifica disponibilità...';
+    statusView.style.color = '#424649';
 
 }
 
@@ -380,24 +392,14 @@ async function annullaRinnovo(idPrenotazione) {
 const register_form = document.getElementById("register-form-wrapper");
 register_form.addEventListener("submit", registerUser);
 
-const form_create_domain = document.getElementById("create-domain-form");
-form_create_domain.addEventListener("submit", handleCreateDomain);
-
 document.getElementById("cancel-create-domain").addEventListener("click", function (event) {
     event.preventDefault();
 
     document.getElementById("create-domain-form").reset();
 
-    // imposto nel form i cookie
-    const cookie = getCookie();
-    const nome = document.getElementById("name-create-domain");
-    nome.value = cookie.nome;
-
-    const cognome = document.getElementById("surname-create-domain");
-    cognome.value = cookie.cognome;
-
-    const email = document.getElementById("email-create-domain");
-    email.value = cookie.email;
+    const statusView = document.getElementById('disp-dominio');
+    statusView.textContent = 'verifica disponibilità...';
+    statusView.style.color = '#424649';
 });
 
 document.getElementById('create-domain-switch').addEventListener('click', function () {
@@ -437,25 +439,71 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const dominio = dominioInput.value;
 
         if (dominio.length === 0) {
-            statusView.textContent = 'inserisci il dominio per verificare la disponibilità';
+            statusView.textContent = 'verifica disponibilità...';
             statusView.style.color = '#424649';
-        }
-
-        const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
-        const jsonResponse = await response.json();
-
-        // tre stati String: true, occupato, false
-
-        if (jsonResponse.available === true) {
-            //scrivo disponibile
-            statusView.textContent = 'Disponibile';
-            statusView.style.color = '#247e54';
-        } else if (jsonResponse.available === 'occupato') {
-            statusView.textContent = 'Occupato';
-            statusView.style.color = '#ff9770';
         } else {
-            statusView.textContent = 'Occupato';
-            statusView.style.color = '#f33f3f';
+            const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
+            const jsonResponse = await response.json();
+
+            // tre stati String: true, occupato, false
+
+            if (jsonResponse.available == true) {
+                //scrivo disponibile
+                statusView.textContent = 'Disponibile';
+                statusView.style.color = '#247e54';
+            } else if (jsonResponse.available === 'Occupato') {
+                statusView.textContent = 'Occupato da ' + jsonResponse.email;
+                statusView.style.color = '#ff9770';
+            } else {
+                if (jsonResponse.email === getCookie().email) {
+                    statusView.textContent = 'Già in possesso';
+                    statusView.style.color = '#f33f3f';
+                } else {
+                    statusView.textContent = 'Occupato da ' + jsonResponse.email;
+                    statusView.style.color = '#f33f3f';
+                }
+            }
         }
     });
+});
+
+document.getElementById('cancelPayment').addEventListener('click', function () {
+    document.getElementById('paymentPopup').style.display = 'none';
+    document.getElementById('container').style.opacity = 1;
+    document.getElementById('container').style.pointerEvents = 'auto';
+});
+
+document.getElementById('submit-create-domain').addEventListener('click', function (event) {
+
+    // todo blocco il dominio sul server
+
+    event.preventDefault();
+    // controllo che i campi inserti siano validi
+    const dominio = document.getElementById('domain-create-domain').value;
+    const durata = document.getElementById('duration-create-domain').value;
+    const nome = document.getElementById('name-create-domain').value;
+    const cognome = document.getElementById('surname-create-domain').value;
+    const email = document.getElementById('email-create-domain').value;
+    if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && document.getElementById('disp-dominio').textContent === 'Disponibile') {
+
+        //genero prezzo random
+        document.getElementById('payment-value').textContent = "Totale: " + Math.floor(Math.random() * 100) + "€";
+
+        // mostro popUp pagamento
+        document.getElementById('paymentPopup').style.display = 'block';
+        document.getElementById('container').style.opacity = 0.5;
+        document.getElementById('container').style.pointerEvents = 'none';
+
+    } else {
+        alert('Compila tutti i campi correttamente');   // todo alert personalizzato
+    }
+});
+
+document.getElementById('submit-payment').addEventListener('click', function (event) {
+    event.preventDefault();
+
+    document.getElementById('paymentPopup').style.display = 'none';
+    document.getElementById('container').style.opacity = 1;
+    document.getElementById('container').style.pointerEvents = 'auto';
+    handleCreateDomain();
 });
