@@ -339,11 +339,6 @@ async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
         body: jsonData
     });
     const jsonResponse = await response.json();
-    //mostro sucessPopup
-    const successPopup = document.getElementById("successPopup");
-    successPopup.style.display = "block"; // disattivo tutto il resto della pagina tranne il popUp success    
-    document.getElementById('container').style.opacity = 0.5;
-    document.getElementById('container').style.pointerEvents = 'none';
 
     loadYourDomains();
 }
@@ -367,11 +362,6 @@ async function rinnovaDominio(durata, idPrenotazione) {
         body: jsonData
     });
     const jsonResponse = await response.json();
-    //mostro sucessPopup
-    const successPopup = document.getElementById("successPopup");
-    successPopup.style.display = "block"; // disattivo tutto il resto della pagina tranne il popUp success    
-    document.getElementById('container').style.opacity = 0.5;
-    document.getElementById('container').style.pointerEvents = 'none';
 
     loadYourDomains();
 }
@@ -437,4 +427,35 @@ document.getElementById('successPopup').addEventListener('click', function () {
     // ripristino attività container
     document.getElementById('container').style.opacity = 1;
     document.getElementById('container').style.pointerEvents = 'auto';
+});
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const dominioInput = document.getElementById('domain-create-domain');
+    const statusView = document.getElementById('disp-dominio');
+
+    dominioInput.addEventListener('input', async function () {
+        const dominio = dominioInput.value;
+
+        if (dominio.length === 0) {
+            statusView.textContent = 'inserisci il dominio per verificare la disponibilità';
+            statusView.style.color = '#424649';
+        }
+
+        const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
+        const jsonResponse = await response.json();
+
+        // tre stati String: true, occupato, false
+
+        if (jsonResponse.available === true) {
+            //scrivo disponibile
+            statusView.textContent = 'Disponibile';
+            statusView.style.color = '#247e54';
+        } else if (jsonResponse.available === 'occupato') {
+            statusView.textContent = 'Occupato';
+            statusView.style.color = '#ff9770';
+        } else {
+            statusView.textContent = 'Occupato';
+            statusView.style.color = '#f33f3f';
+        }
+    });
 });

@@ -74,6 +74,9 @@ public class Main {
                     case "4": // visualizzazione tutte prenotazioni dell'utente dalla mail
                         out.println(gp.leggiPrenotazioni(dati[1]));
                         break;
+                    case "5": // verifica disponibilità dominio
+                        out.println(gp.verificaDisponibilita(dati[1]));
+                        break;
                 }
 
                 in.close();

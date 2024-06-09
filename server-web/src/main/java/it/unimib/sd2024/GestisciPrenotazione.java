@@ -9,8 +9,8 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-// import java.util.HashMap;
-// import java.util.Map;
+import java.util.HashMap;
+import java.util.Map;
 
 // import jakarta.json.JsonException;
 import jakarta.json.bind.JsonbBuilder;
@@ -40,6 +40,14 @@ public class GestisciPrenotazione {
     Socket socket;
     PrintStream out;
     BufferedReader in;
+
+    // lista di domini in registrazione concorrente
+    Map<String, String> registrazioneConccorrente; // dominio, email
+
+    public GestisciPrenotazione() {
+        registrazioneConccorrente = new HashMap<>();
+        registrazioneConccorrente.put("dominio", "email");
+    }
 
     private void startSocket() {
         try {
@@ -135,7 +143,7 @@ public class GestisciPrenotazione {
             // generazione prenotazione creando un id univoco da assegnarli e passando i
             // valori del body
             Prenotazione prenotazione = JsonbBuilder.create().fromJson(body, Prenotazione.class);
-            prenotazione.setIdPrenotazione(latestId++);
+            prenotazione.setIdPrenotazione(++latestId);
             prenotazione.setStatus("attivo");
             // salvataggio prenotazione nel database
 
@@ -262,6 +270,48 @@ public class GestisciPrenotazione {
             return Response.ok().entity(JsonbBuilder.create().toJson(prenotazione)).build();
         } catch (JsonbException e) {
             return Response.status(Status.BAD_REQUEST).build();
+        } catch (IOException e) {
+            System.out.println(e);
+            return Response.serverError().build();
+        }
+    }
+
+    @GET
+    @Path("/check")
+    @Produces(MediaType.APPLICATION_JSON)
+    public synchronized Response checkAvailable(@QueryParam("dominio") String dominio) {
+
+        if (registrazioneConccorrente.containsKey(dominio)) {
+            // return "occupato"
+            return Response.ok("{\"available\":\"occupato\"}").build();
+        }
+
+        try {
+
+            // controllo se il dominio è in registrazione concorrente
+
+            startSocket();
+
+            String op = "5"; // check availability operation
+            String request = op + ";" + dominio;
+            out.println(request);
+            out.println("0");
+
+            String dato = "";
+            String inputLine = "";
+            while ((inputLine = in.readLine()) != null) {
+                if ("0".equals(inputLine)) {
+                    break;
+                }
+                dato += inputLine;
+            }
+
+            closeSocket();
+            if (dato.equals("true")) {
+                return Response.ok("{\"available\": true}").build();
+            }
+            return Response.ok("{\"available\": false}").build();
+
         } catch (IOException e) {
             System.out.println(e);
             return Response.serverError().build();

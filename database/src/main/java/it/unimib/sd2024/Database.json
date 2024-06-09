@@ -1,62 +1,15 @@
-{"Prenotazioni": [
-    {
-        "cvv": "dominio1.it",
-        "cognome": "Pirovano",
-        "idPrenotazione": "0",
-        "dominio": "dominio1.it",
-        "durata": "10",
-        "nome": "Davide",
-        "dataScadenza": "06/08/2034",
-        "nomeCognomeIntestatario": "dominio1.it",
-        "dataPrenotazione": "08/06/2024",
-        "numeroCarta": "dominio1.it",
-        "scadenzaCarta": "dominio1.it",
-        "email": "test@gmail.com",
-        "status": "attivo"
-    },
-    {
-        "cvv": "dominio2.it",
-        "cognome": "Pirovano",
-        "idPrenotazione": "1",
-        "dominio": "dominio2.it",
-        "durata": "10",
-        "nome": "Davide",
-        "dataScadenza": "08/06/2034",
-        "nomeCognomeIntestatario": "dominio2.it",
-        "dataPrenotazione": "08/06/2024",
-        "numeroCarta": "dominio2.it",
-        "scadenzaCarta": "dominio2.it",
-        "email": "test@gmail.com",
-        "status": "attivo"
-    },
-    {
-        "cvv": "dominio3.it",
-        "cognome": "Pirovano",
-        "idPrenotazione": "2",
-        "dominio": "dominio3.it",
-        "durata": "6",
-        "nome": "Davide",
-        "dataScadenza": "06/08/2030",
-        "nomeCognomeIntestatario": "dominio3.it",
-        "dataPrenotazione": "08/06/2024",
-        "numeroCarta": "dominio3.it",
-        "scadenzaCarta": "dominio3.it",
-        "email": "test@gmail.com",
-        "status": "attivo"
-    },
-    {
-        "cvv": "dominio5.it",
-        "cognome": "Pirovano",
-        "idPrenotazione": "4",
-        "dominio": "dominio5.it",
-        "durata": "10",
-        "nome": "Davide",
-        "dataScadenza": "06/08/2034",
-        "nomeCognomeIntestatario": "dominio5.it",
-        "dataPrenotazione": "08/06/2024",
-        "numeroCarta": "dominio5.it",
-        "scadenzaCarta": "dominio5.it",
-        "email": "test@gmail.com",
-        "status": "attivo"
-    }
-]}
+{"Prenotazioni": [{
+    "cvv": "dominio1.it",
+    "cognome": "Pirovano",
+    "idPrenotazione": "1",
+    "dominio": "dominio1.it",
+    "durata": "10",
+    "nome": "Davide",
+    "dataScadenza": "06/09/2034",
+    "nomeCognomeIntestatario": "dominio1.it",
+    "dataPrenotazione": "09/06/2024",
+    "numeroCarta": "dominio1.it",
+    "scadenzaCarta": "dominio1.it",
+    "email": "test@gmail.com",
+    "status": "attivo"
+}]}

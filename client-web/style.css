@@ -261,7 +261,7 @@ th {
 #successPopup button {
   padding: 10px 15px;
   border: none;
-  background-color: #3da9fc;
+  background-color: #094067;
   color: #fff;
   cursor: pointer;
   border-radius: 5px;
@@ -360,10 +360,6 @@ th {
   margin-bottom: 15px;
 }
 
-#selettore-prolunga {
-  margin-bottom: 15px;
-}
-
 .btn-attivo {
   background-color: #247e54;
   color: #ffffff;
@@ -389,4 +385,20 @@ th {
   height: 15px;
   fill: #ffffff;
   margin-left: 5px;
+}
+
+#disp-dominio {
+  font-size: 10px;
+  color: #424649;
+  /* allineo il contenuto a sinistra */
+  text-align: left;
+}
+
+#status-dom-view {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#insert-domain{
+  margin-bottom: 0px;
 }

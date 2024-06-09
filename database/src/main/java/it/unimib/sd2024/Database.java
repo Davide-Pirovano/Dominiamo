@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import org.json.*;
 
@@ -165,12 +168,47 @@ public class Database {
         }
     }
 
-    // controllo scadenze e se scaduto aggiorno lo status in "rinnovare"
-    public synchronized void checkScadenze() {
-        System.out.println("Controllo scadenze");
+    // verifica disponibilità dominio
+    public synchronized boolean verificaDisponibilita(String dominio) {
+        System.out.println("Verifica disponibilità dominio");
+        // true disponibile, false non disponibile
         try {
             // Leggi il contenuto del file JSON come stringa
             String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
+            // Converti il contenuto in un oggetto JSON
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Ottieni l'array JSON "Prenotazione"
+            JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
+
+            // Cerca l'oggetto JSON con il dominio specificato
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                if (obj.getString("dominio").equals(dominio)) {
+                    return false;
+                }
+            }
+
+            return true;
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // controllo scadenze e se scaduto aggiorno lo status in "rinnovare"
+    public synchronized void checkScadenze() {
+        final String ATTIVO = "attivo";
+        final String SCADUTO = "scaduto";
+        final String RINNOVARE = "rinnovare";
+        final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        System.out.println("Controllo scadenze");
+
+        try {
+            // Leggi il contenuto del file JSON come stringa
+            String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
+
             // Converti il contenuto in un oggetto JSON
             JSONObject jsonObject = new JSONObject(content);
 
@@ -178,32 +216,41 @@ public class Database {
             JSONArray jsonArray = jsonObject.getJSONArray("Prenotazioni");
 
             // Ottieni la data odierna
-            String today = java.time.LocalDate.now().toString();
+            LocalDate today = LocalDate.now();
 
-            // itero sugli oggetti del json e controllo dove ho lo stato attivo se la data
-            // di scadenza è scaduta aggiorno lo status in rinnovare
+            // Itera sugli oggetti del JSON e controlla le scadenze
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
+                String status = obj.getString("status");
+                String dataScadenza = obj.getString("dataScadenza");
 
-                // fromatto data dell'oggetto in yyyy-mm-dd
-                String[] dataScadenza = obj.getString("dataScadenza").split("/");
-                // e lo salvo in una variabile
-                String dataScadenzaFormatted = dataScadenza[2] + "-" + dataScadenza[1] + "-" + dataScadenza[0];
+                try {
+                    // Converte la data di scadenza in formato LocalDate
+                    LocalDate scadenzaDate = LocalDate.parse(dataScadenza, formatter);
 
-                if (obj.getString("status").equals("attivo") && dataScadenzaFormatted.compareTo(today) < 0
-                        && obj.getInt("durata") == 10) {
-                    System.out.println("Scaduto");
-                    obj.put("status", "scaduto");
-
-                } else if (obj.getString("status").equals("attivo") && dataScadenzaFormatted.compareTo(today) < 0) {
-                    System.out.println("Rinnovare");
-                    obj.put("status", "rinnovare");
+                    if (status.equals(ATTIVO) && scadenzaDate.isBefore(today)) {
+                        if (obj.getInt("durata") == 10) {
+                            System.out.println("Scaduto");
+                            obj.put("status", SCADUTO);
+                        } else {
+                            System.out.println("Rinnovare");
+                            obj.put("status", RINNOVARE);
+                        }
+                    }
+                } catch (DateTimeParseException e) {
+                    System.err.println("Errore nel parsing della data per l'oggetto: " + obj);
+                    e.printStackTrace();
                 }
             }
 
             // Scrivi il nuovo oggetto JSON nel file
             Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
-        } catch (JSONException | IOException e) {
+
+        } catch (IOException e) {
+            System.err.println("Errore nella lettura o scrittura del file JSON");
+            e.printStackTrace();
+        } catch (JSONException e) {
+            System.err.println("Errore nella manipolazione del JSON");
             e.printStackTrace();
         }
     }

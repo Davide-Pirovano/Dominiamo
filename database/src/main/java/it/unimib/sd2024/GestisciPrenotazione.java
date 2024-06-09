@@ -40,6 +40,12 @@ public class GestisciPrenotazione {
         return db.leggiPrenotazione(id);
     }
 
+    public synchronized boolean verificaDisponibilita(String dominio) {
+        // System.out.println("Verifica disponibilità");
+        // Verifica della disponibilità di un dominio
+        return db.verificaDisponibilita(dominio);
+    }
+
     public synchronized void checkSacdenze() {
         System.out.println("Controllo scadenze");
         // Controllo delle scadenze

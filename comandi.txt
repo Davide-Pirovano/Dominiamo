@@ -4,6 +4,7 @@ PROTOCOLLO COMUNICAZIONE CLIENT SERVER
 2 - visualizza prenotazione con id
 3 - rinnovo prenotazione scaduta
 4 - visualizza domini
+5 - controllo disponibilità dominio
 
 --------------
 status = "attivo"
@@ -17,6 +18,9 @@ status = "scaduto"
 
 ------------
 
-TODO
-* controllare se negli ordini di 10 anni, quando scadono mette scaduto e non rinnovare nel db
-* mettere i due popUp in uno
+Scaletta
+1. divisione form registrazione con pagamento
+2. quando un utente decide di registrare un nuovo dominio c'è un controllo al singolo input per verificare se è disponibile
+3. quando conferma e va al pagamento, il quel momento il dominio è bloccato temporaneamente a livello server
+4a. se il pagamento va a buon fine registro il dominio nel db e lo tolgo dalla struttura dati server per il bloccaggio
+4b. se il pagamento non va a buon fine lo tolgo dalla struttura dati server per il bloccaggio
