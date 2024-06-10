@@ -474,6 +474,8 @@ document.getElementById('cancelPayment').addEventListener('click', function () {
     document.getElementById('container').style.pointerEvents = 'auto';
 });
 
+var timeoutNotifica;
+
 document.getElementById('submit-create-domain').addEventListener('click', function (event) {
 
     // todo blocco il dominio sul server
@@ -498,17 +500,40 @@ document.getElementById('submit-create-domain').addEventListener('click', functi
     } else {
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
-        setTimeout(function () {
+        notificaClass = true;
+        timeoutNotifica = setTimeout(function () {
             notifica.classList.remove('show');
         }, 3000);
+    }
+});
+
+document.getElementById('notifica-X').addEventListener('click', function () {
+    notifica.classList.remove('show');
+    // Cancella il timeout se è stato impostato
+    if (typeof timeoutNotifica !== 'undefined') {
+        clearTimeout(timeoutNotifica);
     }
 });
 
 document.getElementById('submit-payment').addEventListener('click', function (event) {
     event.preventDefault();
 
-    document.getElementById('paymentPopup').style.display = 'none';
-    document.getElementById('container').style.opacity = 1;
-    document.getElementById('container').style.pointerEvents = 'auto';
-    handleCreateDomain();
+    // controllo che i campi non siano vuoti
+    const cvv = document.getElementById('cvv-create-domain').value;
+    const creditCardNumber = document.getElementById('creditCardNumber-create-domain').value;
+    const expirationDate = document.getElementById('expirationDate-create-domain').value;
+    const cardHolderName = document.getElementById('cardHolderName-create-domain').value;
+    if (cvv == '' || creditCardNumber == '' || expirationDate == '' || cardHolderName == '') {
+        document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
+        notifica.classList.add('show');
+        notificaClass = true;
+        timeoutNotifica = setTimeout(function () {
+            notifica.classList.remove('show');
+        }, 3000);
+    } else {
+        document.getElementById('paymentPopup').style.display = 'none';
+        document.getElementById('container').style.opacity = 1;
+        document.getElementById('container').style.pointerEvents = 'auto';
+        handleCreateDomain();
+    }
 });
