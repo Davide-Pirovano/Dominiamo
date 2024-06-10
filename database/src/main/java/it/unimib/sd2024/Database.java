@@ -170,7 +170,8 @@ public class Database {
     // verifica disponibilità dominio
     public synchronized String verificaDisponibilita(String dominio) {
         System.out.println("Verifica disp dominio");
-        // return "false;l'email" dell'utente che ha prenotato il dominio o "true;null" se il dominio è disponibile
+        // return "false;l'email" dell'utente che ha prenotato il dominio o "true;null"
+        // se il dominio è disponibile
         try {
             // Leggi il contenuto del file JSON come stringa
             String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);

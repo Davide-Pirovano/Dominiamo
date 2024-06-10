@@ -1,15 +1,19 @@
-{"Prenotazioni": [{
-    "cvv": "d",
-    "cognome": "Pirovano",
-    "idPrenotazione": "2",
-    "dominio": "dominio.it",
-    "durata": "1",
-    "nome": "Davide",
-    "dataScadenza": "10/06/2025",
-    "nomeCognomeIntestatario": "d",
-    "dataPrenotazione": "10/06/2024",
-    "numeroCarta": "d",
-    "scadenzaCarta": "d",
-    "email": "test@gmail.com",
-    "status": "attivo"
-}]}
+{
+    "Prenotazioni": [
+        {
+            "cvv": "1",
+            "cognome": "Pirovano",
+            "idPrenotazione": "1",
+            "dominio": "dom.it",
+            "durata": "9",
+            "nome": "Davide",
+            "dataScadenza": "06/10/2033",
+            "nomeCognomeIntestatario": "1",
+            "dataPrenotazione": "10/06/2024",
+            "numeroCarta": "1",
+            "scadenzaCarta": "1",
+            "email": "dp@gmail.com",
+            "status": "attivo"
+        }
+    ]
+}

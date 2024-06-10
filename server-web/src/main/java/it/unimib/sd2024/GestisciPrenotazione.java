@@ -15,6 +15,7 @@ import java.util.Map;
 // import jakarta.json.JsonException;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
+import jakarta.ws.rs.DELETE;
 // import jakarta.ws.rs.Consumes;
 // import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -30,23 +31,16 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-/**
- * Rappresenta la risorsa "example" in "http://localhost:8080/example".
- */
 @Path("domini")
 public class GestisciPrenotazione {
     // Attributi privati statici...
     private static int latestId = 0;
-    Socket socket;
-    PrintStream out;
-    BufferedReader in;
+    private static Socket socket;
+    private static PrintStream out;
+    private static BufferedReader in;
 
     // lista di domini in registrazione concorrente
-    Map<String, String> registrazioneConccorrente; // dominio, email
-
-    public GestisciPrenotazione() {
-        registrazioneConccorrente = new HashMap<>();
-    }
+    private static Map<String, String> registrazioneConccorrente = new HashMap<>(); // dominio, email
 
     private void startSocket() {
         try {
@@ -279,9 +273,7 @@ public class GestisciPrenotazione {
     public synchronized Response checkAvailable(@QueryParam("dominio") String dominio) {
 
         if (registrazioneConccorrente.containsKey(dominio)) {
-            // return "occupato"
-            return Response
-                    .ok("{\"available\":\"occupato\", \"email\" : " + registrazioneConccorrente.get(dominio) + "}")
+            return Response.ok("{\"available\":true, \"email\": \"" + registrazioneConccorrente.get(dominio) + "\"}")
                     .build();
         }
 
@@ -311,6 +303,37 @@ public class GestisciPrenotazione {
         } catch (IOException e) {
             System.out.println(e);
             return Response.serverError().build();
+        }
+    }
+
+    @POST
+    @Path("/reserved")
+    @Produces(MediaType.APPLICATION_JSON)
+    public synchronized Response reserveDomain(String body) {
+        try {
+            // cast body in json
+            Prenotazione p = JsonbBuilder.create().fromJson(body, Prenotazione.class);
+            String dominio = p.getDominio();
+            String email = p.getEmail();
+            registrazioneConccorrente.put(dominio, email);
+            return Response.ok().build();
+        } catch (JsonbException e) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+    }
+
+    @DELETE
+    @Path("/reserved")
+    @Produces(MediaType.APPLICATION_JSON)
+    public synchronized Response deleteReservedDomain(String body) {
+        try {
+            // cast body in json
+            Prenotazione p = JsonbBuilder.create().fromJson(body, Prenotazione.class);
+            String dominio = p.getDominio();
+            registrazioneConccorrente.remove(dominio);
+            return Response.ok().build();
+        } catch (JsonbException e) {
+            return Response.status(Status.BAD_REQUEST).build();
         }
     }
 }

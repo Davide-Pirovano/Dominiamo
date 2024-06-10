@@ -398,6 +398,17 @@ document.getElementById("cancel-create-domain").addEventListener("click", functi
 
     document.getElementById("create-domain-form").reset();
 
+    // reimposto i valori dei cookie nel form
+    const cookie = getCookie();
+    const nome = document.getElementById("name-create-domain");
+    nome.value = cookie.nome;
+
+    const cognome = document.getElementById("surname-create-domain");
+    cognome.value = cookie.cognome;
+
+    const email = document.getElementById("email-create-domain");
+    email.value = cookie.email;
+
     const statusView = document.getElementById('disp-dominio');
     statusView.textContent = 'verifica disponibilità...';
     statusView.style.color = '#424649';
@@ -447,20 +458,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const jsonResponse = await response.json();
 
             // tre stati String: true, occupato, false
+            console.log(jsonResponse);
 
-            if (jsonResponse.available == true) {
+            if (jsonResponse.available == true && jsonResponse.email === "null") {
                 //scrivo disponibile
                 statusView.textContent = 'Disponibile';
                 statusView.style.color = '#247e54';
-            } else if (jsonResponse.available === 'Occupato') {
-                statusView.textContent = 'Occupato da ' + jsonResponse.email;
+            } else if (jsonResponse.available === true && jsonResponse.email != "null") {
+                statusView.textContent = 'Bloccato da ' + jsonResponse.email;
                 statusView.style.color = '#ff9770';
             } else {
                 if (jsonResponse.email === getCookie().email) {
                     statusView.textContent = 'Già in possesso';
                     statusView.style.color = '#f33f3f';
                 } else {
-                    statusView.textContent = 'Occupato da ' + jsonResponse.email;
+                    statusView.textContent = 'Non disponibile, occupato da: ' + jsonResponse.email;
                     statusView.style.color = '#f33f3f';
                 }
             }
@@ -469,6 +481,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 document.getElementById('cancelPayment').addEventListener('click', function () {
+
+    // faccio una delete a /reserved
+    fetch(`${API_URI}/reserved`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ dominio: document.getElementById('domain-create-domain').value })
+    });
+
     document.getElementById('paymentPopup').style.display = 'none';
     document.getElementById('container').style.opacity = 1;
     document.getElementById('container').style.pointerEvents = 'auto';
@@ -476,18 +498,33 @@ document.getElementById('cancelPayment').addEventListener('click', function () {
 
 var timeoutNotifica;
 
-document.getElementById('submit-create-domain').addEventListener('click', function (event) {
-
-    // todo blocco il dominio sul server
+document.getElementById('submit-create-domain').addEventListener('click', async function (event) {
 
     event.preventDefault();
+
     // controllo che i campi inserti siano validi
     const dominio = document.getElementById('domain-create-domain').value;
     const durata = document.getElementById('duration-create-domain').value;
     const nome = document.getElementById('name-create-domain').value;
     const cognome = document.getElementById('surname-create-domain').value;
     const email = document.getElementById('email-create-domain').value;
-    if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && document.getElementById('disp-dominio').textContent === 'Disponibile') {
+    // controllo che l'email sia valida ovvero che contenga una chiocciola
+    const emailValid = email.includes('@');
+
+    // controllo che il dominio sia disponibile
+    const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
+    const jsonResponse = await response.json();
+
+    if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && emailValid && jsonResponse.available == true && jsonResponse.email === "null") {
+
+        // invio post al server
+        const response = await fetch(`${API_URI}/reserved`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ dominio: dominio, email: email })
+        });
 
         //genero prezzo random
         document.getElementById('payment-value').textContent = "Totale: " + Math.floor(Math.random() * 100) + "€";
@@ -497,6 +534,18 @@ document.getElementById('submit-create-domain').addEventListener('click', functi
         document.getElementById('container').style.opacity = 0.5;
         document.getElementById('container').style.pointerEvents = 'none';
 
+    } else if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && emailValid && jsonResponse.available == true && jsonResponse.email !== "null") {
+        document.getElementById('notifica-p').textContent = 'Dominio bloccato da un altro utente';
+        notifica.classList.add('show');
+        notificaClass = true;
+        timeoutNotifica = setTimeout(function () {
+            notifica.classList.remove('show');
+        }, 3000);
+
+        const statusView = document.getElementById('disp-dominio');
+
+        statusView.textContent = 'Bloccato da ' + jsonResponse.email;
+        statusView.style.color = '#ff9770';
     } else {
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
@@ -517,7 +566,6 @@ document.getElementById('notifica-X').addEventListener('click', function () {
 
 document.getElementById('submit-payment').addEventListener('click', function (event) {
     event.preventDefault();
-
     // controllo che i campi non siano vuoti
     const cvv = document.getElementById('cvv-create-domain').value;
     const creditCardNumber = document.getElementById('creditCardNumber-create-domain').value;
@@ -531,6 +579,16 @@ document.getElementById('submit-payment').addEventListener('click', function (ev
             notifica.classList.remove('show');
         }, 3000);
     } else {
+
+        // faccio una delete a /reserved
+        fetch(`${API_URI}/reserved`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ dominio: document.getElementById('domain-create-domain').value })
+        });
+
         document.getElementById('paymentPopup').style.display = 'none';
         document.getElementById('container').style.opacity = 1;
         document.getElementById('container').style.pointerEvents = 'auto';

@@ -17,16 +17,16 @@
     <h2>Registrati</h2>
     <form id="register-form">
       <div class="input-box">
-        <input type="text" id="nome-registrazione" name="nome" placeholder="Nome" required>
+        <input autocomplete="off" type="text" id="nome-registrazione" name="nome" placeholder="Nome" required>
       </div>
       <div class="input-box">
-        <input type="text" id="cognome-registrazione" name="cognome" required placeholder="Cognome">
+        <input autocomplete="off" type="text" id="cognome-registrazione" name="cognome" required placeholder="Cognome">
       </div>
       <div class="input-box">
-        <input type="email" id="email-registrazione" name="email" required placeholder="Email">
+        <input autocomplete="off" type="email" id="email-registrazione" name="email" required placeholder="Email">
       </div>
       <div class="input-box button">
-        <input type="submit" value="Invia">
+        <input autocomplete="off" type="submit" value="Invia">
       </div>
     </form>
   </div>
@@ -48,7 +48,7 @@
           <h2 id="title-create-domain-form">Crea un dominio</h2>
           <div id="insert-domain" class="form-row">
             <label for="domain-create-domain">Dominio da acquistare:</label>
-            <input type="text" id="domain-create-domain" name="dominio">
+            <input type="text" id="domain-create-domain" name="dominio" autocomplete="off">
           </div>
           <div id="status-dom-view" class="form-row">
             <p id="disp-dominio">verifica disponibilità...</p>
@@ -70,15 +70,15 @@
           </div>
           <div class="form-row">
             <label for="name-create-domain">Nome:</label>
-            <input type="text" id="name-create-domain" name="nome">
+            <input type="text" id="name-create-domain" name="nome" autocomplete="off" readonly>
           </div>
           <div class="form-row">
             <label for="surname-create-domain">Cognome:</label>
-            <input type="text" id="surname-create-domain" name="cognome">
+            <input type="text" id="surname-create-domain" name="cognome" autocomplete="off" readonly>
           </div>
           <div class="form-row">
             <label for="email-create-domain">Indirizzo Email:</label>
-            <input type="email" id="email-create-domain" name="email">
+            <input type="email" id="email-create-domain" name="email" autocomplete="off" readonly>
           </div>
 
           <div id="registrationActioButton">
@@ -147,23 +147,24 @@
       <h2>Effettua il pagamento</h2>
       <div class="row">
         <label for="creditCardNumber-create-domain">Numero di Carta di Credito:</label>
-        <input placeholder="0000 0000 0000 0000" type="text" id="creditCardNumber-create-domain" name="numeroCarta"
-          required>
+        <input autocomplete="off" placeholder="0000 0000 0000 0000" type="text" id="creditCardNumber-create-domain"
+          name="numeroCarta" required>
       </div>
       <div class="column-row">
         <div class="column">
           <label for="expirationDate-create-domain">Data di Scadenza:</label>
-          <input type="text" id="expirationDate-create-domain" name="scadenzaCarta" placeholder="MM/AA" required>
+          <input autocomplete="off" type="text" id="expirationDate-create-domain" name="scadenzaCarta"
+            placeholder="MM/AA" required>
         </div>
         <div class="column">
           <label for="cvv-create-domain">CVV:</label>
-          <input type="text" id="cvv-create-domain" name="cvv" required>
+          <input autocomplete="off" type="text" id="cvv-create-domain" name="cvv" required>
         </div>
       </div>
       <div class="row">
         <label for="cardHolderName-create-domain">Intestatario Carta:</label>
-        <input type="text" id="cardHolderName-create-domain" name="nomeCognomeIntestatario" placeholder="Nome e Cognome"
-          required>
+        <input autocomplete="off" type="text" id="cardHolderName-create-domain" name="nomeCognomeIntestatario"
+          placeholder="Nome e Cognome" required>
       </div>
       <div id="payment-row" class="column-row">
         <h3 id="payment-value">Totale: </h3>
