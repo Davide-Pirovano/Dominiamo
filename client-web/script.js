@@ -473,6 +473,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     statusView.style.color = '#f33f3f';
                 } else {
                     statusView.textContent = 'Non disponibile, occupato da: ' + jsonResponse.email;
+                    console.log(jsonResponse);
                     statusView.style.color = '#f33f3f';
                 }
             }

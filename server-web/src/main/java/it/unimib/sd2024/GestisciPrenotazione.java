@@ -297,9 +297,19 @@ public class GestisciPrenotazione {
                 dato += inputLine;
             }
             String[] dati = dato.split(";");
-
             closeSocket();
-            return Response.ok("{\"available\":" + dati[0] + ", \"email\": \"" + dati[1] + "\"}").build();
+
+            if (dati[0].equals("true")) {
+                return Response.ok("{\"available\":" + dati[0] + ", \"email\": \"" + dati[1]
+                        + "\"}").build();
+            } else {
+                return Response.ok("{\"available\": " + dati[0] + ", \"nome\": \"" + dati[1]
+                        + "\", \"cognome\": \""
+                        + dati[2] + "\", \"dataScadenza\": \"" + dati[3] + "\", \"email\": \"" +
+                        dati[4] + "\"}")
+                        .build();
+            }
+
         } catch (IOException e) {
             System.out.println(e);
             return Response.serverError().build();

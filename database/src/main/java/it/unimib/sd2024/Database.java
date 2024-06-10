@@ -185,14 +185,16 @@ public class Database {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
                 if (obj.getString("dominio").equals(dominio)) {
-                    return "false;" + obj.getString("email");
+                    // false;nome;cognome;dataScadenza;email
+                    return "false;" + obj.getString("nome") + ";" + obj.getString("cognome") + ";"
+                            + obj.getString("dataScadenza") + ";" + obj.getString("email");
                 }
             }
 
             return "true;null";
         } catch (JSONException | IOException e) {
             e.printStackTrace();
-            return "false;null";
+            return "false;null;null,null,null";
         }
     }
 
