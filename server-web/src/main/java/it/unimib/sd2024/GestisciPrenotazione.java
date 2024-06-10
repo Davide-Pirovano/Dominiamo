@@ -243,7 +243,6 @@ public class GestisciPrenotazione {
             String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";"
                     + email + ";" + cvv + ";" + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";"
                     + dataPrenotazione + ";" + dataScadenza + ";" + status;
-            // System.out.println(request);
 
             out.println(request);
             out.println("0");

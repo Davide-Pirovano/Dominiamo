@@ -3,7 +3,8 @@ const API_URI = "http://localhost:8080/domini";
 window.onload = init();
 
 // Variabile globale per memorizzare l'ID della prenotazione corrente
-let currentIdPrenotazione = null;
+var currentIdPrenotazione = null;
+var notifica = document.getElementById('notifica');
 
 async function init() {
     // Controllo se i cookie sono presenti altrimenti l'utente deve registrarsi
@@ -495,7 +496,11 @@ document.getElementById('submit-create-domain').addEventListener('click', functi
         document.getElementById('container').style.pointerEvents = 'none';
 
     } else {
-        alert('Compila tutti i campi correttamente');   // todo alert personalizzato
+        document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
+        notifica.classList.add('show');
+        setTimeout(function () {
+            notifica.classList.remove('show');
+        }, 3000);
     }
 });
 
