@@ -1,47 +1,15 @@
-{"Prenotazioni": [
-    {
-        "cvv": "1",
-        "cognome": "Pirovano",
-        "idPrenotazione": "2",
-        "dominio": "dem.it",
-        "durata": "10",
-        "nome": "Davide",
-        "dataScadenza": "13/06/2034",
-        "nomeCognomeIntestatario": "1",
-        "dataPrenotazione": "13/06/2024",
-        "numeroCarta": "1",
-        "scadenzaCarta": "1",
-        "email": "dp@gmail.com",
-        "status": "attivo"
-    },
-    {
-        "cvv": "",
-        "cognome": "Pirovano",
-        "idPrenotazione": "3",
-        "dominio": "d",
-        "durata": "4",
-        "nome": "Davide",
-        "dataScadenza": "13/06/2028",
-        "nomeCognomeIntestatario": "",
-        "dataPrenotazione": "13/06/2024",
-        "numeroCarta": "",
-        "scadenzaCarta": "",
-        "email": "dp@gmail.com",
-        "status": "attivo"
-    },
-    {
-        "cvv": "",
-        "cognome": "Pirovano",
-        "idPrenotazione": "4",
-        "dominio": "da",
-        "durata": "1",
-        "nome": "Davide",
-        "dataScadenza": "13/06/2025",
-        "nomeCognomeIntestatario": "",
-        "dataPrenotazione": "13/06/2024",
-        "numeroCarta": "",
-        "scadenzaCarta": "",
-        "email": "dp@gmail.com",
-        "status": "attivo"
-    }
-]}
+{"Prenotazioni": [{
+    "cvv": "",
+    "cognome": "Pirovano",
+    "idPrenotazione": "1",
+    "dominio": "dom.it",
+    "durata": "3",
+    "nome": "Davide",
+    "dataScadenza": "13/06/2027",
+    "nomeCognomeIntestatario": "",
+    "dataPrenotazione": "13/06/2024",
+    "numeroCarta": "",
+    "scadenzaCarta": "",
+    "email": "dp@gmail.com",
+    "status": "attivo"
+}]}

@@ -52,6 +52,14 @@
           </div>
           <div id="status-dom-view" class="form-row">
             <p id="disp-dominio">verifica disponibilità...</p>
+            <div id="info-occupato">
+              <svg id="info-svg" svg xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path fill="#f33f3f"
+                  d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" />
+              </svg>
+            </div>
+
           </div>
           <div class="form-row">
             <label for="duration-create-domain">Durata registrazione:</label>
@@ -173,6 +181,24 @@
     </form>
   </div>
 
+  <div class="popup" id="detailStatePopup" hidden>
+    <h2>Dettagli</h2>
+    <div id="detailStatePopupContent">
+      <h4 id="detailStatePopupContentP"></h4>
+      <p id="nome-detailStatePopupContentP"></p>
+      <p id="cognome-detailStatePopupContentP"></p>
+      <p id="email-detailStatePopupContentP"></p>
+      <p id="dataScadenza-detailStatePopupContentP"></p>
+    </div>
+    <div id="detailStatePopupCloseButton">
+      <svg xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+        <path fill="#f33f3f"
+          d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" />
+      </svg>
+    </div>
+  </div>
+
   <div id="notifica" class="">
     <svg id="notifica-X" xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -181,7 +207,6 @@
     </svg>
     <h4>Errore!</h4>
     <p id="notifica-p">Compila correttamente i campi</p>
-    <p id="desc-owner"></p>
   </div>
 
   <script src="script.js"></script>

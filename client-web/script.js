@@ -4,6 +4,8 @@ window.onload = init();
 
 // Variabile globale per memorizzare l'ID della prenotazione corrente
 var currentIdPrenotazione = null;
+var currentCheckedDomain = null;
+var timeoutNotifica;
 var notifica = document.getElementById('notifica');
 
 async function init() {
@@ -11,6 +13,7 @@ async function init() {
     var cookie = getCookie();
 
     initializeRinnovoPopup();   // inizializzo il popUp rinnovo
+    initializeDetailStatePopup();    // inizializzo il popUp dettagli
 
     if (!cookie) {
         registerUserDOM();
@@ -18,6 +21,31 @@ async function init() {
         loadInterfaceDOM();
     }
 
+}
+
+function initializeDetailStatePopup() {
+    document.getElementById('info-occupato').addEventListener('click', async function () {
+        document.getElementById('detailStatePopup').style.display = 'block';
+        // Disattivo tutto il resto della pagina tranne il popUp dettagli
+        document.getElementById('container').style.opacity = 0.5;
+        document.getElementById('container').style.pointerEvents = 'none';
+
+        // eseguo richiesta dettaglia sul dominio
+        try {
+            const response = await fetch(`${API_URI}/check?dominio=${currentCheckedDomain}`);
+            const jsonResponse = await response.json();
+            document.getElementById('detailStatePopupContentP').textContent = 'Il dominio' + currentCheckedDomain + ' è occupato da:';
+            document.getElementById('nome-detailStatePopupContentP').textContent = 'Nome: ' + jsonResponse.nome;
+            document.getElementById('cognome-detailStatePopupContentP').textContent = 'Cognome: ' + jsonResponse.cognome;
+            document.getElementById('email-detailStatePopupContentP').textContent = 'Email: ' + jsonResponse.email;
+            document.getElementById('dataScadenza-detailStatePopupContentP').textContent = 'Data di scadenza: ' + jsonResponse.dataScadenza;
+
+        }
+        catch (error) {
+            console.error('Error checking domain availability:', error);
+        }
+    }
+    );
 }
 
 function getCookie() {
@@ -46,9 +74,9 @@ async function registerUser(event) {
     const jsonData = JSON.stringify(data);
 
     // set cookie considerando il campo email univoco
-    document.cookie = `email=${data.email}`;
-    document.cookie = `nome=${data.nome}`;
-    document.cookie = `cognome=${data.cognome}`;
+    document.cookie = `email = ${data.email} `;
+    document.cookie = `nome = ${data.nome} `;
+    document.cookie = `cognome = ${data.cognome} `;
 
     // rimuovo form registrazione
     const registerForm = document.getElementById("register-form-wrapper");
@@ -144,7 +172,7 @@ async function loadYourDomains() {
     const email = cookie.email;
 
     // chiamata get per ottenere i domini registrati dall'utente
-    const response = await fetch(`${API_URI}?email=${email}`);
+    const response = await fetch(`${API_URI}?email = ${email} `);
     const jsonResponse = await response.json();
 
     // aggiorno la tabella con i domini
@@ -224,7 +252,7 @@ function initializeRinnovoPopup() {
         const durata = document.getElementById("durata-rinnovo-dominio").value;
 
         // ottengo la durata precedente
-        const response = await fetch(`${API_URI}/${currentIdPrenotazione}`);
+        const response = await fetch(`${API_URI} /${currentIdPrenotazione}`);
         const jsonResponse = await response.json();
         const durataPrecedente = jsonResponse["durata"];
         const stato = jsonResponse["status"];
@@ -398,8 +426,7 @@ async function annullaRinnovo(idPrenotazione) {
     loadYourDomains();
 }
 
-const register_form = document.getElementById("register-form-wrapper");
-register_form.addEventListener("submit", registerUser);
+document.getElementById("register-form-wrapper").addEventListener("submit", registerUser);
 
 document.getElementById("cancel-create-domain").addEventListener("click", function (event) {
     event.preventDefault();
@@ -477,10 +504,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 if (jsonResponse.available === true && jsonResponse.email === "null") {
                     statusView.textContent = 'Disponibile';
                     statusView.style.color = '#247e54';
+                    document.getElementById('info-occupato').style.display = 'none';
                 } else if (jsonResponse.available === true && jsonResponse.email !== "null") {
                     statusView.textContent = 'Bloccato da ' + jsonResponse.email;
                     statusView.style.color = '#ff9770';
+                    document.getElementById('info-occupato').style.display = 'none';
                 } else {
+                    document.getElementById('info-occupato').style.display = 'flex';
+                    currentCheckedDomain = dominio;
                     const userEmail = getCookie().email;
                     if (jsonResponse.email === userEmail) {
                         statusView.textContent = 'Già in possesso';
@@ -517,8 +548,6 @@ document.getElementById('cancelPayment').addEventListener('click', function () {
     document.getElementById('container').style.opacity = 1;
     document.getElementById('container').style.pointerEvents = 'auto';
 });
-
-var timeoutNotifica;
 
 document.getElementById('submit-create-domain').addEventListener('click', async function (event) {
 
@@ -564,30 +593,15 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
             timeoutNotifica = setTimeout(function () {
                 notifica.classList.remove('show');
             }, 3000);
-
             const statusView = document.getElementById('disp-dominio');
-
             statusView.textContent = 'Bloccato da ' + jsonResponse.email;
             statusView.style.color = '#ff9770';
         } else {
             document.getElementById('notifica-p').textContent = 'Dominio già in possesso';
-            // creo un elemento p html da inserire nella notifica
-            const p = document.getElementById('desc-owner');
-            p.textContent = 'Infromazioni possessore: email:' + jsonResponse.email + ' nome: ' + jsonResponse.nome + ' cognome: ' + jsonResponse.cognome + ' dataScadenza: ' + jsonResponse.dataScadenza;
-            // ingrandisco notifica per contenere il p
-            notifica.style.height = '150px';
-            notifica.style.width = '250px';
             notifica.classList.add('show');
             notificaClass = true;
             timeoutNotifica = setTimeout(function () {
                 notifica.classList.remove('show');
-                //rimuovo l'elemento p dalla notifica
-                // riporto le dimensioni della notifica a quelle originali dopo qualche secondo
-                setTimeout(function () {
-                    notifica.style.height = '100px';
-                    notifica.style.width = '200px';
-                    document.getElementById('desc-owner').textContent = '';
-                }, 1000);
             }, 3000);
         }
     } else {
@@ -640,4 +654,10 @@ document.getElementById('submit-payment').addEventListener('click', function (ev
         document.getElementById('container').style.pointerEvents = 'auto';
         handleCreateDomain();
     }
+});
+
+document.getElementById('detailStatePopupCloseButton').addEventListener('click', function () {
+    document.getElementById('detailStatePopup').style.display = 'none';
+    document.getElementById('container').style.opacity = 1;
+    document.getElementById('container').style.pointerEvents = 'auto';
 });
