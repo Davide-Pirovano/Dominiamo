@@ -271,7 +271,6 @@ public class GestisciPrenotazione {
     @Path("/check")
     @Produces(MediaType.APPLICATION_JSON)
     public synchronized Response checkAvailable(@QueryParam("dominio") String dominio) {
-
         if (registrazioneConccorrente.containsKey(dominio)) {
             return Response.ok("{\"available\":true, \"email\": \"" + registrazioneConccorrente.get(dominio) + "\"}")
                     .build();

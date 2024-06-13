@@ -337,13 +337,21 @@ function processaDataScadenza(item, dataScadenza, dataOdierna, cell, cells, head
     }
 }
 
-async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
+function parseDate(input) {
+    // Split the input string by '/'
+    const parts = input.split('/');
+    // Rearrange the parts into 'yyyy-mm-dd' format
+    const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+    return new Date(formattedDate);
+}
 
+async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
+    dataPrenotazione = parseDate(dataPrenotazione);
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
     const jsonData = JSON.stringify({ durata: durata, dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo' });
-    console.log(jsonData + idPrenotazione);
+    // console.log(jsonData + idPrenotazione);
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",
         headers: {
@@ -365,7 +373,7 @@ async function rinnovaDominio(durata, idPrenotazione) {
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
     const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo' });
 
-    console.log(jsonData + idPrenotazione);
+    // console.log(jsonData + idPrenotazione);
 
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",
@@ -447,42 +455,55 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const dominioInput = document.getElementById('domain-create-domain');
     const statusView = document.getElementById('disp-dominio');
 
-    dominioInput.addEventListener('input', async function () {
+    function debounce(func, delay) {    // funzione per evitare chiamate multiple, aspetta delay ms prima di chiamare la funzione
+        let timeout;
+        return function (...args) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+    }
+
+    const checkDomainAvailability = async function () {
         const dominio = dominioInput.value;
 
         if (dominio.length === 0) {
             statusView.textContent = 'verifica disponibilità...';
             statusView.style.color = '#424649';
         } else {
-            const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
-            const jsonResponse = await response.json();
+            try {
+                const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
+                const jsonResponse = await response.json();
 
-            // tre stati String: true, occupato, false
-            console.log(jsonResponse);
-
-            if (jsonResponse.available == true && jsonResponse.email === "null") {
-                //scrivo disponibile
-                statusView.textContent = 'Disponibile';
-                statusView.style.color = '#247e54';
-            } else if (jsonResponse.available === true && jsonResponse.email != "null") {
-                statusView.textContent = 'Bloccato da ' + jsonResponse.email;
-                statusView.style.color = '#ff9770';
-            } else {
-                if (jsonResponse.email === getCookie().email) {
-                    statusView.textContent = 'Già in possesso';
-                    statusView.style.color = '#f33f3f';
+                if (jsonResponse.available === true && jsonResponse.email === "null") {
+                    statusView.textContent = 'Disponibile';
+                    statusView.style.color = '#247e54';
+                } else if (jsonResponse.available === true && jsonResponse.email !== "null") {
+                    statusView.textContent = 'Bloccato da ' + jsonResponse.email;
+                    statusView.style.color = '#ff9770';
                 } else {
-                    statusView.textContent = 'Non disponibile, occupato da: ' + jsonResponse.email;
-                    console.log(jsonResponse);
-                    statusView.style.color = '#f33f3f';
+                    const userEmail = getCookie().email;
+                    if (jsonResponse.email === userEmail) {
+                        statusView.textContent = 'Già in possesso';
+                        statusView.style.color = '#f33f3f';
+                    } else {
+                        statusView.textContent = 'Non disponibile, occupato da: ' + jsonResponse.email;
+                        statusView.style.color = '#f33f3f';
+                    }
                 }
+            } catch (error) {
+                statusView.textContent = 'Errore nella verifica della disponibilità';
+                statusView.style.color = '#f33f3f';
+                console.error('Error checking domain availability:', error);
             }
         }
-    });
+    };
+
+    dominioInput.addEventListener('input', debounce(checkDomainAvailability, 500));
 });
 
 document.getElementById('cancelPayment').addEventListener('click', function () {
-
+    //resetto il form
+    document.getElementById('payment-form').reset();
     // faccio una delete a /reserved
     fetch(`${API_URI}/reserved`, {
         method: "DELETE",
@@ -512,41 +533,63 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
     // controllo che l'email sia valida ovvero che contenga una chiocciola
     const emailValid = email.includes('@');
 
-    // controllo che il dominio sia disponibile
-    const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
-    const jsonResponse = await response.json();
 
-    if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && emailValid && jsonResponse.available == true && jsonResponse.email === "null") {
 
-        // invio post al server
-        const response = await fetch(`${API_URI}/reserved`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ dominio: dominio, email: email })
-        });
+    if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && emailValid) {
+        // controllo che il dominio sia disponibile
+        const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
+        const jsonResponse = await response.json();
 
-        //genero prezzo random
-        document.getElementById('payment-value').textContent = "Totale: " + Math.floor(Math.random() * 100) + "€";
+        if (jsonResponse.available == true && jsonResponse.email === "null") {
+            // invio post al server
+            const response = await fetch(`${API_URI}/reserved`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ dominio: dominio, email: email })
+            });
 
-        // mostro popUp pagamento
-        document.getElementById('paymentPopup').style.display = 'block';
-        document.getElementById('container').style.opacity = 0.5;
-        document.getElementById('container').style.pointerEvents = 'none';
+            //genero prezzo random
+            document.getElementById('payment-value').textContent = "Totale: " + Math.floor(Math.random() * 100) + "€";
 
-    } else if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && emailValid && jsonResponse.available == true && jsonResponse.email !== "null") {
-        document.getElementById('notifica-p').textContent = 'Dominio bloccato da un altro utente';
-        notifica.classList.add('show');
-        notificaClass = true;
-        timeoutNotifica = setTimeout(function () {
-            notifica.classList.remove('show');
-        }, 3000);
+            // mostro popUp pagamento
+            document.getElementById('paymentPopup').style.display = 'block';
+            document.getElementById('container').style.opacity = 0.5;
+            document.getElementById('container').style.pointerEvents = 'none';
+        } else if (jsonResponse.available == true && jsonResponse.email !== "null") {
+            document.getElementById('notifica-p').textContent = 'Dominio bloccato da un altro utente';
+            notifica.classList.add('show');
+            notificaClass = true;
+            timeoutNotifica = setTimeout(function () {
+                notifica.classList.remove('show');
+            }, 3000);
 
-        const statusView = document.getElementById('disp-dominio');
+            const statusView = document.getElementById('disp-dominio');
 
-        statusView.textContent = 'Bloccato da ' + jsonResponse.email;
-        statusView.style.color = '#ff9770';
+            statusView.textContent = 'Bloccato da ' + jsonResponse.email;
+            statusView.style.color = '#ff9770';
+        } else {
+            document.getElementById('notifica-p').textContent = 'Dominio già in possesso';
+            // creo un elemento p html da inserire nella notifica
+            const p = document.getElementById('desc-owner');
+            p.textContent = 'Infromazioni possessore: email:' + jsonResponse.email + ' nome: ' + jsonResponse.nome + ' cognome: ' + jsonResponse.cognome + ' dataScadenza: ' + jsonResponse.dataScadenza;
+            // ingrandisco notifica per contenere il p
+            notifica.style.height = '150px';
+            notifica.style.width = '250px';
+            notifica.classList.add('show');
+            notificaClass = true;
+            timeoutNotifica = setTimeout(function () {
+                notifica.classList.remove('show');
+                //rimuovo l'elemento p dalla notifica
+                // riporto le dimensioni della notifica a quelle originali dopo qualche secondo
+                setTimeout(function () {
+                    notifica.style.height = '100px';
+                    notifica.style.width = '200px';
+                    document.getElementById('desc-owner').textContent = '';
+                }, 1000);
+            }, 3000);
+        }
     } else {
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
@@ -572,6 +615,8 @@ document.getElementById('submit-payment').addEventListener('click', function (ev
     const creditCardNumber = document.getElementById('creditCardNumber-create-domain').value;
     const expirationDate = document.getElementById('expirationDate-create-domain').value;
     const cardHolderName = document.getElementById('cardHolderName-create-domain').value;
+    //resetto il form
+    document.getElementById('payment-form').reset();
     if (cvv == '' || creditCardNumber == '' || expirationDate == '' || cardHolderName == '') {
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
