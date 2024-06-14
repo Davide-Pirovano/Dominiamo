@@ -496,6 +496,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         if (dominio.length === 0) {
             statusView.textContent = 'verifica disponibilità...';
             statusView.style.color = '#424649';
+            document.getElementById('info-occupato').style.display = 'none';
         } else {
             try {
                 const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
