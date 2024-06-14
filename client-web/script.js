@@ -147,6 +147,9 @@ async function handleCreateDomain() {
     data.scadenzaCarta = document.getElementById('expirationDate-create-domain').value;
     data.nomeCognomeIntestatario = document.getElementById('cardHolderName-create-domain').value;
 
+    //resetto il form
+    document.getElementById('payment-form').reset();
+
     const jsonData = JSON.stringify(data);
 
     const response = await fetch(API_URI, {
@@ -163,6 +166,7 @@ async function handleCreateDomain() {
     const statusView = document.getElementById('disp-dominio');
     statusView.textContent = 'verifica disponibilità...';
     statusView.style.color = '#424649';
+    document.getElementById('info-occupato').style.display = 'none';
 
 }
 
@@ -172,7 +176,7 @@ async function loadYourDomains() {
     const email = cookie.email;
 
     // chiamata get per ottenere i domini registrati dall'utente
-    const response = await fetch(`${API_URI}?email = ${email} `);
+    const response = await fetch(`${API_URI}?email=${email}`);
     const jsonResponse = await response.json();
 
     // aggiorno la tabella con i domini
@@ -252,7 +256,7 @@ function initializeRinnovoPopup() {
         const durata = document.getElementById("durata-rinnovo-dominio").value;
 
         // ottengo la durata precedente
-        const response = await fetch(`${API_URI} /${currentIdPrenotazione}`);
+        const response = await fetch(`${API_URI}/${currentIdPrenotazione}`);
         const jsonResponse = await response.json();
         const durataPrecedente = jsonResponse["durata"];
         const stato = jsonResponse["status"];
@@ -630,9 +634,8 @@ document.getElementById('submit-payment').addEventListener('click', function (ev
     const creditCardNumber = document.getElementById('creditCardNumber-create-domain').value;
     const expirationDate = document.getElementById('expirationDate-create-domain').value;
     const cardHolderName = document.getElementById('cardHolderName-create-domain').value;
-    //resetto il form
-    document.getElementById('payment-form').reset();
-    if (cvv == '' || creditCardNumber == '' || expirationDate == '' || cardHolderName == '') {
+
+    if (cvv === '' || creditCardNumber === '' || expirationDate === '' || cardHolderName === '') {
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
         notificaClass = true;
