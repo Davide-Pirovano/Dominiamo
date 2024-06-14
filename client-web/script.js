@@ -451,6 +451,7 @@ document.getElementById("cancel-create-domain").addEventListener("click", functi
     const statusView = document.getElementById('disp-dominio');
     statusView.textContent = 'verifica disponibilità...';
     statusView.style.color = '#424649';
+    document.getElementById('info-occupato').style.display = 'none';
 });
 
 document.getElementById('create-domain-switch').addEventListener('click', function () {

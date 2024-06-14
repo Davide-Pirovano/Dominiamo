@@ -14,7 +14,7 @@
 <body data-server-no-reload>
 
   <div class="wrapper" id="register-form-wrapper" hidden>
-    <h2>Registrati</h2>
+    <h1>Registrati</h1>
     <form id="register-form">
       <div class="input-box">
         <input autocomplete="off" type="text" id="nome-registrazione" name="nome" placeholder="Nome" required>
@@ -45,7 +45,7 @@
     <div id="action-container">
       <div id="create-domain-wrapper">
         <form id="create-domain-form">
-          <h2 id="title-create-domain-form">Crea un dominio</h2>
+          <h1 id="title-create-domain-form">Crea un dominio</h1>
           <div id="insert-domain" class="form-row">
             <label for="domain-create-domain">Dominio da acquistare:</label>
             <input type="text" id="domain-create-domain" name="dominio" autocomplete="off">
@@ -107,7 +107,7 @@
       </div>
 
       <div id="your-domains-wrapper" hidden>
-        <h2>I tuoi domini</h2>
+        <h1>I tuoi domini</h1>
         <table id="your-domains-table">
           <thead>
             <tr>
@@ -126,7 +126,7 @@
   </div>
 
   <div class="popup" id="rinnovoPopup" hidden>
-    <h2 id="h2-rinnovo-popup"></h2>
+    <h1 id="h2-rinnovo-popup"></h1>
     <div id="selettore-rinnovo">
       <label for="durata-rinnovo-dominio">Sì, rinnova per :</label>
       <select id="durata-rinnovo-dominio" name="durata" required>
@@ -152,7 +152,7 @@
       </svg>
     </div>
     <form id="payment-form">
-      <h2>Effettua il pagamento</h2>
+      <h1>Effettua il pagamento</h1>
       <div class="row">
         <label for="creditCardNumber-create-domain">Numero di Carta di Credito:</label>
         <input autocomplete="off" placeholder="0000 0000 0000 0000" type="text" id="creditCardNumber-create-domain"
@@ -175,7 +175,7 @@
           placeholder="Nome e Cognome" required>
       </div>
       <div id="payment-row" class="column-row">
-        <h3 id="payment-value">Totale: </h3>
+        <h2 id="payment-value">Totale: </h2>
         <button type="submit" id="submit-payment">Conferma e Paga</button>
       </div>
     </form>
@@ -184,7 +184,7 @@
   <div class="popup" id="detailStatePopup" hidden>
     <h2>Dettagli</h2>
     <div id="detailStatePopupContent">
-      <h4 id="detailStatePopupContentP"></h4>
+      <h3 id="detailStatePopupContentP"></h3>
       <p id="nome-detailStatePopupContentP"></p>
       <p id="cognome-detailStatePopupContentP"></p>
       <p id="email-detailStatePopupContentP"></p>
@@ -205,7 +205,7 @@
       <path fill="#f33f3f"
         d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" />
     </svg>
-    <h4>Errore!</h4>
+    <h2>Errore!</h2>
     <p id="notifica-p">Compila correttamente i campi</p>
   </div>
 

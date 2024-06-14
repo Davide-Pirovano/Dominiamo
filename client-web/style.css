@@ -33,15 +33,14 @@ body {
   display: block;
 }
 
-.wrapper h2 {
+.wrapper h1 {
   position: relative;
-  font-size: 22px;
   font-weight: 600;
   color: #094067;
   margin-bottom: 20px;
 }
 
-.wrapper h2::before {
+.wrapper h1::before {
   content: '';
   position: absolute;
   left: 0;
@@ -62,8 +61,7 @@ body {
   height: 40px;
   width: 100%;
   outline: none;
-  padding: 0 15px;
-  font-size: 15px;
+  padding: 25px;
   font-weight: 400;
   color: black;
   border: 1.5px solid #094067;
@@ -71,6 +69,7 @@ body {
   border-radius: 6px;
   transition: all 0.3s ease;
   background-color: transparent;
+  font-size: 25px;
 }
 
 .input-box input::placeholder {
@@ -89,7 +88,6 @@ body {
 }
 
 .input-box.button input {
-  border: none;
   background-color: #ffffff;
   border: 3px solid black;
   color: black;
@@ -99,6 +97,9 @@ body {
   transition: background-color 0.3s ease;
   justify-content: center;
   align-items: center;
+  font-size: x-large;
+  padding: 10px 15px;
+  height: auto;
 }
 
 .input-box.button input:hover {
@@ -123,6 +124,7 @@ td {
 
 th,
 td {
+  font-size: large;
   padding: 10px;
   text-align: center;
 }
@@ -145,19 +147,21 @@ th {
 }
 
 .form-row label {
-  width: 50%;
+  width: 60%;
   padding-right: 10px;
   text-align: right;
+  font-size: x-large;
 }
 
 .form-row input,
 .form-row select {
-  width: 50%;
+  width: 40%;
+  font-size: large;
 }
 
 #title-create-domain-form {
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
 #action-container {
@@ -186,6 +190,7 @@ th {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
+  font-size: large;
 }
 
 .button-group {
@@ -200,6 +205,7 @@ th {
 }
 
 .button-group button {
+  font-size: large;
   padding: 10px 15px;
   margin-bottom: 20px;
   margin-right: 5px;
@@ -209,12 +215,13 @@ th {
   color: #fff;
   cursor: pointer;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .button-group button.active {
   text-decoration: underline;
   text-decoration-color: #ffffff;
+  transition: all 0.3s ease;
 }
 
 .button-group button.active:hover {
@@ -226,7 +233,7 @@ th {
   background-color: #3086c9;
 }
 
-#your-domains-wrapper h2 {
+#your-domains-wrapper h1 {
   padding: 5px;
   margin-bottom: 10px;
 }
@@ -238,11 +245,12 @@ th {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
+  font-size: large;
 }
 
 .btn-rinnova svg {
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
   fill: #ffffff;
   margin-left: 5px;
 }
@@ -286,12 +294,12 @@ th {
 
 #cancel-create-domain {
   margin-right: 5px;
-  padding: 8px;
+  padding: 12px;
   background-color: #ffffff;
   border: 2px solid #f33f3f;
   cursor: pointer;
   border-radius: 6px;
-  height: 40px;
+  height: 60px;
 }
 
 #trash-icon {
@@ -329,6 +337,8 @@ th {
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.3s ease;
+  font-size: large;
+  width: 50px;
 }
 
 .yesButton:hover {
@@ -345,6 +355,8 @@ th {
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.3s ease;
+  font-size: large;
+  width: 50px;
 }
 
 .noButton:hover {
@@ -359,15 +371,20 @@ th {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
-  padding: 20px;
+  padding: 30px;
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
-  border: 1px solid #094067;
+  border: 1px solid black;
   text-align: center;
 }
 
 #selettore-rinnovo {
   margin-bottom: 15px;
+  font-size: x-large;
+}
+
+#durata-rinnovo-dominio {
+  font-size: large;
 }
 
 .btn-attivo {
@@ -377,12 +394,7 @@ th {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
-}
-
-.btn-attivo svg {
-  width: 20px;
-  height: 20px;
-  fill: #ffffff;
+  font-size: large;
 }
 
 .btn-attivo:hover {
@@ -391,8 +403,8 @@ th {
 }
 
 .btn-attivo svg {
-  width: 15px;
-  height: 15px;
+  width: 17px;
+  height: 17px;
   fill: #ffffff;
   margin-left: 5px;
 }
@@ -401,6 +413,7 @@ th {
   font-size: 10px;
   color: #424649;
   text-align: left;
+  font-size: medium;
 }
 
 #status-dom-view {
@@ -414,7 +427,7 @@ th {
 }
 
 #paymentPopup {
-  width: 50%;
+  width: 35%;
 }
 
 #paymentPopup h2 {
@@ -430,14 +443,15 @@ th {
   display: flex;
   flex-direction: column;
   text-align: left;
-  font-size: 13px;
+  font-size: large;
   margin-top: 10px;
   margin-bottom: 3px;
 }
 
 #paymentPopup input {
-  padding: 8px 5px;
+  padding: 12px 8px;
   border-radius: 6px;
+  font-size: medium;
   border: 1px solid #094067;
 }
 
@@ -468,6 +482,7 @@ th {
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s ease;
+  font-size: large;
 }
 
 #paymentPopup #payment-row button:hover {
@@ -487,8 +502,8 @@ th {
   display: block;
   position: relative;
   border-radius: 50px;
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   color: #f33f3f;
   display: flex;
   align-content: center;
@@ -508,8 +523,8 @@ th {
   bottom: 0;
   left: -300px;
   margin: 10px;
-  width: 200px;
-  height: 100px;
+  width: 225px;
+  height: 125px;
   transition: all 0.3s linear;
   background-color: #ffffff;
   padding: 15px;
@@ -523,7 +538,7 @@ th {
 }
 
 #notifica p {
-  font-size: 12px;
+  font-size: medium;
 }
 
 #notifica svg {
@@ -550,8 +565,8 @@ th {
 }
 
 #info-occupato svg {
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   fill: #f33f3f;
 }
 
@@ -559,15 +574,14 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
   background-color: transparent;
   cursor: pointer;
-  margin-left: 5px;
+  margin-top: 10px;
 }
 
 #detailStatePopupCloseButton svg {
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 35px;
   fill: #f33f3f;
   transition: all 0.3s ease;
 }
@@ -575,4 +589,16 @@ th {
 #detailStatePopupCloseButton svg:hover {
   transform: scale(1.1);
   transition: all 0.3s ease;
+}
+
+#detailStatePopup p {
+  font-size: large;
+}
+
+#detailStatePopup h2 {
+  margin-bottom: 10px;
+}
+
+#your-domains-table {
+  font-size: large;
 }
