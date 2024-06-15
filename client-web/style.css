@@ -19,10 +19,10 @@ body {
 
 .wrapper {
   position: relative;
-  max-width: 320px;
+  max-width: 420px;
   width: 100%;
   background: #ffffff;
-  padding: 20px;
+  padding: 30px 50px;
   border-radius: 6px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   margin: 0 auto;
@@ -34,10 +34,11 @@ body {
 }
 
 .wrapper h1 {
+  font-size: 40px;
   position: relative;
   font-weight: 600;
   color: #094067;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .wrapper h1::before {
@@ -58,10 +59,9 @@ body {
 
 .input-box input,
 .input-box select {
-  height: 40px;
   width: 100%;
   outline: none;
-  padding: 25px;
+  padding: 10px 15px;
   font-weight: 400;
   color: black;
   border: 1.5px solid #094067;
@@ -70,6 +70,7 @@ body {
   transition: all 0.3s ease;
   background-color: transparent;
   font-size: 25px;
+  margin-bottom: 15px;
 }
 
 .input-box input::placeholder {
@@ -97,8 +98,9 @@ body {
   transition: background-color 0.3s ease;
   justify-content: center;
   align-items: center;
-  font-size: x-large;
+  font-size: 28px;
   padding: 10px 15px;
+  margin-bottom: 0px;
   height: auto;
 }
 
@@ -124,7 +126,6 @@ td {
 
 th,
 td {
-  font-size: large;
   padding: 10px;
   text-align: center;
 }
@@ -135,7 +136,6 @@ th {
 }
 
 #create-domain-form {
-  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -147,21 +147,32 @@ th {
 }
 
 .form-row label {
-  width: 60%;
+  width: 50%;
   padding-right: 10px;
   text-align: right;
-  font-size: x-large;
+  font-size: 25px;
 }
 
 .form-row input,
 .form-row select {
-  width: 40%;
-  font-size: large;
+  width: 50%;
+  background-color: #ffffff;
+  border: 1px solid #094067;
+  color: black;
+  display: flex;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  padding: 10px 15px;
+  margin-bottom: 0px;
+  height: auto;
 }
 
 #title-create-domain-form {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  font-size: 50px;
 }
 
 #action-container {
@@ -170,51 +181,51 @@ th {
   display: flex;
   justify-content: center;
   background-color: #ffffff;
-  padding: 15px;
-  border-radius: 6px;
+  padding: 30px;
+  border-radius: 10px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 #logout-button-wrapper {
   position: absolute;
-  top: 0;
-  left: 0;
-  margin: 10px;
-  padding: 5px;
+  top: 25px;
+  left: 25px;
 }
 
 #logout-button {
   background-color: #f33f3f;
   color: #ffffff;
   border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: 10px;
+  padding: 15px 20px;
   cursor: pointer;
-  font-size: large;
+  font-size: x-large;
+}
+
+#logout-button:hover {
+  background-color: #c92b2b;
 }
 
 .button-group {
   position: absolute;
-  top: 0;
+  top: 25px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
-  margin: 10px;
-  padding: 5px;
 }
 
 .button-group button {
-  font-size: large;
-  padding: 10px 15px;
+  font-size: x-large;
+  padding: 15px 20px;
   margin-bottom: 20px;
-  margin-right: 5px;
-  margin-left: 5px;
+  margin-right: 15px;
+  margin-left: 15px;
   border: none;
   background-color: #3da9fc;
   color: #fff;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 10px;
   transition: all 0.3s ease;
 }
 
@@ -235,6 +246,7 @@ th {
 
 #your-domains-wrapper h1 {
   padding: 5px;
+  font-size: 50px;
   margin-bottom: 10px;
 }
 
@@ -263,11 +275,13 @@ th {
 #successPopup h2 {
   color: black;
   margin-bottom: 10px;
+  font-size: 40px;
 }
 
 #successPopup p {
   color: black;
   margin-bottom: 10px;
+  font-size: 20px;
 }
 
 #successPopup button {
@@ -279,6 +293,7 @@ th {
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s ease;
+  font-size: 22px;
 }
 
 #successPopup button:hover {
@@ -298,8 +313,8 @@ th {
   background-color: #ffffff;
   border: 2px solid #f33f3f;
   cursor: pointer;
-  border-radius: 6px;
-  height: 60px;
+  border-radius: 10px;
+  height: 65px;
 }
 
 #trash-icon {
@@ -427,11 +442,12 @@ th {
 }
 
 #paymentPopup {
-  width: 35%;
+  width: 50%;
 }
 
 #paymentPopup h2 {
   margin-bottom: 30px;
+  font-size: 30px
 }
 
 #paymentPopup .row {
@@ -449,9 +465,9 @@ th {
 }
 
 #paymentPopup input {
-  padding: 12px 8px;
-  border-radius: 6px;
-  font-size: medium;
+  padding: 15px 20px;
+  border-radius: 10px;
+  font-size: 25px;
   border: 1px solid #094067;
 }
 
@@ -482,7 +498,7 @@ th {
   cursor: pointer;
   border-radius: 5px;
   transition: background-color 0.3s ease;
-  font-size: large;
+  font-size: 30px;
 }
 
 #paymentPopup #payment-row button:hover {
@@ -502,8 +518,8 @@ th {
   display: block;
   position: relative;
   border-radius: 50px;
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   color: #f33f3f;
   display: flex;
   align-content: center;
@@ -520,38 +536,42 @@ th {
 
 #notifica {
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   left: -300px;
-  margin: 10px;
-  width: 225px;
-  height: 125px;
+  width: 300px;
+  height: 175px;
   transition: all 0.3s linear;
   background-color: #ffffff;
-  padding: 15px;
+  padding: 25px;
   border: 5px solid #f33f3f;
-  border-radius: 6px;
+  border-radius: 20px;
 }
 
 #notifica.show {
-  left: 0px;
+  left: 10px;
   transition: all 0.3s linear;
 }
 
 #notifica p {
-  font-size: medium;
+  font-size: large;
 }
 
 #notifica svg {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: 5px;
+  right: 5px;
   border-radius: 100px;
   cursor: pointer;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#notifica svg:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
 }
 
 #info-occupato {
@@ -600,5 +620,13 @@ th {
 }
 
 #your-domains-table {
-  font-size: large;
+  font-size: 25px;
+}
+
+#payment-form h1 {
+  font-size: 50px;
+}
+
+#payment-form label {
+  font-size: 25px;
 }

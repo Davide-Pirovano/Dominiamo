@@ -73,15 +73,25 @@ async function registerUser(event) {
     const data = Object.fromEntries(formData);
     const jsonData = JSON.stringify(data);
 
-    // set cookie considerando il campo email univoco
-    document.cookie = `email = ${data.email} `;
-    document.cookie = `nome = ${data.nome} `;
-    document.cookie = `cognome = ${data.cognome} `;
+    if (data.email === '' || data.nome === '' || data.cognome === '') {
+        //mostro notifica
+        document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
+        notifica.classList.add('show');
+        notificaClass = true;
+        timeoutNotifica = setTimeout(function () {
+            notifica.classList.remove('show');
+        }, 3000);
+    } else {
+        // set cookie considerando il campo email univoco
+        document.cookie = `email = ${data.email} `;
+        document.cookie = `nome = ${data.nome} `;
+        document.cookie = `cognome = ${data.cognome} `;
 
-    // rimuovo form registrazione
-    const registerForm = document.getElementById("register-form-wrapper");
-    registerForm.style.display = "none";
-    loadInterfaceDOM();
+        // rimuovo form registrazione
+        const registerForm = document.getElementById("register-form-wrapper");
+        registerForm.style.display = "none";
+        loadInterfaceDOM();
+    }
 }
 
 async function registerUserDOM() {
@@ -644,7 +654,6 @@ document.getElementById('submit-payment').addEventListener('click', function (ev
             notifica.classList.remove('show');
         }, 3000);
     } else {
-
         // faccio una delete a /reserved
         fetch(`${API_URI}/reserved`, {
             method: "DELETE",
