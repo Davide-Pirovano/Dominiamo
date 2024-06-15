@@ -352,7 +352,7 @@ th {
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.3s ease;
-  font-size: large;
+  font-size: 25px;
   width: 50px;
 }
 
@@ -370,7 +370,7 @@ th {
   cursor: pointer;
   border-radius: 5px;
   transition: all 0.3s ease;
-  font-size: large;
+  font-size: 25px;
   width: 50px;
 }
 
@@ -395,11 +395,11 @@ th {
 
 #selettore-rinnovo {
   margin-bottom: 15px;
-  font-size: x-large;
+  font-size: 35px;
 }
 
 #durata-rinnovo-dominio {
-  font-size: large;
+  font-size: 28px;
 }
 
 .btn-attivo {
@@ -409,7 +409,7 @@ th {
   border-radius: 5px;
   padding: 5px 10px;
   cursor: pointer;
-  font-size: large;
+  font-size: 20px;
 }
 
 .btn-attivo:hover {
@@ -629,4 +629,9 @@ th {
 
 #payment-form label {
   font-size: 25px;
+}
+
+#h2-rinnovo-popup {
+  font-size: 40px;
+  margin-bottom: 10px;
 }

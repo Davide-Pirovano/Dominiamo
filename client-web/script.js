@@ -379,16 +379,7 @@ function processaDataScadenza(item, dataScadenza, dataOdierna, cell, cells, head
     }
 }
 
-function parseDate(input) {
-    // Split the input string by '/'
-    const parts = input.split('/');
-    // Rearrange the parts into 'yyyy-mm-dd' format
-    const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-    return new Date(formattedDate);
-}
-
 async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
-    dataPrenotazione = parseDate(dataPrenotazione);
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
