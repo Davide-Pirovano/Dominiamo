@@ -27,16 +27,16 @@ public class Database {
         // Creazione del file json se non esiste
         try {
             File file = new File(dbPath);
-            //if (file.createNewFile()) {
+            if (file.createNewFile()) {
                 System.out.println("File creato: " + file.getName());
-                // inizializzo {"Prenotazione" : []}
+                
                 FileWriter fileWriter = new FileWriter(dbPath);
                 BufferedWriter writer = new BufferedWriter(fileWriter);
                 writer.write("{\"Prenotazioni\" : [], \"Ordini\" : []}");
                 writer.close();
-            // } else {
-            //     System.out.println("File esistente");
-            // }
+            } else {
+                System.out.println("File esistente");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,8 +151,6 @@ public class Database {
             String[] keyValue = dati[i].split(":");
             datiMap.put(keyValue[0], keyValue[1]);
         }
-
-        System.out.println(datiMap.toString());
 
         try {
             

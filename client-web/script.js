@@ -297,10 +297,13 @@ async function loadYourOrders() {
             Object.keys(item).forEach(key => {  // per ogni chiave dell'oggetto in questione
 
                 if (key === 'idOrdine' || key === 'dominio' || key === 'dataOrdine' || key === 'oggetto' || key === 'prezzo') { // seleziono le chiavi che mi interessano
-
                     const cellIndex = headers.indexOf(key); // seleziono l'indice della cella corrispondente alla chiave
                     const cell = cells[cellIndex];  // seleziono la cella corrispondente alla chiave
-                    cell.textContent = item[key];
+                    if (key === 'prezzo') {
+                        cell.textContent = item[key] + ' €';
+                    } else {
+                        cell.textContent = item[key];
+                    }
 
                 }
             });
@@ -476,7 +479,7 @@ async function rinnovaDominio(durata, idPrenotazione) {
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
     const prezzo = document.getElementById('costo-rinnovo').textContent;
     const prezzoAggiornato = prezzo.split(' ')[1];
-    const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo', prezzo: prezzoAggiornato});
+    const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo', prezzo: prezzoAggiornato });
 
     // console.log(jsonData + idPrenotazione);
 
