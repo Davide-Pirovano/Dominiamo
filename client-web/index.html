@@ -36,6 +36,8 @@
     <div class="button-group">
       <button id="create-domain-switch" class="active">Crea un Dominio</button>
       <button id="your-domains-switch">I tuoi domini</button>
+      <button id="your-orders-switch">I tuoi ordini</button>
+
     </div>
 
     <div id="logout-button-wrapper">
@@ -119,6 +121,26 @@
             </tr>
           </thead>
           <tbody id="your-domain-tbody">
+          </tbody>
+        </table>
+      </div>
+
+      <div id="your-orders-wrapper" hidden>
+        <h1>I tuoi ordini</h1>
+        <table id="your-orders-table">
+          <thead>
+            <tr>
+              <!-- Visualizzare l’elenco degli ordini. Ogni ordine contiene i seguenti dati:
+              dominio a cui fa riferimento, data ordine, oggetto dell’ordine (registrazione
+              o rinnovo o prolungazione) e quota pagata -->
+              <th>Ordine</th>
+              <th>Dominio</th>
+              <th>Data Ordine</th>
+              <th>Oggetto</th>
+              <th>Prezzo</th>
+            </tr>
+          </thead>
+          <tbody id="your-orders-tbody">
           </tbody>
         </table>
       </div>

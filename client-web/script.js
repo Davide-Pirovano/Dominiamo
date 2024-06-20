@@ -34,7 +34,7 @@ function initializeDetailStatePopup() {
         try {
             const response = await fetch(`${API_URI}/check?dominio=${currentCheckedDomain}`);
             const jsonResponse = await response.json();
-            document.getElementById('detailStatePopupContentP').textContent = 'Il dominio' + currentCheckedDomain + ' è occupato da:';
+            document.getElementById('detailStatePopupContentP').textContent = 'Il dominio ' + currentCheckedDomain + ' è occupato da:';
             document.getElementById('nome-detailStatePopupContentP').textContent = 'Nome: ' + jsonResponse.nome;
             document.getElementById('cognome-detailStatePopupContentP').textContent = 'Cognome: ' + jsonResponse.cognome;
             document.getElementById('email-detailStatePopupContentP').textContent = 'Email: ' + jsonResponse.email;
@@ -255,6 +255,63 @@ async function loadYourDomains() {
 
 }
 
+async function loadYourOrders(){
+    const cookie = getCookie();
+    const email = cookie.email;
+
+    // chiamata get per ottenere gli ordini registrati dall'utente
+    const response = await fetch(`${API_URI}?email=${email}`);
+    const jsonResponse = await response.json();
+
+    // aggiorno la tabella con i ordini
+
+    // Ottiene il tbody della tabella
+    const tbody = document.getElementById('your-orders-tbody');
+
+    // Pulisce la tabella
+    tbody.innerHTML = '';
+
+    // Genera le righe della tabella ed aggiungi solo gli elementi che ci interessano
+
+    // controllo se ho domini registrati
+    if (jsonResponse.length === 0) {    // nessun dominio registrato
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');  //aggiungo colspan di 5
+        cell.setAttribute('colspan', '5');
+        cell.textContent = 'Nessun ordine effettuato';
+        row.appendChild(cell);
+        tbody.appendChild(row);
+
+    } else { // ho domini registrati
+        jsonResponse.forEach(item => {  // interpreto la risposta
+
+            const headers = ['ordine', 'dominio', 'dataOrdine', 'oggetto', 'prezzo']; // headers tabella
+
+            const row = document.createElement('tr'); // creo riga tabella
+
+            // Crea un array di celle td vuote per popolare la riga creata
+            const cells = headers.map(() => document.createElement('td'));
+
+            Object.keys(item).forEach(key => {  // per ogni chiave dell'oggetto in questione
+
+                if (key === 'ordine' || key === 'dominio' || key === 'dataOrdine' || key === 'oggetto' || key === 'prezzo') { // seleziono le chiavi che mi interessano
+
+                    const cellIndex = headers.indexOf(key); // seleziono l'indice della cella corrispondente alla chiave
+                    const cell = cells[cellIndex];  // seleziono la cella corrispondente alla chiave
+                    cell.textContent = item[key];
+                    
+                }
+            });
+
+            // Appendi tutte le celle alla riga
+            cells.forEach(cell => row.appendChild(cell));
+
+            tbody.appendChild(row);
+        });
+    }
+
+}
+
 function initializeRinnovoPopup() {
     document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
         // Chiudo popUp
@@ -276,7 +333,12 @@ function initializeRinnovoPopup() {
         } else if (stato === "attivo") {
             // calcolo durata totale
             const durataTotale = parseInt(durata) + parseInt(durataPrecedente);
-            prolungaDominio(durataTotale, jsonResponse["dataPrenotazione"], currentIdPrenotazione);
+            // parso in date la data di prenotazione
+            const dataString = jsonResponse["dataPrenotazione"];
+            const [giorno, mese, anno] = dataString.split('/');
+            const dataPrenotazione = new Date(anno, mese-1, giorno);
+
+            prolungaDominio(durataTotale, dataPrenotazione, currentIdPrenotazione);
         }
         document.getElementById("durata-rinnovo-dominio").value = 1;
     });
@@ -458,22 +520,35 @@ document.getElementById("cancel-create-domain").addEventListener("click", functi
 document.getElementById('create-domain-switch').addEventListener('click', function () {
     document.getElementById('create-domain-wrapper').style.display = 'block';
     document.getElementById('your-domains-wrapper').style.display = 'none';
+    document.getElementById('your-orders-wrapper').style.display = 'none';
     document.getElementById('create-domain-switch').classList.add('active');
     document.getElementById('your-domains-switch').classList.remove('active');
+    document.getElementById('your-orders-switch').classList.remove('active');
 });
 
 document.getElementById('your-domains-switch').addEventListener('click', function () {
     document.getElementById('create-domain-wrapper').style.display = 'none';
     document.getElementById('your-domains-wrapper').style.display = 'block';
+    document.getElementById('your-orders-wrapper').style.display = 'none';
     document.getElementById('create-domain-switch').classList.remove('active');
     document.getElementById('your-domains-switch').classList.add('active');
+    document.getElementById('your-orders-switch').classList.remove('active');
     loadYourDomains();
 });
-
+document.getElementById('your-orders-switch').addEventListener('click', function () {
+    document.getElementById('create-domain-wrapper').style.display = 'none';
+    document.getElementById('your-domains-wrapper').style.display = 'none';
+    document.getElementById('your-orders-wrapper').style.display = 'block';
+    document.getElementById('create-domain-switch').classList.remove('active');
+    document.getElementById('your-domains-switch').classList.remove('active');
+    document.getElementById('your-orders-switch').classList.add('active');
+    loadYourOrders();
+});
 document.getElementById('logout-button').addEventListener('click', function () {
     document.cookie = 'email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'nome=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'cognome=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    console.log("logout");
     window.location.reload();
 });
 

@@ -250,6 +250,12 @@ th {
   margin-bottom: 10px;
 }
 
+#your-orders-wrapper h1 {
+  padding: 5px;
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
 .btn-rinnova {
   background-color: #f33f3f;
   color: #ffffff;
@@ -622,7 +628,9 @@ th {
 #your-domains-table {
   font-size: 25px;
 }
-
+#your-orders-table {
+  font-size: 25px;
+}
 #payment-form h1 {
   font-size: 50px;
 }
