@@ -342,6 +342,10 @@ th {
   color: #f33f3f;
 }
 
+#rinnovoPopup {
+  width: 50%;
+}
+
 #rinnovoPopup h2 {
   margin-bottom: 10px;
 }
@@ -401,11 +405,11 @@ th {
 
 #selettore-rinnovo {
   margin-bottom: 15px;
-  font-size: 35px;
+  font-size: 30px;
 }
 
 #durata-rinnovo-dominio {
-  font-size: 28px;
+  font-size: 23px;
 }
 
 .btn-attivo {
@@ -628,9 +632,11 @@ th {
 #your-domains-table {
   font-size: 25px;
 }
+
 #your-orders-table {
   font-size: 25px;
 }
+
 #payment-form h1 {
   font-size: 50px;
 }
@@ -640,6 +646,42 @@ th {
 }
 
 #h2-rinnovo-popup {
-  font-size: 40px;
+  font-size: 35px;
   margin-bottom: 10px;
+}
+
+#payment-form-rinnovo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 50px;
+  padding: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+#payment-form-rinnovo .row {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+#payment-form-rinnovo label {
+  position: relative;
+  display: flex;
+  width: 40%;
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+#payment-form-rinnovo input {
+  position: relative;
+  width: 60%;
+  display: flex;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 20px;
+  border: 1px solid #094067;
+  margin: 10px;
 }

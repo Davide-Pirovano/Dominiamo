@@ -209,7 +209,7 @@ public class Database {
                     }else if(chiaviOrdini[i].equals("dominio")){
                         newJsonObjectOrdini.put(chiaviOrdini[i], prenotazione.getString("dominio"));
                     }else if(chiaviOrdini[i].equals("prezzo")){
-                        newJsonObjectOrdini.put(chiaviOrdini[i], "10");
+                        newJsonObjectOrdini.put(chiaviOrdini[i], prenotazione.getString("prezzo"));
                     }
                 
                 }else{

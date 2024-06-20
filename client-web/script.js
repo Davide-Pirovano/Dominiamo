@@ -315,6 +315,7 @@ async function loadYourOrders() {
 }
 
 function initializeRinnovoPopup() {
+
     document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
         // Chiudo popUp
         document.getElementById('rinnovoPopup').style.display = 'none';
@@ -355,6 +356,9 @@ function initializeRinnovoPopup() {
 }
 
 function openRinnovoPopup(item) {
+    //genero prezzo random
+    document.getElementById('costo-rinnovo').textContent = "Totale: " + Math.floor(Math.random() * 100) + " €";
+
     currentIdPrenotazione = item["idPrenotazione"];
     const durataPrecedente = item["durata"];
 
@@ -447,9 +451,9 @@ async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
-    // const prezzo = document.getElementById('payment-value').textContent;
-    // data.prezzo = prezzo.split(' ')[1];
-    const jsonData = JSON.stringify({ durata: durata, dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo'});
+    const prezzo = document.getElementById('costo-rinnovo').textContent;
+    const prezzoAggiornato = prezzo.split(' ')[1];
+    const jsonData = JSON.stringify({ durata: durata, dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo', prezzo: prezzoAggiornato });
     // console.log(jsonData + idPrenotazione);
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",
@@ -470,7 +474,9 @@ async function rinnovaDominio(durata, idPrenotazione) {
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
-    const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo' });
+    const prezzo = document.getElementById('costo-rinnovo').textContent;
+    const prezzoAggiornato = prezzo.split(' ')[1];
+    const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo', prezzo: prezzoAggiornato});
 
     // console.log(jsonData + idPrenotazione);
 

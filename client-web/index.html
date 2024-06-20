@@ -155,6 +155,29 @@
       </select>
 
     </div>
+    <form id="payment-form-rinnovo">
+      <h1>Effettua il pagamento</h1>
+      <div class="row">
+        <label for="creditCardNumber-rinnovo-domain">Numero di Carta di Credito:</label>
+        <input autocomplete="off" placeholder="0000 0000 0000 0000" type="text" id="creditCardNumber-rinnovo-domain"
+          name="numeroCarta" required>
+      </div>
+      <div class="row">
+        <label for="expirationDate-rinnovo-domain">Data di Scadenza:</label>
+        <input autocomplete="off" type="text" id="expirationDate-rinnovo-domain" name="scadenzaCarta"
+          placeholder="MM/AA" required>
+      </div>
+      <div class="row">
+        <label for="cvv-rinnovo-domain">CVV:</label>
+        <input autocomplete="off" type="text" id="cvv-rinnovo-domain" name="cvv" required>
+      </div>
+      <div class="row">
+        <label for="cardHolderName-rinnovo-domain">Intestatario Carta:</label>
+        <input autocomplete="off" type="text" id="cardHolderName-rinnovo-domain" name="nomeCognomeIntestatario"
+          placeholder="Nome e Cognome" required>
+      </div>
+    </form>
+    <h2 id="costo-rinnovo">Totale: </h2>
     <button class="yesButton" id="rinnovoPopupYesButton">Si</button>
     <button class="noButton" id="rinnovoPopupNoButton">No</button>
   </div>

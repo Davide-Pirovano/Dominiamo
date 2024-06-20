@@ -4,7 +4,7 @@
             "idOrdine": 1,
             "dominio": "test.it",
             "oggetto": "Registrazione",
-            "prezzo": "98",
+            "prezzo": "82",
             "email": "dp@gmail.com",
             "dataOrdine": "20/06/2024"
         },
@@ -12,7 +12,7 @@
             "idOrdine": 2,
             "dominio": "test.it",
             "oggetto": "Rinnovo",
-            "prezzo": "10",
+            "prezzo": "Totale",
             "email": "dp@gmail.com",
             "dataOrdine": "20/06/2024"
         },
@@ -20,7 +20,23 @@
             "idOrdine": 3,
             "dominio": "test.it",
             "oggetto": "Rinnovo",
-            "prezzo": "10",
+            "prezzo": "Totale",
+            "email": "dp@gmail.com",
+            "dataOrdine": "20/06/2024"
+        },
+        {
+            "idOrdine": 4,
+            "dominio": "test.it",
+            "oggetto": "Rinnovo",
+            "prezzo": "32",
+            "email": "dp@gmail.com",
+            "dataOrdine": "20/06/2024"
+        },
+        {
+            "idOrdine": 5,
+            "dominio": "test.it",
+            "oggetto": "Rinnovo",
+            "prezzo": "68",
             "email": "dp@gmail.com",
             "dataOrdine": "20/06/2024"
         }
@@ -30,9 +46,9 @@
         "cognome": "Pirovano",
         "idPrenotazione": "1",
         "dominio": "test.it",
-        "durata": "4",
+        "durata": "1",
         "nome": "Davide",
-        "dataScadenza": "20/06/2028",
+        "dataScadenza": "20/06/2025",
         "nomeCognomeIntestatario": "12",
         "dataPrenotazione": "20/06/2024",
         "numeroCarta": "12",
