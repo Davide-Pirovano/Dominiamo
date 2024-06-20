@@ -28,6 +28,8 @@ public class Prenotazione {
 
     private String status;
 
+    private String prezzo;
+
     public int getIdPrenotazione() {
         return idPrenotazione;
     }
@@ -130,5 +132,13 @@ public class Prenotazione {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPrezzo() {
+        return prezzo;
+    }
+
+    public void setPrezzo(String prezzo) {
+        this.prezzo = prezzo;
     }
 }

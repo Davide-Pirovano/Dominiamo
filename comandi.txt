@@ -1,10 +1,11 @@
 PROTOCOLLO COMUNICAZIONE CLIENT SERVER
 0 - carettere terminatore conversazione
 1 - creazione nuovo dominio
-2 - visualizza prenotazione con id
+2 - visualizza prenotazione
 3 - rinnovo prenotazione scaduta
 4 - visualizza domini
 5 - controllo disponibilità dominio
+6 - visualizza ordini
 
 --------------
 status = "attivo"

@@ -156,6 +156,8 @@ async function handleCreateDomain() {
     data.numeroCarta = document.getElementById('creditCardNumber-create-domain').value;
     data.scadenzaCarta = document.getElementById('expirationDate-create-domain').value;
     data.nomeCognomeIntestatario = document.getElementById('cardHolderName-create-domain').value;
+    const prezzo = document.getElementById('payment-value').textContent;
+    data.prezzo = prezzo.split(' ')[1];
 
     //resetto il form
     document.getElementById('payment-form').reset();
@@ -255,12 +257,12 @@ async function loadYourDomains() {
 
 }
 
-async function loadYourOrders(){
+async function loadYourOrders() {
     const cookie = getCookie();
     const email = cookie.email;
 
     // chiamata get per ottenere gli ordini registrati dall'utente
-    const response = await fetch(`${API_URI}?email=${email}`);
+    const response = await fetch(`${API_URI}/orders/?email=${email}`);
     const jsonResponse = await response.json();
 
     // aggiorno la tabella con i ordini
@@ -285,7 +287,7 @@ async function loadYourOrders(){
     } else { // ho domini registrati
         jsonResponse.forEach(item => {  // interpreto la risposta
 
-            const headers = ['ordine', 'dominio', 'dataOrdine', 'oggetto', 'prezzo']; // headers tabella
+            const headers = ['idOrdine', 'dominio', 'dataOrdine', 'oggetto', 'prezzo']; // headers tabella
 
             const row = document.createElement('tr'); // creo riga tabella
 
@@ -294,12 +296,12 @@ async function loadYourOrders(){
 
             Object.keys(item).forEach(key => {  // per ogni chiave dell'oggetto in questione
 
-                if (key === 'ordine' || key === 'dominio' || key === 'dataOrdine' || key === 'oggetto' || key === 'prezzo') { // seleziono le chiavi che mi interessano
+                if (key === 'idOrdine' || key === 'dominio' || key === 'dataOrdine' || key === 'oggetto' || key === 'prezzo') { // seleziono le chiavi che mi interessano
 
                     const cellIndex = headers.indexOf(key); // seleziono l'indice della cella corrispondente alla chiave
                     const cell = cells[cellIndex];  // seleziono la cella corrispondente alla chiave
                     cell.textContent = item[key];
-                    
+
                 }
             });
 
@@ -336,7 +338,7 @@ function initializeRinnovoPopup() {
             // parso in date la data di prenotazione
             const dataString = jsonResponse["dataPrenotazione"];
             const [giorno, mese, anno] = dataString.split('/');
-            const dataPrenotazione = new Date(anno, mese-1, giorno);
+            const dataPrenotazione = new Date(anno, mese - 1, giorno);
 
             prolungaDominio(durataTotale, dataPrenotazione, currentIdPrenotazione);
         }
@@ -445,7 +447,9 @@ async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
     const dataScadenza = new Date(dataPrenotazione);
     // calcolo la durata in anni 
     dataScadenza.setFullYear(dataScadenza.getFullYear() + parseInt(durata));
-    const jsonData = JSON.stringify({ durata: durata, dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo' });
+    // const prezzo = document.getElementById('payment-value').textContent;
+    // data.prezzo = prezzo.split(' ')[1];
+    const jsonData = JSON.stringify({ durata: durata, dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo'});
     // console.log(jsonData + idPrenotazione);
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",
@@ -662,7 +666,7 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
             });
 
             //genero prezzo random
-            document.getElementById('payment-value').textContent = "Totale: " + Math.floor(Math.random() * 100) + "€";
+            document.getElementById('payment-value').textContent = "Totale: " + Math.floor(Math.random() * 100) + " €";
 
             // mostro popUp pagamento
             document.getElementById('paymentPopup').style.display = 'block';

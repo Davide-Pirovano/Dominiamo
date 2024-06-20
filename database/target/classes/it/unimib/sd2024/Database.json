@@ -1,15 +1,43 @@
-{"Prenotazioni": [{
-    "cvv": "das",
-    "cognome": "Rossi",
-    "idPrenotazione": "5",
-    "dominio": "test.it",
-    "durata": "1",
-    "nome": "Mario",
-    "dataScadenza": "15/06/2025",
-    "nomeCognomeIntestatario": "da",
-    "dataPrenotazione": "15/06/2024",
-    "numeroCarta": "dsa",
-    "scadenzaCarta": "dsa",
-    "email": "mariorossi@gmail.com",
-    "status": "attivo"
-}]}
+{
+    "Ordini": [
+        {
+            "idOrdine": 1,
+            "dominio": "test.it",
+            "oggetto": "Registrazione",
+            "prezzo": "98",
+            "email": "dp@gmail.com",
+            "dataOrdine": "20/06/2024"
+        },
+        {
+            "idOrdine": 2,
+            "dominio": "test.it",
+            "oggetto": "Rinnovo",
+            "prezzo": "10",
+            "email": "dp@gmail.com",
+            "dataOrdine": "20/06/2024"
+        },
+        {
+            "idOrdine": 3,
+            "dominio": "test.it",
+            "oggetto": "Rinnovo",
+            "prezzo": "10",
+            "email": "dp@gmail.com",
+            "dataOrdine": "20/06/2024"
+        }
+    ],
+    "Prenotazioni": [{
+        "cvv": "12",
+        "cognome": "Pirovano",
+        "idPrenotazione": "1",
+        "dominio": "test.it",
+        "durata": "4",
+        "nome": "Davide",
+        "dataScadenza": "20/06/2028",
+        "nomeCognomeIntestatario": "12",
+        "dataPrenotazione": "20/06/2024",
+        "numeroCarta": "12",
+        "scadenzaCarta": "12",
+        "email": "dp@gmail.com",
+        "status": "attivo"
+    }]
+}

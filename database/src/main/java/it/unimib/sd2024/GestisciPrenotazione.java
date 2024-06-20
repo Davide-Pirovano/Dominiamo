@@ -41,6 +41,7 @@ public class GestisciPrenotazione {
     }
 
     public synchronized String verificaDisponibilita(String dominio) {
+        System.out.println(dominio);
         // System.out.println("Verifica disponibilità");
         // Verifica della disponibilità di un dominio
         return db.verificaDisponibilita(dominio);
@@ -50,5 +51,11 @@ public class GestisciPrenotazione {
         System.out.println("Controllo scadenze");
         // Controllo delle scadenze
         db.checkScadenze();
+    }
+
+    public synchronized String leggiOrdini(String email) {
+        // System.out.println("Lettura ordini");
+        // Lettura degli ordini
+        return db.leggiOrdini(email);
     }
 }

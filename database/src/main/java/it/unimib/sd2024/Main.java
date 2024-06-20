@@ -77,6 +77,9 @@ public class Main {
                     case "5": // verifica disponibilità dominio
                         out.println(gp.verificaDisponibilita(dati[1]));
                         break;
+                    case "6":
+                    out.println(gp.leggiOrdini(dati[1]));
+                        break;
                 }
 
                 in.close();

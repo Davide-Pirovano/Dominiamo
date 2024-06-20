@@ -156,11 +156,14 @@ public class GestisciPrenotazione {
             String dataPrenotazione = prenotazione.getDataPrenotazione().toString();
             String dataScadenza = prenotazione.getDataScadenza().toString();
             String status = prenotazione.getStatus();
+            String prezzo = prenotazione.getPrezzo();
 
-            String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";"
-                    + email + ";" + cvv + ";"
-                    + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";" + dataPrenotazione + ";"
-                    + dataScadenza + ";" + status;
+            String request = op + ";idPrenotazione:" + idPrenotazione + ";dominio:" + dominio
+                    + ";durata:" + durata + ";nome:" + nome + ";cognome:" + cognome + ";email:"
+                    + email + ";cvv:" + cvv + ";numeroCarta:"
+                    + numeroCarta + ";scadenzaCarta:" + scadenzaCarta + ";nomeCognomeIntestatario:"
+                    + nomeCognomeIntestatario + ";dataPrenotazione:" + dataPrenotazione + ";dataScadenza:"
+                    + dataScadenza + ";status:" + status + ";prezzo:" + prezzo;
 
             out.println(request);
             out.println("0");
@@ -233,10 +236,14 @@ public class GestisciPrenotazione {
             }
 
             String status = prenotazione.getStatus();
+            String prezzo = prenotazione.getPrezzo();
 
-            String request = op + ";" + idPrenotazione + ";" + dominio + ";" + durata + ";" + nome + ";" + cognome + ";"
-                    + email + ";" + cvv + ";" + numeroCarta + ";" + scadenzaCarta + ";" + nomeCognomeIntestatario + ";"
-                    + dataPrenotazione + ";" + dataScadenza + ";" + status;
+            String request = op + ";idPrenotazione:" + idPrenotazione + ";dominio:" + dominio
+                    + ";durata:" + durata + ";nome:" + nome + ";cognome:" + cognome + ";email:"
+                    + email + ";cvv:" + cvv + ";numeroCarta:"
+                    + numeroCarta + ";scadenzaCarta:" + scadenzaCarta + ";nomeCognomeIntestatario:"
+                    + nomeCognomeIntestatario + ";dataPrenotazione:" + dataPrenotazione + ";dataScadenza:"
+                    + dataScadenza + ";status:" + status + ";prezzo:" + prezzo;
 
             out.println(request);
             out.println("0");
@@ -345,4 +352,40 @@ public class GestisciPrenotazione {
             return Response.status(Status.BAD_REQUEST).build();
         }
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/orders")
+    public Response getOrders(@QueryParam("email") String email) {
+
+        try {
+            startSocket();
+            String op = "6"; // read orders operation
+            String request = op + ";" + email;
+            out.println(request);
+            out.println("0");
+
+            String dato = "";
+            String inputLine = "";
+            while ((inputLine = in.readLine()) != null) {
+                if ("0".equals(inputLine)) {
+                    break;
+                }
+                dato += inputLine;
+            }
+
+            // invio response con dato al client
+            if (dato.equals("")) {
+                closeSocket();
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            closeSocket();
+            return Response.ok(dato).build();
+        } catch (IOException e) {
+            System.out.println(e);
+            return Response.serverError().build();
+        }
+    }
+
 }

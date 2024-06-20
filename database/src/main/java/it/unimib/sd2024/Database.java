@@ -10,27 +10,33 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+
 import org.json.*;
 
 public class Database {
     private String dbPath = "src\\main\\java\\it\\unimib\\sd2024\\Database.json";
     String[] chiavi = { "idPrenotazione", "dominio", "durata", "nome", "cognome", "email", "cvv", "numeroCarta",
-            "scadenzaCarta", "nomeCognomeIntestatario", "dataPrenotazione", "dataScadenza", "status" };
+            "scadenzaCarta", "nomeCognomeIntestatario", "dataPrenotazione", "dataScadenza", "status"};
+
+    String[] chiaviOrdini = {"idOrdine", "email", "dominio", "dataOrdine", "oggetto", "prezzo" };
+
+    private static int idOrdine = 0;
 
     public Database() {
         // Creazione del file json se non esiste
         try {
             File file = new File(dbPath);
-            if (file.createNewFile()) {
+            //if (file.createNewFile()) {
                 System.out.println("File creato: " + file.getName());
                 // inizializzo {"Prenotazione" : []}
                 FileWriter fileWriter = new FileWriter(dbPath);
                 BufferedWriter writer = new BufferedWriter(fileWriter);
-                writer.write("{\"Prenotazioni\" : []}");
+                writer.write("{\"Prenotazioni\" : [], \"Ordini\" : []}");
                 writer.close();
-            } else {
-                System.out.println("File esistente");
-            }
+            // } else {
+            //     System.out.println("File esistente");
+            // }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,6 +46,14 @@ public class Database {
     // inserimento dati nel file json
     public synchronized boolean inserisciDati(String[] dati) {
         System.out.println("Inserimento dati nel database");
+
+        // converto i dati in un hashmap <String, String> splittando per :
+        HashMap<String, String> datiMap = new HashMap<String, String>();
+        for (int i = 0; i < dati.length; i++) {
+            String[] keyValue = dati[i].split(":");
+            datiMap.put(keyValue[0], keyValue[1]);
+        }
+        
         try {
             // Leggi il contenuto del file JSON come stringa
             String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
@@ -52,13 +66,43 @@ public class Database {
             // Creo un JSONObject per il nuovo oggetto JSON
             JSONObject newJsonObject = new JSONObject();
 
-            // Associa valori alle chiavi
-            for (int i = 0; i < dati.length; i++) {
-                newJsonObject.put(chiavi[i], dati[i]);
+            // Associa valori alle chiavi controllando datiMap
+            for (int i = 0; i < chiavi.length; i++) {
+                newJsonObject.put(chiavi[i], datiMap.get(chiavi[i]));
             }
+            
 
             // Aggiungi il nuovo oggetto JSON all'array JSON
             jsonArray.put(newJsonObject);
+
+            // Scrivi il nuovo oggetto JSON nel file
+            Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
+
+            // aggiungo ordine
+            JSONArray ordini = jsonObject.getJSONArray("Ordini");
+
+            // Creo un JSONObject per il nuovo oggetto JSON
+            JSONObject newJsonObjectOrdini = new JSONObject();
+
+            // Associa valori alle chiavi
+            for (int i = 0; i < chiaviOrdini.length; i++) {
+                if (datiMap.containsKey(chiaviOrdini[i])) {
+                    newJsonObjectOrdini.put(chiaviOrdini[i], datiMap.get(chiaviOrdini[i]));
+                }else{
+                    if(chiaviOrdini[i].equals("idOrdine")){
+                        newJsonObjectOrdini.put(chiaviOrdini[i], ++idOrdine);
+                    }else if(chiaviOrdini[i].equals("oggetto")){
+                        newJsonObjectOrdini.put(chiaviOrdini[i], "Registrazione");
+                    }else if(chiaviOrdini[i].equals("dataOrdine")){
+                        // aggiungo la data nel formato dd/mm/yyyy
+                        LocalDate today = LocalDate.now();
+                        newJsonObjectOrdini.put(chiaviOrdini[i], today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    }
+                }
+            }
+
+            // Aggiungi il nuovo oggetto JSON all'array JSON
+            ordini.put(newJsonObjectOrdini);
 
             // Scrivi il nuovo oggetto JSON nel file
             Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
@@ -102,11 +146,16 @@ public class Database {
     // modifica dati nel file json
     public synchronized boolean modificaDati(String[] dati) {
         System.out.println("Modifica dati nel database");
+        HashMap<String, String> datiMap = new HashMap<String, String>();
+        for (int i = 0; i < dati.length; i++) {
+            String[] keyValue = dati[i].split(":");
+            datiMap.put(keyValue[0], keyValue[1]);
+        }
+
+        System.out.println(datiMap.toString());
+
         try {
-            // stampo array dati
-            // for (int i = 0; i < dati.length; i++) {
-            // System.out.println(dati[i] == "null");
-            // }
+            
             // Leggi il contenuto del file JSON come stringa
             String content = new String(Files.readAllBytes(Paths.get(dbPath)),
                     StandardCharsets.UTF_8);
@@ -118,20 +167,69 @@ public class Database {
 
             // Cerca l'oggetto JSON con l'id specificato e aggiorno i valori solamente se
             // diversi da null e quando incorntra l'id non lo modificare
+            String idPrenotazione = "";
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                if (obj.getString("idPrenotazione").equals(dati[0])) {
-                    for (int j = 1; j < dati.length; j++) {
-                        if (!dati[j].equals("null")) {
-                            obj.put(chiavi[j], dati[j]);
+                if (obj.getString("idPrenotazione").equals(datiMap.get("idPrenotazione"))) {
+                    idPrenotazione = obj.getString("idPrenotazione");
+                    for (int j = 0; j < chiavi.length; j++) {
+                        if (datiMap.containsKey(chiavi[j]) && !datiMap.get(chiavi[j]).equals("null")) {
+                            obj.put(chiavi[j], datiMap.get(chiavi[j]));
                         }
                     }
                 }
             }
 
+            // ottengo la prenotazione
+            JSONObject prenotazione = null;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                if (obj.getString("idPrenotazione").equals(idPrenotazione)) {
+                    prenotazione = obj;
+                }
+            }
+
+            // // Scrivi il nuovo oggetto JSON nel file
+            Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
+
+            // aggiungo operazione agli ordini
+            JSONArray ordini = jsonObject.getJSONArray("Ordini");
+
+            // Creo un JSONObject per il nuovo oggetto JSON
+            JSONObject newJsonObjectOrdini = new JSONObject();
+
+            // Associa valori alle chiavi
+            for (int i = 0; i < chiaviOrdini.length; i++) {
+                if (datiMap.containsKey(chiaviOrdini[i]) && !datiMap.get(chiaviOrdini[i]).equals("null")) {
+                    newJsonObjectOrdini.put(chiaviOrdini[i], datiMap.get(chiaviOrdini[i]));
+                }else if(datiMap.containsKey(chiaviOrdini[i])){
+
+                    if(chiaviOrdini[i].equals("email")){
+                        newJsonObjectOrdini.put(chiaviOrdini[i], prenotazione.getString("email"));
+                    }else if(chiaviOrdini[i].equals("dominio")){
+                        newJsonObjectOrdini.put(chiaviOrdini[i], prenotazione.getString("dominio"));
+                    }else if(chiaviOrdini[i].equals("prezzo")){
+                        newJsonObjectOrdini.put(chiaviOrdini[i], "10");
+                    }
+                
+                }else{
+                    if(chiaviOrdini[i].equals("idOrdine")){
+                        newJsonObjectOrdini.put(chiaviOrdini[i], ++idOrdine);
+                    }else if(chiaviOrdini[i].equals("oggetto")){
+                        newJsonObjectOrdini.put(chiaviOrdini[i], "Rinnovo");
+                    }else if(chiaviOrdini[i].equals("dataOrdine")){
+                        // aggiungo la data nel formato dd/mm/yyyy
+                        LocalDate today = LocalDate.now();
+                        newJsonObjectOrdini.put(chiaviOrdini[i], today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                    } 
+                }
+            }
+
+            // Aggiungi il nuovo oggetto JSON all'array JSON
+            ordini.put(newJsonObjectOrdini);
+
             // Scrivi il nuovo oggetto JSON nel file
-            Files.write(Paths.get(dbPath),
-                    jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
+            Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
 
             return true;
         } catch (Exception e) {
@@ -161,6 +259,35 @@ public class Database {
             }
 
             return "";
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    // lettura ordini dal file json
+    public synchronized String leggiOrdini(String email) {
+        System.out.println("Lettura ordini dal database");
+        try {
+            // Leggi il contenuto del file JSON come stringa
+            String content = new String(Files.readAllBytes(Paths.get(dbPath)), StandardCharsets.UTF_8);
+            // Converti il contenuto in un oggetto JSON
+            JSONObject jsonObject = new JSONObject(content);
+
+            // Ottieni l'array JSON "Ordini"
+            JSONArray jsonArray = jsonObject.getJSONArray("Ordini");
+
+            JSONArray result = new JSONArray();
+
+            // Cerca l'oggetto JSON con l'email specificata
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                if (obj.getString("email").equals(email)) {
+                    result.put(obj);
+                }
+            }
+
+            return result.toString(4);
         } catch (JSONException | IOException e) {
             e.printStackTrace();
             return "";
