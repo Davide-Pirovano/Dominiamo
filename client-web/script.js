@@ -77,7 +77,13 @@ async function registerUser(event) {
         //mostro notifica
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
-        notificaClass = true;
+        timeoutNotifica = setTimeout(function () {
+            notifica.classList.remove('show');
+        }, 3000);
+    } else if (data.email.includes('@') === false) {
+        //mostro notifica
+        document.getElementById('notifica-p').textContent = 'L\'email inserita non è valida';
+        notifica.classList.add('show');
         timeoutNotifica = setTimeout(function () {
             notifica.classList.remove('show');
         }, 3000);
@@ -320,33 +326,57 @@ async function loadYourOrders() {
 function initializeRinnovoPopup() {
 
     document.getElementById('rinnovoPopupYesButton').addEventListener('click', async function () {
-        // Chiudo popUp
-        document.getElementById('rinnovoPopup').style.display = 'none';
-        // Ripristino attività container
-        document.getElementById('container').style.opacity = 1;
-        document.getElementById('container').style.pointerEvents = 'auto';
+        // controllo parametri pagamento
+        const cvv = document.getElementById('cvv-rinnovo-domain').value;
+        const creditCardNumber = document.getElementById('creditCardNumber-rinnovo-domain').value.replace(/\s/g, '');
+        const expirationDate = document.getElementById('expirationDate-rinnovo-domain').value;
+        const cardHolderName = document.getElementById('cardHolderName-rinnovo-domain').value;
 
-        const durata = document.getElementById("durata-rinnovo-dominio").value;
+        const cvvValid = cvv.length === 3;
+        const creditCardNumberValid = creditCardNumber.length === 16;
+        const today = new Date();
+        const expirationDateValid = expirationDate.length === 5 && expirationDate.includes('/') &&
+            expirationDate.split('/')[0].length === 2 && expirationDate.split('/')[1].length === 2 &&
+            parseInt(expirationDate.split('/')[0]) <= 12 && parseInt(expirationDate.split('/')[1]) >= today.getFullYear().toString().slice(2, 4)
+            && parseInt(expirationDate.split('/')[0]) > today.getMonth() + 1;
 
-        // ottengo la durata precedente
-        const response = await fetch(`${API_URI}/${currentIdPrenotazione}`);
-        const jsonResponse = await response.json();
-        const durataPrecedente = jsonResponse["durata"];
-        const stato = jsonResponse["status"];
+        if (!cvvValid || !creditCardNumberValid || !expirationDateValid || cardHolderName === '') {
+            //mostro notifica e mantengo il popUp aperto
+            document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
+            notifica.classList.add('show');
+            timeoutNotifica = setTimeout(function () {
+                notifica.classList.remove('show');
+            }, 3000);
+        } else {
+            // Chiudo popUp
+            document.getElementById('rinnovoPopup').style.display = 'none';
+            // Ripristino attività container
+            document.getElementById('container').style.opacity = 1;
+            document.getElementById('container').style.pointerEvents = 'auto';
+            
+            // controllo se devo rinnovare o prolungare
+            const durata = document.getElementById("durata-rinnovo-dominio").value;
 
-        if (stato === 'rinnovare') {
-            rinnovaDominio(durata, currentIdPrenotazione);
-        } else if (stato === "attivo") {
-            // calcolo durata totale
-            const durataTotale = parseInt(durata) + parseInt(durataPrecedente);
-            // parso in date la data di prenotazione
-            const dataString = jsonResponse["dataPrenotazione"];
-            const [giorno, mese, anno] = dataString.split('/');
-            const dataPrenotazione = new Date(anno, mese - 1, giorno);
+            // ottengo la durata precedente
+            const response = await fetch(`${API_URI}/${currentIdPrenotazione}`);
+            const jsonResponse = await response.json();
+            const durataPrecedente = jsonResponse["durata"];
+            const stato = jsonResponse["status"];
 
-            prolungaDominio(durataTotale, dataPrenotazione, currentIdPrenotazione);
+            if (stato === 'rinnovare') {
+                rinnovaDominio(durata, currentIdPrenotazione);
+            } else if (stato === "attivo") {
+                // calcolo durata totale
+                const durataTotale = parseInt(durata) + parseInt(durataPrecedente);
+                // parso in date la data di prenotazione
+                const dataString = jsonResponse["dataPrenotazione"];
+                const [giorno, mese, anno] = dataString.split('/');
+                const dataPrenotazione = new Date(anno, mese - 1, giorno);
+
+                prolungaDominio(durataTotale, dataPrenotazione, currentIdPrenotazione);
+            }
+            document.getElementById("durata-rinnovo-dominio").value = 1;
         }
-        document.getElementById("durata-rinnovo-dominio").value = 1;
     });
 
     document.getElementById('rinnovoPopupNoButton').addEventListener('click', function () {
@@ -656,10 +686,17 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
     const email = document.getElementById('email-create-domain').value;
     // controllo che l'email sia valida ovvero che contenga una chiocciola
     const emailValid = email.includes('@');
+    const domainValid = dominio.includes('.');
 
 
 
-    if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && emailValid) {
+    if (!domainValid) {
+        document.getElementById('notifica-p').textContent = 'Dominio non valido, inserire un dominio valido';
+        notifica.classList.add('show');
+        timeoutNotifica = setTimeout(function () {
+            notifica.classList.remove('show');
+        }, 3000);
+    } else if (dominio != '' && durata != '' && nome != '' && cognome != '' && email != '' && emailValid) {
         // controllo che il dominio sia disponibile
         const response = await fetch(`${API_URI}/check?dominio=${dominio}`);
         const jsonResponse = await response.json();
@@ -684,7 +721,6 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
         } else if (jsonResponse.available == true && jsonResponse.email !== "null") {
             document.getElementById('notifica-p').textContent = 'Dominio bloccato da un altro utente';
             notifica.classList.add('show');
-            notificaClass = true;
             timeoutNotifica = setTimeout(function () {
                 notifica.classList.remove('show');
             }, 3000);
@@ -694,7 +730,6 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
         } else {
             document.getElementById('notifica-p').textContent = 'Dominio già in possesso';
             notifica.classList.add('show');
-            notificaClass = true;
             timeoutNotifica = setTimeout(function () {
                 notifica.classList.remove('show');
             }, 3000);
@@ -702,7 +737,6 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
     } else {
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
-        notificaClass = true;
         timeoutNotifica = setTimeout(function () {
             notifica.classList.remove('show');
         }, 3000);
@@ -721,14 +755,22 @@ document.getElementById('submit-payment').addEventListener('click', function (ev
     event.preventDefault();
     // controllo che i campi non siano vuoti
     const cvv = document.getElementById('cvv-create-domain').value;
-    const creditCardNumber = document.getElementById('creditCardNumber-create-domain').value;
+    const creditCardNumber = document.getElementById('creditCardNumber-create-domain').value.replace(/\s/g, '');
+    console.log(creditCardNumber);
     const expirationDate = document.getElementById('expirationDate-create-domain').value;
     const cardHolderName = document.getElementById('cardHolderName-create-domain').value;
+    const cvvValid = cvv.length === 3;
+    // rimuovo gli spazi dalla stringa e controllo che sia lunga 16
+    const creditCardNumberValid = creditCardNumber.length === 16;
+    const today = new Date();
+    const expirationDateValid = expirationDate.length === 5 && expirationDate.includes('/') &&
+        expirationDate.split('/')[0].length === 2 && expirationDate.split('/')[1].length === 2 &&
+        parseInt(expirationDate.split('/')[0]) <= 12 && parseInt(expirationDate.split('/')[1]) >= today.getFullYear().toString().slice(2, 4)
+        && parseInt(expirationDate.split('/')[0]) > today.getMonth() + 1 || parseInt(expirationDate.split('/')[1]) > today.getFullYear().toString().slice(2, 4);
 
-    if (cvv === '' || creditCardNumber === '' || expirationDate === '' || cardHolderName === '') {
+    if (cvv === '' || creditCardNumber === '' || expirationDate === '' || cardHolderName === '' || !cvvValid || !creditCardNumberValid || !expirationDateValid) {
         document.getElementById('notifica-p').textContent = 'Compila tutti i campi correttamente';
         notifica.classList.add('show');
-        notificaClass = true;
         timeoutNotifica = setTimeout(function () {
             notifica.classList.remove('show');
         }, 3000);
