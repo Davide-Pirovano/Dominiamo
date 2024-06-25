@@ -1,40 +1,75 @@
 # Progetto Sistemi Distribuiti 2023-2024 - API REST
 
-Documentare qui l'API REST progettata. Di seguito è presente un esempio.
+Documentazione dell'API REST progettata.
 
-**Attenzione**: l'unica rappresentazione ammessa è in formato JSON. Pertanto vengono assunti gli header `Content-Type: application/json` e `Accept: application/json`.
+**Attenzione**: l'unica rappresentazione ammessa è in formato JSON.
 
-## `/contacts`
+## `/domini`
 
-Ogni risorsa ha la sua sezione dedicata con i metodi ammessi. In questo caso si riferisce alla risorsa `/contacts`.
+* ### GET
 
-### GET
+    - **Descrizione**: Questa API REST è progettata per recuperare domini associati a un indirizzo email specificato.
+    
+    - **Parametri**: `email`: Questo parametro della query è utilizzato per specificare l'indirizzo email per il quale si desiderano ottenere i domini.
 
-**Descrizione**: breve descrizione di cosa fa il metodo applicato alla risorsa. In questo caso restituisce l'elenco dei contatti presenti.
+    - **Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli header riguardanti la rappresentazione dei dati (JSON).
+    
+    - **Body richiesta**: none
 
-**Parametri**: elenco dei parametri. In questo caso non sono previsti. Se la risorsa fosse stata `/contacts/{id}` allora andava specificato cosa deve essere `{id}`.
+    - **Risposta**: viene restituita una lista JSON di tutti i domini registrati relativi all'email, nel formato
 
-**Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli hader riguardanti la rappresentazione dei dati (JSON).
+          [
+              {
+                "cvv": "123",
+                "cognome": "Cognome",
+                "idPrenotazione": "1",
+                "dominio": "test.it",
+                "durata": "1",
+                "nome": "Nome",
+                "dataScadenza": "25/06/2025",
+                "nomeCognomeIntestatario": "Nome Cognome",
+                "dataPrenotazione": "25/06/2024",
+                "numeroCarta": "1234 1234 1234 1234",
+                "scadenzaCarta": "12/33",
+                "email": "email@gmail.com",
+                "status": "attivo"
+              },
+              ...
+          ]
 
-**Body richiesta**: cosa ci deve essere nel body della richiesta (se previsto). In questo caso nulla perché non è previsto.
+    - **Codici di stato restituiti**:
+      * `200 OK`
 
-**Risposta**: cosa viene restituito in caso di successo. In questo caso una lista con ogni elemento un contatto con i seguenti campi: `id` (intero), `name` (stringa) e `number` (stringa).
+* ### POST
 
-**Codici di stato restituiti**: elenco dei codici di stato restituiti in caso di successo e di fallimento. In questo caso restituisce sempre `200 OK`. Viene dato per assunto che in caso di problemi lato server si restituisce `500 Internal Server Error`, non è necessario specificarlo ogni volta.
+    - **Descrizione**: Questa API REST è progettata per recuperare domini associati a un indirizzo email specificato.
+    
+    - **Parametri**: `email`: Questo parametro della query è utilizzato per specificare l'indirizzo email per il quale si desiderano ottenere i domini.
 
-### POST
+    - **Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli header riguardanti la rappresentazione dei dati (JSON).
+    
+    - **Body richiesta**: none
 
-**Descrizione**: aggiunge un contatto alla rubrica telefonica.
+    - **Risposta**: viene restituita una lista JSON di tutti i domini registrati relativi all'email, nel formato
 
-**Parametri**: nessuno.
+          [
+              {
+                "cvv": "123",
+                "cognome": "Cognome",
+                "idPrenotazione": "1",
+                "dominio": "test.it",
+                "durata": "1",
+                "nome": "Nome",
+                "dataScadenza": "25/06/2025",
+                "nomeCognomeIntestatario": "Nome Cognome",
+                "dataPrenotazione": "25/06/2024",
+                "numeroCarta": "1234 1234 1234 1234",
+                "scadenzaCarta": "12/33",
+                "email": "email@gmail.com",
+                "status": "attivo"
+              },
+              ...
+          ]
 
-**Header**: nessuno.
-
-**Body richiesta**: singolo contatto con i campi `name` e `number`.
-
-**Risposta**: body vuoto e la risorsa creata è indicata nell'header `Location`.
-
-**Codici di stato restituiti**:
-
-* 201 Created: successo.
-* 400 Bad Request: c'è un errore del client (JSON, campo mancante o altro).
+    - **Codici di stato restituiti**:
+      * `200 OK`

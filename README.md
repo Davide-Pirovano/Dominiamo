@@ -1,6 +1,7 @@
 # Progetto Sistemi Distribuiti 2023-2024
 
-Lo scheletro espone la struttura che il progetto deve seguire. Al posto di questo paragrafo è necessario scrivere il nome del progetto e una breve descrizione.
+Il progetto d’esame del corso di “Sistemi Distribuiti” dell’anno 2023-2024 consiste nella progettazione e sviluppo di un’applicazione distribuita per per l’acquisto
+e gestione di domini Internet.
 
 ## Componenti del gruppo
 
@@ -10,7 +11,7 @@ Lo scheletro espone la struttura che il progetto deve seguire. Al posto di quest
 
 ## Compilazione ed esecuzione
 
-Sia il server Web sia il database sono applicazioni Java gestire con Maven. All'interno delle rispettive cartelle si può trovare il file `pom.xml` in cui è presenta la configurazione di Maven per il progetto. Si presuppone l'utilizzo della macchina virtuale di laboratorio, per cui nel `pom.xml` è specificato l'uso di Java 21.
+Sia il server Web sia il database sono applicazioni Java gestite con Maven. All'interno delle rispettive cartelle si può trovare il file `pom.xml` in cui è presente la configurazione di Maven per il progetto. Nel `pom.xml` è specificato l'uso di Java 21.
 
 Il server Web e il database sono dei progetti Java che utilizano Maven per gestire le dipendenze, la compilazione e l'esecuzione.
 
@@ -18,7 +19,7 @@ Il server Web e il database sono dei progetti Java che utilizano Maven per gesti
 
 Per avviare il client Web è necessario utilizzare l'estensione "Live Preview" su Visual Studio Code, come mostrato durante il laboratorio. Tale estensione espone un server locale con i file contenuti nella cartella `client-web`.
 
-**Attenzione**: è necessario configurare CORS in Google Chrome come mostrato nel laboratorio.
+**Attenzione**: è necessario configurare CORS in Google Chrome come mostrato nel laboratorio. Avendo riscontrato diversi problemi con l'estensione suggerita in laboratorio consigliamo di installare l'estensione "CROSS DOMAIN - Cors" presente sul Chrome Web Store.
 
 ### Server Web
 
