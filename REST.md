@@ -51,20 +51,21 @@ Documentazione dell'API REST progettata.
 
     - **Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli header riguardanti la rappresentazione dei dati (JSON).
     
-    - **Body richiesta**: {
-                            "dominio":"test.it",
-                            "durata":"1",
-                            "nome":"Nome",
-                            "cognome":"Cognome",
-                            "email":"email@gmail.com",
-                            "dataPrenotazione":"25/06/2024",
-                            "dataScadenza":"25/06/2025",
-                            "cvv":"123",
-                            "numeroCarta":"1234 1234 1234 1234",
-                            "scadenzaCarta":"11/26",
-                            "nomeCognomeIntestatario":"Nome Cognome",
-                            "prezzo":"63"
-                        }
+    - **Body richiesta**:
+            {
+                "dominio":"test.it",
+                "durata":"1",
+                "nome":"Nome",
+                "cognome":"Cognome",
+                "email":"email@gmail.com",
+                "dataPrenotazione":"25/06/2024",
+                "dataScadenza":"25/06/2025",
+                "cvv":"123",
+                "numeroCarta":"1234 1234 1234 1234",
+                "scadenzaCarta":"11/26",
+                "nomeCognomeIntestatario":"Nome Cognome",
+                "prezzo":"63"
+            }
 
     - **Risposta**: La risposta conterrà l'oggetto prenotazione in formato JSON insieme all'URI della nuova prenotazione.
                     {
