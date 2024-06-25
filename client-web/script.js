@@ -270,7 +270,6 @@ async function loadYourOrders() {
     // chiamata get per ottenere gli ordini registrati dall'utente
     const response = await fetch(`${API_URI}/orders/?email=${email}`);
     const jsonResponse = await response.json();
-    console.log(jsonResponse);
 
     // aggiorno la tabella con i ordini
 
