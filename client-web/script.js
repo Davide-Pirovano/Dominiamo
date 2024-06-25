@@ -389,8 +389,9 @@ function initializeRinnovoPopup() {
 }
 
 function openRinnovoPopup(item) {
-    //genero prezzo random
-    document.getElementById('costo-rinnovo').textContent = "Totale: " + Math.floor(Math.random() * 100) + " €";
+    //genero prezzo random da 50 a 100
+    const prezzo = Math.floor(Math.random() * 50) + 50;
+    document.getElementById('costo-rinnovo').textContent = "Totale: " + prezzo + " €";
 
     currentIdPrenotazione = item["idPrenotazione"];
     const durataPrecedente = item["durata"];
@@ -709,7 +710,8 @@ document.getElementById('submit-create-domain').addEventListener('click', async 
             });
 
             //genero prezzo random
-            document.getElementById('payment-value').textContent = "Totale: " + Math.floor(Math.random() * 100) + " €";
+            const prezzo = Math.floor(Math.random() * 50) + 50;
+            document.getElementById('payment-value').textContent = "Totale: " + prezzo + " €";
 
             // mostro popUp pagamento
             document.getElementById('paymentPopup').style.display = 'block';

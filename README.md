@@ -21,6 +21,8 @@ Per avviare il client Web è necessario utilizzare l'estensione "Live Preview" s
 
 **Attenzione**: è necessario configurare CORS in Google Chrome come mostrato nel laboratorio. Avendo riscontrato diversi problemi con l'estensione suggerita in laboratorio consigliamo di installare l'estensione "CROSS DOMAIN - Cors" presente sul Chrome Web Store.
 
+**Attenzione**: è fortemente consigliato l'utilizzo del browser `Google Chrome` siccome con altri browser quali `Microsoft Edge` per esempio si possono riscontrare errori dovuti al formato di gestione delle date del browser.
+
 ### Server Web
 
 Il server Web utilizza Jetty e Jersey. Si può avviare eseguendo `mvn jetty:run` all'interno della cartella `server-web`. Espone le API REST all'indirizzo `localhost` alla porta `8080`.
