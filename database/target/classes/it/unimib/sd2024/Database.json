@@ -1,1 +1,60 @@
-{"Prenotazioni" : [], "Ordini" : []}
+{
+    "Ordini": [
+        {
+            "idOrdine": 1,
+            "dominio": "test.it",
+            "oggetto": "Registrazione",
+            "prezzo": "86",
+            "email": "dp@gmail.com",
+            "dataOrdine": "25/06/2024"
+        },
+        {
+            "idOrdine": 2,
+            "dominio": "test.it",
+            "oggetto": "Registrazione",
+            "prezzo": "57",
+            "email": "lucabianchi@gmail.com",
+            "dataOrdine": "25/06/2024"
+        },
+        {
+            "idOrdine": 3,
+            "dominio": "test.it",
+            "oggetto": "Rinnovo",
+            "prezzo": "25",
+            "email": "lucabianchi@gmail.com",
+            "dataOrdine": "25/06/2024"
+        }
+    ],
+    "Prenotazioni": [
+        {
+            "cvv": "123",
+            "cognome": "Pirovano",
+            "idPrenotazione": "1",
+            "dominio": "test.it",
+            "durata": "1",
+            "nome": "Davide",
+            "dataScadenza": "25/06/2020",
+            "nomeCognomeIntestatario": "a",
+            "dataPrenotazione": "25/06/2024",
+            "numeroCarta": "1234123412341234",
+            "scadenzaCarta": "11/25",
+            "email": "dp@gmail.com",
+            "status": "scaduto"
+        },
+        {
+            "cvv": "123",
+            "cognome": "Binchi",
+            "idPrenotazione": "2",
+            "dominio": "test.it",
+            "durata": "10",
+            "nome": "Luca",
+            "dataScadenza": "1/6/2036",
+            "nomeCognomeIntestatario": "b",
+            "dataPrenotazione": "6/25/2024",
+            "numeroCarta": "1234123412341234",
+            "scadenzaCarta": "11/25",
+            "email": "lucabianchi@gmail.com",
+            "status": "attivo"
+        }
+    ]
+}

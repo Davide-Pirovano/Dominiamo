@@ -309,7 +309,7 @@ public class Database {
             // Cerca l'oggetto JSON con il dominio specificato
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                if (obj.getString("dominio").equals(dominio)) {
+                if (obj.getString("dominio").equals(dominio) && obj.getString("status").equals("attivo")) {
                     // false;nome;cognome;dataScadenza;email
                     return "false;" + obj.getString("nome") + ";" + obj.getString("cognome") + ";"
                             + obj.getString("dataScadenza") + ";" + obj.getString("email");
@@ -369,6 +369,25 @@ public class Database {
                     e.printStackTrace();
                 }
             }
+
+            // controllo se è stato registrato un dominio scaduto da un altro utente
+            // se una prenotazione è da rinnovare ed il dominio viene registrato da un altro utente allora lo status diventa "scaduto"
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+                String status = obj.getString("status");
+                String dominio = obj.getString("dominio");
+
+                if (status.equals(RINNOVARE)) {
+                    for (int j = 0; j < jsonArray.length(); j++) {
+                        JSONObject obj2 = jsonArray.getJSONObject(j);
+                        if (obj2.getString("dominio").equals(dominio) && obj2.getString("status").equals(ATTIVO)) {
+                            obj.put("status", SCADUTO);
+                        }
+                    }
+                }
+            }
+
 
             // Scrivi il nuovo oggetto JSON nel file
             Files.write(Paths.get(dbPath), jsonObject.toString(4).getBytes(StandardCharsets.UTF_8));
