@@ -270,6 +270,7 @@ async function loadYourOrders() {
     // chiamata get per ottenere gli ordini registrati dall'utente
     const response = await fetch(`${API_URI}/orders/?email=${email}`);
     const jsonResponse = await response.json();
+    console.log(jsonResponse);
 
     // aggiorno la tabella con i ordini
 
@@ -487,7 +488,7 @@ async function prolungaDominio(durata, dataPrenotazione, idPrenotazione) {
     const prezzo = document.getElementById('costo-rinnovo').textContent;
     const prezzoAggiornato = prezzo.split(' ')[1];
     const jsonData = JSON.stringify({ durata: durata, dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo', prezzo: prezzoAggiornato });
-    // console.log(jsonData + idPrenotazione);
+
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",
         headers: {
@@ -510,8 +511,6 @@ async function rinnovaDominio(durata, idPrenotazione) {
     const prezzo = document.getElementById('costo-rinnovo').textContent;
     const prezzoAggiornato = prezzo.split(' ')[1];
     const jsonData = JSON.stringify({ durata: durata, dataPrenotazione: dataPrenotazione.toLocaleDateString(), dataScadenza: dataScadenza.toLocaleDateString(), status: 'attivo', prezzo: prezzoAggiornato });
-
-    // console.log(jsonData + idPrenotazione);
 
     const response = await fetch(`${API_URI}/${idPrenotazione}`, {
         method: "PUT",
