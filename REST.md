@@ -18,24 +18,24 @@ Documentazione dell'API REST progettata.
 
     - **Risposta**: viene restituita una lista JSON di tutti i domini registrati relativi all'email, nel formato
 
-          [
-              {
-                "cvv": "123",
-                "cognome": "Cognome",
-                "idPrenotazione": "1",
-                "dominio": "test.it",
-                "durata": "1",
-                "nome": "Nome",
-                "dataScadenza": "25/06/2025",
-                "nomeCognomeIntestatario": "Nome Cognome",
-                "dataPrenotazione": "25/06/2024",
-                "numeroCarta": "1234 1234 1234 1234",
-                "scadenzaCarta": "12/33",
-                "email": "email@gmail.com",
-                "status": "attivo"
-              },
-              ...
-          ]
+            [
+                {
+                    "cvv": "123",
+                    "cognome": "Cognome",
+                    "idPrenotazione": "1",
+                    "dominio": "test.it",
+                    "durata": "1",
+                    "nome": "Nome",
+                    "dataScadenza": "25/06/2025",
+                    "nomeCognomeIntestatario": "Nome Cognome",
+                    "dataPrenotazione": "25/06/2024",
+                    "numeroCarta": "1234 1234 1234 1234",
+                    "scadenzaCarta": "12/33",
+                    "email": "email@gmail.com",
+                    "status": "attivo"
+                },
+                ...
+            ]
 
     - **Codici di stato restituiti**:
       * `200 OK`
@@ -52,6 +52,7 @@ Documentazione dell'API REST progettata.
     - **Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli header riguardanti la rappresentazione dei dati (JSON).
     
     - **Body richiesta**:
+    
             {
                 "dominio":"test.it",
                 "durata":"1",
@@ -68,22 +69,25 @@ Documentazione dell'API REST progettata.
             }
 
     - **Risposta**: La risposta conterrà l'oggetto prenotazione in formato JSON insieme all'URI della nuova prenotazione.
-                    {
-                        "cvv": "123",
-                        "cognome": "Cognome",
-                        "idPrenotazione": "1",
-                        "dominio": "test.it",
-                        "durata": "1",
-                        "nome": "Nome",
-                        "dataScadenza": "25/06/2025",
-                        "nomeCognomeIntestatario": "Nome Cognome",
-                        "dataPrenotazione": "25/06/2024",
-                        "numeroCarta": "1234 1234 1234 1234",
-                        "scadenzaCarta": "11/26",
-                        "email": "email@gmail.com",
-                        "status": "attivo",
-                        "prezzo":"63"
-                    }
+    
+            [
+                {
+                    "cvv": "123",
+                    "cognome": "Cognome",
+                    "idPrenotazione": "1",
+                    "dominio": "test.it",
+                    "durata": "1",
+                    "nome": "Nome",
+                    "dataScadenza": "25/06/2025",
+                    "nomeCognomeIntestatario": "Nome Cognome",
+                    "dataPrenotazione": "25/06/2024",
+                    "numeroCarta": "1234 1234 1234 1234",
+                    "scadenzaCarta": "11/26",
+                    "email": "email@gmail.com",
+                    "status": "attivo",
+                    "prezzo":"63"
+                }
+            ]
 
 
     - **Codici di stato restituiti**:
@@ -106,26 +110,27 @@ Documentazione dell'API REST progettata.
     - **Body richiesta**: none
 
     - **Risposta**: viene restituito un oggetto JSON della prenotazione specificata, nel formato
-          {
-            "cvv": "123",
-            "cognome": "Cognome",
-            "idPrenotazione": "1",
-            "dominio": "test.it",
-            "durata": "1",
-            "nome": "Nome",
-            "dataScadenza": "25/06/2025",
-            "nomeCognomeIntestatario": "Nome Cognome",
-            "dataPrenotazione": "25/06/2024",
-            "numeroCarta": "1234 1234 1234 1234",
-            "scadenzaCarta": "12/33",
-            "email": "email@gmail.com",
-            "status": "attivo"
-          }
+    
+            {
+                "cvv": "123",
+                "cognome": "Cognome",
+                "idPrenotazione": "1",
+                "dominio": "test.it",
+                "durata": "1",
+                "nome": "Nome",
+                "dataScadenza": "25/06/2025",
+                "nomeCognomeIntestatario": "Nome Cognome",
+                "dataPrenotazione": "25/06/2024",
+                "numeroCarta": "1234 1234 1234 1234",
+                "scadenzaCarta": "12/33",
+                "email": "email@gmail.com",
+                "status": "attivo"
+            }
 
 
     - **Codici di stato restituiti**:
       * `200 OK`,
-      * `404 Not Found`: utilizzato per gestire specificamente le eccezioni JsonbException e URISyntaxException, come errori di parsing del JSON o URI malformati
+      * `404 Not Found`: utilizzato per gestire specificamente le eccezioni JsonbException e URISyntaxException, come errori di parsing del JSON o URI malformati.
 
 * ### PUT
 
@@ -136,6 +141,7 @@ Documentazione dell'API REST progettata.
     - **Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli header riguardanti la rappresentazione dei dati (JSON).
     
     - **Body richiesta**: viene passato un oggetto JSON con i dettagli della prenotazione
+    
             {
                 "durata":3,
                 "dataScadenza":"25/06/2027",
@@ -143,7 +149,8 @@ Documentazione dell'API REST progettata.
                 "prezzo":"88"
             }
 
-    - **Risposta**: La risposta conterrà conterrà l'oggetto prenotazione aggiornato in formato JSON.
+    - **Risposta**: La risposta conterrà conterrà l'oggetto prenotazione aggiornato in formato JSON
+    
             {
                 dataScadenza: '25/06/2027',
                 durata: 3,
@@ -176,16 +183,19 @@ Documentazione dell'API REST progettata.
 
     - **Risposta**:
         - Se l'oggetto non sta venendo prenotato contemporaneamente da un'altro utente ed è libero, viene restituito un oggetto JSON nel formato:
+        
                 {
                     "available": true,
                     "email": "null"
                 }
         - Se l'oggetto sta venendo prenotato contemporaneamente da un'altro utente ed è libero, viene restituito un oggetto JSON nel formato:
+        
                 {
                     "available": true,
                     "email": "email"
                 }
         - Se l'oggetto non sta venendo prenotato contemporaneamente da un'altro utente ed è prenotato, viene restituito un oggetto JSON nel formato:
+        
                 {
                     "available": false,
                     "nome": "Nome",
@@ -209,10 +219,12 @@ Documentazione dell'API REST progettata.
 
     - **Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli header riguardanti la rappresentazione dei dati (JSON).
     
-    - **Body richiesta**: {
-                            "dominio": "test.it",
-                            "email": "Email"
-                            }
+    - **Body richiesta**:
+                
+            {
+                "dominio": "test.it",
+                "email": "Email"
+            }
 
     - **Risposta**: viene restituito "OK" tramite codice di stato per dare conferma dell'inserimento del dominio nella lista delle prenotazioni concorrenti
 
@@ -227,7 +239,9 @@ Documentazione dell'API REST progettata.
 
     - **Header**: solo gli header importanti. In questo caso nessuno oltre a quelli già impostati automaticamente dal client. Si può evitare di specificare gli header riguardanti la rappresentazione dei dati (JSON).
     
-    - **Body richiesta**: { "dominio": "test.it" }
+    - **Body richiesta**:
+    
+            { "dominio": "test.it" }
 
     - **Risposta**: viene restituito "OK" tramite codice di stato per dare conferma della cancellazione del dominio nella lista delle prenotazioni concorrenti
 
@@ -247,17 +261,18 @@ Documentazione dell'API REST progettata.
     - **Body richiesta**: none
 
     - **Risposta**: viene restituita una lista JSON di tutti i domini registrati relativi all'email, nel formato
-        [
-            {
-                dataOrdine: "25/06/2024",
-                dominio: "test.it",
-                email: "email@gmail.com",
-                idOrdine: 8,
-                oggetto: "Operazione",
-                prezzo: "46"
-            },
-            ...
-        ]
+        
+            [
+                {
+                    dataOrdine: "25/06/2024",
+                    dominio: "test.it",
+                    email: "email@gmail.com",
+                    idOrdine: 8,
+                    oggetto: "Operazione",
+                    prezzo: "46"
+                },
+                ...
+            ]
 
     - **Codici di stato restituiti**:
       * `200 OK`
