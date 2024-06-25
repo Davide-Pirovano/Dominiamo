@@ -337,8 +337,8 @@ function initializeRinnovoPopup() {
         const today = new Date();
         const expirationDateValid = expirationDate.length === 5 && expirationDate.includes('/') &&
             expirationDate.split('/')[0].length === 2 && expirationDate.split('/')[1].length === 2 &&
-            parseInt(expirationDate.split('/')[0]) <= 12 && parseInt(expirationDate.split('/')[1]) >= today.getFullYear().toString().slice(2, 4)
-            && parseInt(expirationDate.split('/')[0]) > today.getMonth() + 1;
+            parseInt(expirationDate.split('/')[0]) <= 12 && parseInt(expirationDate.split('/')[1]) > today.getFullYear().toString().slice(2, 4) &&
+            parseInt(expirationDate.split('/')[0]) > today.getMonth() + 1 || parseInt(expirationDate.split('/')[1]) > today.getFullYear().toString().slice(2, 4);
 
         if (!cvvValid || !creditCardNumberValid || !expirationDateValid || cardHolderName === '') {
             //mostro notifica e mantengo il popUp aperto
@@ -591,7 +591,6 @@ document.getElementById('logout-button').addEventListener('click', function () {
     document.cookie = 'email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'nome=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'cognome=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    console.log("logout");
     window.location.reload();
 });
 
@@ -756,7 +755,6 @@ document.getElementById('submit-payment').addEventListener('click', function (ev
     // controllo che i campi non siano vuoti
     const cvv = document.getElementById('cvv-create-domain').value;
     const creditCardNumber = document.getElementById('creditCardNumber-create-domain').value.replace(/\s/g, '');
-    console.log(creditCardNumber);
     const expirationDate = document.getElementById('expirationDate-create-domain').value;
     const cardHolderName = document.getElementById('cardHolderName-create-domain').value;
     const cvvValid = cvv.length === 3;
