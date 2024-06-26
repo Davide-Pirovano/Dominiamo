@@ -1,4 +1,6 @@
-# Progetto Sistemi Distribuiti 2023-2024
+# Domini Brianzoli - Progetto Sistemi Distribuiti 2023-2024
+
+**Gruppo: I Brianzoli**
 
 Il progetto d’esame del corso di “Sistemi Distribuiti” dell’anno 2023-2024 consiste nella progettazione e sviluppo di un’applicazione distribuita per per l’acquisto
 e gestione di domini Internet.
